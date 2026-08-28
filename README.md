@@ -58,6 +58,13 @@ continua refletindo no seletor sem precisar mexer no código.
 O visual usa as variáveis de tema do próprio site (`--card`, `--text`,
 `--border`, `--success`), então acompanha o tema claro e o escuro.
 
+## Prévia ao compartilhar
+
+O `og:url` do `index.html` apontava para `farmastudio-tropical.netlify.app`,
+que não é o endereço do site. Corrigido para
+`https://farmaciatropical.netlify.app/`, senão o preview do link no
+WhatsApp e nas redes pode sair inconsistente.
+
 ## Publicar de novo
 
 Dentro de `publicado/`:
