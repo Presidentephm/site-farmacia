@@ -21,6 +21,24 @@ O seletor entra em:
 Os links da seção "Nossas lojas" continuam indo direto para o número
 daquela unidade: ali o cliente já escolheu a loja.
 
+## Faixa "Marcas que trabalhamos"
+
+Uma esteira com os logos dos laboratórios rolando continuamente, como havia
+no site anterior (`farmacia-tropical.farmaeasy.com.br`). Entra logo acima da
+seção "Quem somos" e pausa quando o mouse passa por cima.
+
+- `publicado/assets/marcas-marquee.js` — monta e posiciona a seção.
+- `publicado/marcas/*.webp` — os dez logos, trazidos do site anterior.
+
+A vitrine monta as seções fora de ordem enquanto carrega os dados do
+Supabase, e as que chegam depois entrariam antes desta faixa. Por isso o
+script não só insere a seção: ele a recoloca acima de "Quem somos" sempre
+que a ordem muda.
+
+Os logos vêm com fundo branco próprio, então o cartão de cada um é branco
+nos dois temas — no tema escuro, um cartão da cor do fundo deixaria cada
+logo como um retângulo branco solto.
+
 ## Como foi feito
 
 O código-fonte do app (React + Vite + Supabase) não está neste
@@ -29,7 +47,7 @@ repositório, então a alteração foi aplicada sobre o site já compilado:
 - `publicado/assets/seletor-loja.js` — o seletor, escrito em JavaScript
   puro. Ele intercepta o clique nos botões acima e monta o link
   `wa.me` da loja escolhida preservando o `?text=` original.
-- `publicado/index.html` — carrega o script acima.
+- `publicado/index.html` — carrega os scripts acima.
 
 As lojas vêm da tabela `fs_lojas` do Supabase (as mesmas que o site já
 usa), buscadas por REST com a chave pública que já está no bundle. Se a
