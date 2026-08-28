@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- O site usa roteamento por hash, então buscadores enxergam uma única
+     página. Listar #/vitrine aqui seria inútil: o fragmento não chega ao
+     servidor e o Google o ignora. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://farmaciatropical.netlify.app/</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

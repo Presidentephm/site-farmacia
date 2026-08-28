@@ -1,0 +1,11 @@
+# Farmácia Tropical — vitrine pública.
+User-agent: *
+Allow: /
+
+# O painel da equipe não deve ser indexado. São rotas em hash (#/...), que
+# buscadores não tratam como endereços separados, então isto é reforço e não
+# a única proteção: o que protege de verdade é o login.
+Disallow: /admin
+Disallow: /login
+
+Sitemap: https://farmaciatropical.netlify.app/sitemap.xml
