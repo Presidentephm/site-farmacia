@@ -96,6 +96,22 @@ registro e apagar o arquivo daqui.
 Com dois banners cadastrados, o carrossel finalmente alterna sozinho — ele
 já fazia isso, mas ficava parado porque só havia um banner.
 
+## Transição entre os banners
+
+`publicado/assets/banner-transicao.js`. A vitrine troca o `src` da mesma
+imagem, então a mudança era seca. Ao perceber a troca, o script sobrepõe uma
+cópia da arte anterior e a faz sumir em meio segundo, produzindo o cruzamento
+entre as duas.
+
+- As artes são pré-carregadas na abertura da página. Sem isso, a primeira
+  troca mostraria o fundo vazio do cartão enquanto a imagem nova baixasse.
+- As setas e os pontinhos ganham `z-index: 2` para continuarem acima da cópia
+  que some.
+- Quem tem "reduzir animações" ligado no sistema segue com a troca seca.
+
+A ordem dos banners é o campo `ordem` da tabela `fs_banners`: hoje o de
+Arraial 24 horas está em 0 e aparece primeiro.
+
 ## Carrossel de banners no celular
 
 `publicado/assets/banner-mobile.js` conserta duas coisas, só em aparelhos de
