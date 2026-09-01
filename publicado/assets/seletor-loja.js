@@ -15,7 +15,7 @@
     { nome: "Loja Trancoso", whatsapp: "(73) 3668-1770", bairro: "Trancoso", cidade: "Porto Seguro", horario: "Seg a Sáb 07:00 às 22:00 · Dom 07:00 às 20:00" }
   ];
 
-  var SELETOR_BOTOES = "a.vitrine-pedir, a.vitrine-zap, a.vitrine-diferencial-link";
+  var SELETOR_BOTOES = "a.vitrine-pedir, a.vitrine-zap, a.vitrine-diferencial-link, a.fs-zap-flutuante";
 
   var lojas = LOJAS_PADRAO;
 

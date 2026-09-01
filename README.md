@@ -58,6 +58,26 @@ continua refletindo no seletor sem precisar mexer no código.
 O visual usa as variáveis de tema do próprio site (`--card`, `--text`,
 `--border`, `--success`), então acompanha o tema claro e o escuro.
 
+## Botão flutuante do WhatsApp
+
+Botão redondo fixo no canto da tela, como no site anterior. Ele não tem
+lógica própria de destino: carrega a classe `fs-zap-flutuante`, que o
+`seletor-loja.js` intercepta, então o clique abre a mesma escolha entre as
+três lojas. O `href` aponta para a Loja Centro e só entra em ação se aquele
+script não carregar.
+
+- `publicado/assets/whatsapp-flutuante.js`
+
+Dois cuidados no arquivo:
+
+- O selo "Powered by Netlify" é um iframe fixo no canto inferior direito,
+  com z-index máximo. Ele cobria o botão e engolia o clique — por isso o
+  script mede o selo e sobe o botão acima dele, refazendo a conta quando a
+  janela muda de tamanho e quando o selo é injetado (ele chega depois do
+  carregamento).
+- O botão não aparece nas rotas `#/login` e `#/admin`: o painel da equipe
+  não é lugar para um botão de venda.
+
 ## Prévia ao compartilhar
 
 O `og:url` do `index.html` apontava para `farmastudio-tropical.netlify.app`,
