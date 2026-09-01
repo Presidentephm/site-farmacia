@@ -78,6 +78,24 @@ Dois cuidados no arquivo:
 - O botão não aparece nas rotas `#/login` e `#/admin`: o painel da equipe
   não é lugar para um botão de venda.
 
+## Banner "Arraial 24 horas"
+
+Arte no mesmo padrão do banner que já existia (vermelho com corte diagonal
+e faixa amarela): avisa que a loja de Arraial d'Ajuda abre 24 horas e traz
+os horários de entrega de madrugada, 01h30 e 03h00.
+
+- `publicado/banners/arraial-24h.webp` — 2400×760, o dobro do formato do
+  carrossel (1200×380), para ficar nítido em tela retina.
+
+A imagem está hospedada junto com o site porque o Supabase Storage recusa
+upload com a chave pública — subir por lá exige estar logado como equipe.
+O registro em `fs_banners` aponta para a URL do site. Se um dia a imagem
+for subida pelo painel da equipe, basta trocar a `imagem_url` desse
+registro e apagar o arquivo daqui.
+
+Com dois banners cadastrados, o carrossel finalmente alterna sozinho — ele
+já fazia isso, mas ficava parado porque só havia um banner.
+
 ## Prévia ao compartilhar
 
 O `og:url` do `index.html` apontava para `farmastudio-tropical.netlify.app`,
