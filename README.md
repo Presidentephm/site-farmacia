@@ -96,6 +96,25 @@ registro e apagar o arquivo daqui.
 Com dois banners cadastrados, o carrossel finalmente alterna sozinho — ele
 já fazia isso, mas ficava parado porque só havia um banner.
 
+## Carrossel de banners no celular
+
+`publicado/assets/banner-mobile.js` conserta duas coisas, só em aparelhos de
+toque e telas até 640px. No computador nada disso roda.
+
+**Parava de passar sozinho.** A vitrine pausa o rodízio no `mouseenter` e só
+retoma no `mouseleave`. Num aparelho de toque o `mouseenter` dispara no
+primeiro toque e o `mouseleave` nunca vem, então o carrossel congelava para
+sempre. Um vigia percebe que o banner ficou parado além de 7,5s (o rodízio
+troca a cada 6s) e toca no próximo pontinho. No computador a pausa ao passar
+o mouse continua valendo — foi verificada depois da mudança.
+
+**As artes apareciam cortadas nas laterais.** Até 640px o CSS do site deixa o
+quadro do banner mais alto (`aspect-ratio: 1200/520`) do que as artes
+(1200/380), e o recorte é `cover`, que amplia a imagem até preencher a altura.
+O script passa a dar ao quadro a proporção da própria imagem carregada, então
+nada é cortado — e vale para qualquer arte que venha a ser cadastrada, não só
+as duas de hoje.
+
 ## Prévia ao compartilhar
 
 O `og:url` do `index.html` apontava para `farmastudio-tropical.netlify.app`,
