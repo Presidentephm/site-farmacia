@@ -81,8 +81,14 @@ Dois cuidados no arquivo:
 ## Banner "Arraial 24 horas"
 
 Arte no mesmo padrão do banner que já existia (vermelho com corte diagonal
-e faixa amarela): avisa que a loja de Arraial d'Ajuda abre 24 horas e traz
-os horários de entrega de madrugada, 01h30 e 03h00.
+e faixa amarela). À esquerda, que a loja de Arraial d'Ajuda abre 24 horas.
+À direita, que a entrega em Porto Seguro sai às 01h30 e 03h00 — os horários
+existem porque o entregador atravessa de balsa, o que o selo "nos horários
+da balsa" explica sem precisar de frase longa.
+
+Os corpos de texto são grandes de propósito: numa tela de celular o banner
+cai para menos de 400px de largura, e o que era pequeno na arte fica
+ilegível.
 
 - `publicado/banners/arraial-24h.webp` — 2400×760, o dobro do formato do
   carrossel (1200×380), para ficar nítido em tela retina.
