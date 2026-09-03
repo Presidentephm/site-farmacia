@@ -14,6 +14,7 @@ FILL_SEC = PatternFill("solid", fgColor="D9E2F3")
 FILL_HDR = PatternFill("solid", fgColor="2E5496")
 FILL_TOT = PatternFill("solid", fgColor="E2EFDA")
 FILL_LIQ = PatternFill("solid", fgColor="C6E0B4")
+FILL_IN = PatternFill("solid", fgColor="FFF2CC")
 FILL_ALERT = PatternFill("solid", fgColor="FFF0F0")
 thin = Side(style="thin", color="BFBFBF")
 BOX = Border(left=thin, right=thin, top=thin, bottom=thin)
@@ -29,7 +30,7 @@ def E(nome, sal, com, he=0.0, notu=0.0, aux=0.0, meta=0.0, inc=0.0, vt6=0.0, obs
     prov = round(sal + he + notu + com + dsr + aux + meta + inc, 2)
     desc = round(-inc + vt6, 2)
     return dict(nome=nome, sal=sal, he=he, notu=notu, com=com, dsr=dsr, aux=aux,
-                meta=meta, inc=inc, prov=prov, vt6=vt6, adiant_inc=-inc,
+                meta=meta, inc=inc, prov=prov, vt6=vt6, adiant_inc=-inc, adiant_sal=None,
                 desc=desc, liq=round(prov + desc, 2), obs=obs)
 
 ARRAIAL = [
@@ -74,6 +75,7 @@ COLS = [("FUNCIONÁRIO", "nome", 15), ("SALÁRIO", "sal", 12), ("HORAS EXTRAS", 
         ("AD. NOTURNO", "notu", 12), ("COMISSÃO", "com", 12), ("DSR", "dsr", 11),
         ("AUX. GERÊNCIA", "aux", 12), ("PRÊMIO META CX", "meta", 12), ("INCENTIVOS", "inc", 12),
         ("TOTAL PROVENTOS", "prov", 14), ("ADIANT. INCENT.", "adiant_inc", 13),
+        ("ADIANTAMENTO SALARIAL / VALES", "adiant_sal", 15),
         ("VALE TRANSP. 6%", "vt6", 13), ("TOTAL DESCONTOS", "desc", 14),
         ("LÍQUIDO PARCIAL", "liq", 14), ("OBSERVAÇÃO", "obs", 70)]
 
@@ -107,9 +109,19 @@ for loja, emps in LOJAS:
     ws.row_dimensions[r].height = 19
     r += 1
     ini = r
+    KEYS = [k for _, k, _ in COLS]
+    L = {k: get_column_letter(i) for i, k in enumerate(KEYS, 1)}
     for e in emps:
         for i, (_, k, _) in enumerate(COLS, 1):
-            c = ws.cell(r, i, e[k])
+            if k == "prov":
+                v = f"=SUM({L['sal']}{r}:{L['inc']}{r})"
+            elif k == "desc":
+                v = f"=SUM({L['adiant_inc']}{r}:{L['vt6']}{r})"
+            elif k == "liq":
+                v = f"={L['prov']}{r}+{L['desc']}{r}"
+            else:
+                v = e[k]
+            c = ws.cell(r, i, v)
             c.border = BOX
             if k == "nome":
                 c.font = font(10, True)
@@ -123,6 +135,8 @@ for loja, emps in LOJAS:
                     c.fill = FILL_LIQ
                 elif k in ("prov", "desc"):
                     c.fill = FILL_TOT
+                elif k == "adiant_sal":
+                    c.font = font(10, False, "0000FF"); c.fill = FILL_IN
         r += 1
     fim = r - 1
     linhas_loja.append((loja, ini, fim))
@@ -153,7 +167,8 @@ r += 2
 avisos = [
  "O QUE AINDA NÃO ESTÁ NESTE RESUMO — precisa ser somado antes de fechar o holerite:",
  "• INSS e IRRF de cada funcionário (cálculo da contabilidade) — por isso a última coluna é LÍQUIDO PARCIAL.",
- "• Vales adiantados, convênio e descontos de falta do mês.",
+ "• Convênio e descontos de falta do mês.",
+ "• A coluna ADIANTAMENTO SALARIAL / VALES está em amarelo, para preencher com o valor adiantado a cada um (em negativo). O total de descontos e o líquido se atualizam sozinhos.",
  "• Prêmio cota geral e prêmio pré-vencidos, conforme a apuração de metas de cada loja.",
  "• Diárias dos folguistas SERGIO (R$ 150,00) e ANA CELIA (R$ 100,00), na loja Centro — vão para o contas a pagar, fora do holerite.",
  "",
