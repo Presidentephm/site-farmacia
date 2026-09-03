@@ -214,6 +214,7 @@ notas = [
  "CONFERÊNCIA — total geral do relatório InovaFarma: venda bruta R$ 300.371,95 · descontos R$ 90.276,65 · venda líquida R$ 210.095,30 · comissão R$ 4.856,69 · incentivo R$ 685,00.",
  "INCENT. APLIC. = incentivo do grupo INJETÁVEIS (aplicações). INCENT. VITAM. = grupo APLICAÇÃO E VITAMINAS INCENTIVO. OUTROS INCENT. = populares, oficinais e similar normal.",
  "A comissão acima é a APURADA pelo sistema. Comissões de PDV antigos e valores fixos acordados são lançados à parte na aba HOLERITE AGO.26.",
+ "DEAN não recebe comissão em folha: no caso dele a comissão apurada acima é apenas informativa. Os incentivos continuam sendo lançados normalmente — confirmar se também ficam de fora.",
  "JOEL: venda bruta de apenas R$ 5.057,69 porque esteve de FÉRIAS em agosto/2026 — a comissão apurada (R$ 103,31) corresponde só aos dias trabalhados.",
 ]
 for t in notas:
@@ -299,8 +300,8 @@ rows["HORAS EXTRAS"] = r
 r = linha(ws, r, "HORAS EXTRAS", {}, "PREENCHER com o apurado no ponto de agosto/2026.", kind="in")
 rows["COMISSÃO PRODUTOS (INOVAFARMA)"] = r
 r = linha(ws, r, "COMISSÃO PRODUTOS (INOVAFARMA)",
-          {n: f"={BASE}!F{BASE_ROW[n]}" for n in EMP},
-          "Apurado no InovaFarma (aba BASE INOVAFARMA AGO.26). AGNOR: mantido o fixo de R$ 2.000,00 pela linha de complemento abaixo. DEAN: R$ 975,65 apurado — em jul/26 não houve lançamento de comissão para ele; confirmar.",
+          {n: (0 if n == "DEAN" else f"={BASE}!F{BASE_ROW[n]}") for n in EMP},
+          "Apurado no InovaFarma (aba BASE INOVAFARMA AGO.26). DEAN NÃO RECEBE COMISSÃO — lançado zero (o apurado dele fica só como informação na aba BASE). AGNOR: mantido o fixo de R$ 2.000,00 pela linha de complemento abaixo.",
           kind="link")
 rows["COMPLEMENTO / COMISSÃO PDV"] = r
 r = linha(ws, r, "COMPLEMENTO / COMISSÃO PDV",
@@ -560,12 +561,12 @@ blocos = [
  ("T", "AGNOR: mantida a comissão fixa de R$ 2.000,00 — a linha COMPLEMENTO / COMISSÃO PDV calcula sozinha a diferença (R$ 1.090,49) sobre o apurado de R$ 909,51."),
  ("T", "JOEL: esteve de férias em agosto/2026 — por isso a venda e a comissão do mês ficaram baixas."),
  ("T", "CAMILA: contratada recentemente; agosto é o primeiro mês completo, com salário integral de R$ 1.621,00."),
+ ("T", "DEAN: não recebe comissão sobre vendas — a rubrica fica zerada na folha. A comissão apurada no InovaFarma (R$ 975,65) aparece apenas na aba BASE, como informação."),
  ("SEC", "PENDÊNCIAS — CONFIRMAR ANTES DE ENVIAR"),
  ("P", "Horas extras e adicional noturno de agosto (apontamento do ponto)."),
  ("P", "Prêmio cota geral e prêmio pré-vencidos de agosto."),
  ("P", "Vales adiantados, convênio e faltas de agosto."),
  ("P", "JOEL: informar o período de FÉRIAS de agosto/2026 para a contabilidade calcular férias, 1/3, média de comissões e o salário proporcional."),
- ("P", "DEAN: apurou R$ 975,65 de comissão em agosto, mas não vinha recebendo comissão em folha — confirmar."),
  ("P", "Comissões de PDV antigos, que em julho eram somadas à comissão do sistema."),
  ("P", "Desconto de vale-transporte: vem sendo lançado R$ 84,29; 6% do salário de R$ 1.621,00 seria R$ 97,26."),
  ("P", "DSR de julho/2026 foi calculado com o fator de agosto (5/26) em vez de 4/27 — ver aba JULHO.26 REVISADO e decidir se ajusta em setembro."),

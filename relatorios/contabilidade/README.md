@@ -39,3 +39,4 @@ congelados (o cabeçalho e a coluna de rubrica ficam fixos ao rolar).
   apurado é calculado automaticamente a partir da aba PARÂMETROS
 - JOEL: férias em agosto/2026 — falta informar o período
 - CAMILA: contratada recentemente; agosto é o primeiro mês completo
+- DEAN: não recebe comissão sobre vendas — rubrica zerada na folha
