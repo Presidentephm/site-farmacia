@@ -216,7 +216,7 @@ notas = [
  "INCENT. APLIC. = incentivo do grupo INJETÁVEIS (aplicações). INCENT. VITAM. = grupo APLICAÇÃO E VITAMINAS INCENTIVO. OUTROS INCENT. = populares, oficinais e similar normal.",
  "A comissão acima é a APURADA pelo sistema. Comissões de PDV antigos e valores fixos acordados são lançados à parte na aba HOLERITE AGO.26.",
  "DEAN não recebe comissão em folha: no caso dele a comissão apurada acima é apenas informativa. Os incentivos dele continuam sendo lançados normalmente.",
- "JOEL: esteve de FÉRIAS de 01 a 31/08/2026 (mês inteiro), mas o código dele registrou R$ 5.057,69 de venda bruta e R$ 103,31 de comissão — conferir quem operou o código no período.",
+ "JOEL: vendeu R$ 3.684,97 nos dias 01 e 02/08 e saiu de férias em 04/08 (retorno em 04/09) — daí a comissão de R$ 103,31. Constam ainda 2 itens de R$ 11,68 em 07/08 no código dele.",
 ]
 for t in notas:
     ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=10)
@@ -293,7 +293,7 @@ rows = {}
 r = sec(ws, r, "PROVENTOS")
 rows["SALÁRIO BASE"] = r
 r = linha(ws, r, "SALÁRIO BASE", {n: SALARIO[n] for n in EMP},
-          "Piso 2026 R$ 1.621,00. CAMILA: admitida em jul/26 (salário proporcional naquele mês); agosto é o 1º mês completo. JOEL: zerado — esteve de férias de 01 a 31/08/2026, sem dias trabalhados no mês.",
+          "Piso 2026 R$ 1.621,00. CAMILA: admitida em jul/26 (salário proporcional naquele mês); agosto é o 1º mês completo. JOEL: zerado — trabalhou de 01 a 03/08 mas esses dias já estão dentro do recibo de férias (01 a 31/08); se a empresa decidir pagá-los à parte, lançar aqui.",
           kind="in", fill=FILL_CONF)
 rows["ADICIONAL NOTURNO"] = r
 r = linha(ws, r, "ADICIONAL NOTURNO", NOTURNO, "Conforme apontamento do ponto (jul/26: EDEY R$ 350,00).", kind="in", fill=FILL_CONF)
@@ -302,7 +302,7 @@ r = linha(ws, r, "HORAS EXTRAS", {}, "PREENCHER com o apurado no ponto de agosto
 rows["COMISSÃO PRODUTOS (INOVAFARMA)"] = r
 r = linha(ws, r, "COMISSÃO PRODUTOS (INOVAFARMA)",
           {n: (0 if n == "DEAN" else f"={BASE}!F{BASE_ROW[n]}") for n in EMP},
-          "Apurado no InovaFarma (aba BASE INOVAFARMA AGO.26). JOEL: R$ 103,31 apurados no código dele mesmo estando de férias o mês inteiro — conferir quem fez essas vendas e zerar se não forem dele. DEAN NÃO RECEBE COMISSÃO — lançado zero (o apurado dele fica só como informação na aba BASE). AGNOR: mantido o fixo de R$ 2.000,00 pela linha de complemento abaixo.",
+          "Apurado no InovaFarma (aba BASE INOVAFARMA AGO.26). JOEL: R$ 103,31 das vendas dele nos dias 01 e 02/08, antes de sair de férias em 04/08 (o recibo de férias saiu como 01 a 31/08). DEAN NÃO RECEBE COMISSÃO — lançado zero (o apurado dele fica só como informação na aba BASE). AGNOR: mantido o fixo de R$ 2.000,00 pela linha de complemento abaixo.",
           kind="link")
 rows["COMPLEMENTO / COMISSÃO PDV"] = r
 r = linha(ws, r, "COMPLEMENTO / COMISSÃO PDV",
@@ -328,7 +328,7 @@ rows["PRÊMIO PRÉ-VENCIDOS"] = r
 r = linha(ws, r, "PRÊMIO PRÉ-VENCIDOS", {}, "PREENCHER conforme apuração de pré-vencidos de agosto.", kind="in")
 rows["FÉRIAS"] = r
 r = linha(ws, r, "FÉRIAS (DIAS GOZADOS)", {},
-          "JOEL: férias de 01 a 31/08/2026, JÁ PAGAS em recibo próprio no início de agosto — NÃO lançar de novo neste holerite. Linha mantida só para o caso de outras férias.",
+          "JOEL: recibo de férias de 01 a 31/08/2026, JÁ PAGO no início de agosto — NÃO lançar de novo aqui. Pelo acordo interno ele saiu em 04/08 e volta em 04/09.",
           kind="in", fill=FILL_CONF)
 rows["1/3 FÉRIAS"] = r
 r = linha(ws, r, "1/3 CONSTITUCIONAL DE FÉRIAS", {},
@@ -366,7 +366,7 @@ rows["FALTAS"] = r
 r = linha(ws, r, "DESCONTO FALTAS / ATRASOS", {}, "PREENCHER conforme o ponto.", kind="in")
 rows["VT6"] = r
 r = linha(ws, r, "DESCONTO VALE TRANSPORTE 6%", VT6,
-          "Valor praticado em jul/26. 6% sobre R$ 1.621,00 seria R$ 97,26 — CONFERIR a base usada. JOEL: zerado, mês inteiro de férias.", kind="in", fill=FILL_CONF)
+          "Valor praticado em jul/26. 6% sobre R$ 1.621,00 seria R$ 97,26 — CONFERIR a base usada. JOEL: zerado, mês de férias.", kind="in", fill=FILL_CONF)
 rows["INSS"] = r
 r = linha(ws, r, "DESCONTO INSS", {}, "A CALCULAR PELA CONTABILIDADE sobre o total de proventos (tabela progressiva vigente).", kind="in")
 rows["IRRF"] = r
@@ -385,7 +385,7 @@ r = linha(ws, r, "LÍQUIDO A RECEBER (05/09/2026)",
 
 r = sec(ws, r, "INFORMATIVO — PAGO PELA EMPRESA, NÃO ENTRA NO HOLERITE")
 rows["VT"] = r
-r = linha(ws, r, "VALE TRANSPORTE (compra set/26)", {}, "PREENCHER com as passagens compradas para setembro/2026.", kind="in")
+r = linha(ws, r, "VALE TRANSPORTE (compra set/26)", {}, "PREENCHER com as passagens compradas para setembro/2026. JOEL: só a partir de 04/09, quando volta das férias.", kind="in")
 rows["VA"] = r
 r = linha(ws, r, "VALE ALIMENTAÇÃO FERIADOS E DOMINGOS", {}, "PREENCHER conforme escala de domingos/feriados de agosto.", kind="in")
 
@@ -649,15 +649,15 @@ blocos = [
  ("T", "DSR de agosto/2026: 5 domingos (02, 09, 16, 23 e 30) ÷ 26 dias úteis = fator 0,192307"),
  ("SEC", "JÁ DEFINIDO PELA EMPRESA"),
  ("T", "AGNOR: mantida a comissão fixa de R$ 2.000,00 — a linha COMPLEMENTO / COMISSÃO PDV calcula sozinha a diferença (R$ 1.090,49) sobre o apurado de R$ 909,51."),
- ("T", "JOEL: férias de 01 a 31/08/2026 (mês inteiro), já pagas em recibo próprio no início de agosto. Neste holerite ele fica sem salário e sem desconto de vale-transporte; férias e 1/3 NÃO se repetem aqui."),
+ ("T", "JOEL: por acordo interno saiu em 04/08 e volta em 04/09, mas o recibo de férias saiu como 01 a 31/08 e já foi pago no início de agosto. Por isso ele tem comissão dos dias 01 e 02/08 (R$ 103,31) e fica sem salário e sem desconto de vale-transporte neste holerite; férias e 1/3 NÃO se repetem aqui."),
  ("T", "CAMILA: contratada recentemente; agosto é o primeiro mês completo, com salário integral de R$ 1.621,00."),
  ("T", "DEAN: não recebe comissão sobre vendas — a rubrica fica zerada na folha (a apurada, R$ 975,65, aparece só na aba BASE). Os incentivos dele continuam sendo pagos normalmente."),
  ("SEC", "PENDÊNCIAS — CONFIRMAR ANTES DE ENVIAR"),
  ("P", "Horas extras e adicional noturno de agosto (apontamento do ponto)."),
  ("P", "Prêmio cota geral e prêmio pré-vencidos de agosto."),
  ("P", "Vales adiantados, convênio e faltas de agosto."),
- ("P", "JOEL: o código dele registrou R$ 103,31 de comissão mesmo com o mês inteiro de férias — conferir quem operou o código e zerar a rubrica se as vendas não forem dele."),
- ("P", "JOEL: confirmar se sobra algum desconto para agosto (convênio, vale ou adiantamento) ou se o holerite dele fica zerado."),
+ ("P", "JOEL: confirmar se há algum desconto para agosto (convênio, vale ou adiantamento) — hoje o holerite dele fica só com a comissão de R$ 103,31 e o DSR."),
+ ("P", "JOEL: como o retorno é em 04/09, o vale-transporte de setembro deve ser proporcional e o holerite de setembro ainda pega os dias 01 a 03/09 de férias, já pagos no recibo de agosto."),
  ("P", "Comissões de PDV antigos, que em julho eram somadas à comissão do sistema."),
  ("P", "Desconto de vale-transporte: vem sendo lançado R$ 84,29; 6% do salário de R$ 1.621,00 seria R$ 97,26."),
  ("P", "DSR de julho/2026 foi calculado com o fator de agosto (5/26) em vez de 4/27 — ver aba JULHO.26 REVISADO e decidir se ajusta em setembro."),

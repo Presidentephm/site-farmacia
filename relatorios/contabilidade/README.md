@@ -50,6 +50,7 @@ InovaFarma. A aba já está configurada para imprimir em uma página.
 
 ## Férias
 
-- JOEL: férias de 01 a 31/08/2026, pagas em recibo próprio no início de
+- JOEL: acordo interno de saída em 04/08 e retorno em 04/09; o recibo de
+  férias saiu como 01 a 31/08/2026 e foi pago no início de
   agosto — não se repetem neste holerite; salário e desconto de
   vale-transporte zerados no mês
