@@ -339,7 +339,7 @@ def build(cfg):
     r = linha(ws, r, "COMPLEMENTO / COMISSÃO PDV", vals_pdv, obs_pdv,
               kind="in", fill=FILL_CONF if fixa else None)
     rows["COMISSÃO TOTAL"] = r
-    r = linha(ws, r, "= COMISSÃO TOTAL",
+    r = linha(ws, r, "COMISSÃO TOTAL (soma)",
               {n: f"=SUM({get_column_letter(C0+i)}{rows['COM INOVA']}:{get_column_letter(C0+i)}{rows['COM PDV']})"
                for i, n in enumerate(EMP)},
               "Base do DSR junto com as horas extras.", kind="calc", bold=True, fill=FILL_TOT)
@@ -347,7 +347,7 @@ def build(cfg):
     r = linha(ws, r, "REPOUSO REMUNERADO / DSR",
               {n: (f"=ROUND(({get_column_letter(C0+i)}{rows['COMISSÃO TOTAL']}"
                    f"+{get_column_letter(C0+i)}{rows['HORAS EXTRAS']})*{FATOR},2)") for i, n in enumerate(EMP)},
-              "= (comissão total + horas extras) × (4 domingos + feriado 07/09) ÷ 25 dias úteis de setembro/2026.", kind="calc")
+              "Cálculo: (comissão total + horas extras) × (4 domingos + feriado 07/09) ÷ 25 dias úteis de setembro/2026.", kind="calc")
     rows["AUXÍLIO GERÊNCIA"] = r
     r = linha(ws, r, "AUXÍLIO GERÊNCIA", cfg["AUXGER"], "Conforme acordo da loja.", kind="in")
     rows["META CAIXA"] = r

@@ -48,7 +48,7 @@ CENTRO = dict(
  SALARIO={"ARIANE": 5648.41, "ELIANA": 1621.0, "GENECIR": 1621.0,
           "RENALDO": 1621.0, "THAYANE": 1621.0, "PEDRO": 1621.0},
  NOTURNO={}, AUXGER={}, METACX={},
- VT6={"ELIANA": -84.29, "GENECIR": -84.29, "RENALDO": -74.29, "THAYANE": -84.29},
+ VT6={"ELIANA": -84.29, "RENALDO": -74.29, "THAYANE": -84.29},
  SEM_COMISSAO=["ARIANE", "PEDRO"],
  SALARIO_ZERO={"GENECIR": "férias de 01 a 30/08/2026, pagas em recibo próprio"},
  JUL={"COMISSÃO PRODUTOS + PDV": {"ELIANA": 1400.0, "GENECIR": 100.0, "RENALDO": 1200.0, "THAYANE": 60.0},
@@ -346,7 +346,7 @@ def build(cfg):
     r = linha(ws, r, "COMPLEMENTO / COMISSÃO PDV", {},
               "PREENCHER: PDV antigos e complementos de comissão acordados, se houver.", kind="in")
     rows["COMISSÃO TOTAL"] = r
-    r = linha(ws, r, "= COMISSÃO TOTAL",
+    r = linha(ws, r, "COMISSÃO TOTAL (soma)",
               {n: f"=SUM({get_column_letter(C0+i)}{rows['COM INOVA']}:{get_column_letter(C0+i)}{rows['COM PDV']})"
                for i, n in enumerate(EMP)},
               "Base do DSR junto com as horas extras.", kind="calc", bold=True, fill=FILL_TOT)
@@ -354,7 +354,7 @@ def build(cfg):
     r = linha(ws, r, "REPOUSO REMUNERADO / DSR",
               {n: (f"=ROUND(({get_column_letter(C0+i)}{rows['COMISSÃO TOTAL']}"
                    f"+{get_column_letter(C0+i)}{rows['HORAS EXTRAS']})*{FATOR},2)") for i, n in enumerate(EMP)},
-              "= (comissão total + horas extras) × 5 domingos ÷ 26 dias úteis de agosto/2026.", kind="calc")
+              "Cálculo: (comissão total + horas extras) × 5 domingos ÷ 26 dias úteis de agosto/2026.", kind="calc")
     rows["AUXÍLIO GERÊNCIA"] = r
     r = linha(ws, r, "AUXÍLIO GERÊNCIA", cfg["AUXGER"], "Conforme acordo da loja.", kind="in")
     rows["META CAIXA"] = r
@@ -403,7 +403,7 @@ def build(cfg):
     r = linha(ws, r, "DESCONTO FALTAS / ATRASOS", {}, "PREENCHER conforme o ponto.", kind="in")
     rows["VT6"] = r
     r = linha(ws, r, "DESCONTO VALE TRANSPORTE 6%", cfg["VT6"],
-              "Valores praticados em jul/26. 6% sobre R$ 1.621,00 seria R$ 97,26 — CONFERIR a base usada.",
+              "Valores praticados em jul/26. 6% sobre R$ 1.621,00 seria R$ 97,26 — CONFERIR a base usada. Quem passou o mês em férias fica sem desconto.",
               kind="in", fill=FILL_CONF)
     rows["INSS"] = r
     r = linha(ws, r, "DESCONTO INSS", {}, "A CALCULAR PELA CONTABILIDADE sobre o total de proventos.", kind="in")

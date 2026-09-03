@@ -118,3 +118,10 @@ Ocorrências já registradas:
   a 27 dias (R$ 1.458,90)
 - TAMILES (Trancoso): atestado de 02 a 08/09, abonado, sem desconto
 - GENECIR (Centro): voltou das férias, salário integral
+
+## Resumo consolidado
+
+`RESUMO_3_LOJAS_AGOSTO_2026_pgto_05-09-2026.xlsx` reúne as três lojas
+numa página só, por funcionário, com totais por loja e total geral. É o
+arquivo para mandar à contabilidade junto com os três detalhados.
+Gerado por `gerar_resumo_3_lojas.py`.

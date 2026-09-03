@@ -316,13 +316,13 @@ r = linha(ws, r, "COMPLEMENTO / COMISSÃO PDV",
           "AGNOR: complemento até a comissão fixa de R$ 2.000,00 (parâmetro na aba PARÂMETROS). SARA: R$ 2,65 de comissão apurada no código dela na loja CENTRO (venda bruta de R$ 365,03), trazida para a folha do Arraial. Demais: preencher com PDV antigos, se houver.",
           kind="in", fill=FILL_CONF)
 rows["COMISSÃO TOTAL"] = r
-r = linha(ws, r, "= COMISSÃO TOTAL",
+r = linha(ws, r, "COMISSÃO TOTAL (soma)",
           {n: f"=SUM({get_column_letter(C0+i)}{rows['COMISSÃO PRODUTOS (INOVAFARMA)']}:{get_column_letter(C0+i)}{rows['COMPLEMENTO / COMISSÃO PDV']})" for i, n in enumerate(EMP)},
           "Base do DSR junto com as horas extras.", kind="calc", bold=True, fill=FILL_TOT)
 rows["DSR"] = r
 r = linha(ws, r, "REPOUSO REMUNERADO / DSR",
           {n: f"=ROUND(({get_column_letter(C0+i)}{rows['COMISSÃO TOTAL']}+{get_column_letter(C0+i)}{rows['HORAS EXTRAS']})*{FATOR},2)" for i, n in enumerate(EMP)},
-          "= (comissão total + horas extras) × 5 domingos ÷ 26 dias úteis de agosto/2026 (fator na aba PARÂMETROS). A linha HORAS EXTRAS inclui o feriado trabalhado vindo da aba PONTO AGO.26.",
+          "Cálculo: (comissão total + horas extras) × 5 domingos ÷ 26 dias úteis de agosto/2026 (fator na aba PARÂMETROS). A linha HORAS EXTRAS inclui o feriado trabalhado vindo da aba PONTO AGO.26.",
           kind="calc")
 rows["AUXÍLIO GERÊNCIA"] = r
 r = linha(ws, r, "AUXÍLIO GERÊNCIA", AUXGER, "AGNOR e SARA — valor recorrente de jul/26.", kind="in", fill=FILL_CONF)
@@ -633,7 +633,8 @@ wsg.sheet_properties.pageSetUpPr.fitToPage = True
 PONTO = [  # (funcionario, tipo, qtde, observacao)
  ("EDEY",    "HE50", 24, "24 horas extras normais em agosto/2026."),
  ("EDEY",    "VALOR", 350.0, "Adicional noturno lançado como valor fixo desde jul/26 — CONFERIR com o apontamento do ponto."),
- ("NATI",    "NOT",  17, "17 horas noturnas."),
+ ("NATI",    "HE50", 17, "17 horas extras noturnas — parcela de hora extra (50%)."),
+ ("NATI",    "NOT",  17, "17 horas extras noturnas — parcela do adicional noturno (20%)."),
  ("NATI",    "FER",   1, "Feriado de 15/08/2026 trabalhado, sem folga compensatória — pago em dobro (1 dia a mais)."),
  ("CAMILA",  "FER",   1, "Dia 15/08/2026 (feriado) trabalhado."),
  ("SARA",    "FER",   1, "Dia 15/08/2026 (feriado) trabalhado."),
@@ -768,7 +769,7 @@ blocos = [
  ("T", "DSR de agosto/2026: 5 domingos (02, 09, 16, 23 e 30) ÷ 26 dias úteis = fator 0,192307"),
  ("SEC", "APONTAMENTO DE AGOSTO/2026 (aba PONTO AGO.26)"),
  ("T", "EDEY: 24 horas extras normais → R$ 265,25."),
- ("T", "NATI: 17 horas noturnas → R$ 25,05 de adicional; e o feriado de 15/08 trabalhado sem folga → R$ 54,03."),
+ ("T", "NATI: 17 horas extras noturnas → R$ 187,89 de hora extra mais R$ 25,05 de adicional noturno; e o feriado de 15/08 trabalhado sem folga → R$ 54,03."),
  ("T", "CAMILA, SARA e VALÉRIA: dia 15/08 (feriado) trabalhado → R$ 54,03 cada."),
  ("T", "VALÉRIA: 2 madrugadas de 8 horas (16 h) com folga no dia seguinte → R$ 23,58 de adicional noturno."),
  ("T", "AGNOR: 3 madrugadas de 8 horas (24 h) com folga → R$ 35,37 de adicional noturno."),
