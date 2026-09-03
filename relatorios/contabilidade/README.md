@@ -26,3 +26,16 @@
 - Célula laranja: valor repetido de julho/2026 — conferir se ainda vale
 - Texto verde: valor vinculado à aba BASE INOVAFARMA AGO.26
 - Célula verde com texto preto: resultado de fórmula — não alterar
+
+## Filtros
+
+As abas HOLERITE AGO.26, JULHO.26 REVISADO, LISTA CONTABILIDADE e
+BASE INOVAFARMA AGO.26 têm filtro na linha de cabeçalho e painéis
+congelados (o cabeçalho e a coluna de rubrica ficam fixos ao rolar).
+
+## Definições da empresa (agosto/2026)
+
+- AGNOR: mantida a comissão fixa de R$ 2.000,00 — o complemento sobre o
+  apurado é calculado automaticamente a partir da aba PARÂMETROS
+- JOEL: férias em agosto/2026 — falta informar o período
+- CAMILA: contratada recentemente; agosto é o primeiro mês completo
