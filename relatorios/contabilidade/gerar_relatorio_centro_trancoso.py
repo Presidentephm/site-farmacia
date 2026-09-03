@@ -110,12 +110,17 @@ TRANCOSO = dict(
  JUL_VA={},
  JUL_ABA="TRANCOSO JULHO",
  PONTO=[("INIURLE", "HE50", 40, "40 horas extras normais em agosto/2026.")],
+ PONTO_PROX=[("TAMILES", "Atestado médico de 7 dias, entregue em 02/09/2026 — cobre de 02/09 a 08/09/2026.",
+              "Cai na competência SETEMBRO/2026 (holerite pago em 05/10/2026), não nesta folha de agosto. "
+              "Atestado de até 15 dias é abonado pela empresa: falta justificada, sem desconto de salário nem de DSR. "
+              "A partir do 16º dia seria auxílio-doença pelo INSS. Anexar o atestado à pasta da funcionária.")],
  JUL_NOTA="OBSERVAÇÃO: em julho/2026 a comissão foi lançada por uma MÉDIA, e não pelo apurado do sistema. A partir de agosto/2026 a loja passa a pagar a comissão em dobro, e a empresa vai reduzir nas premiações a diferença gerada por esse aumento.",
  DEFINIDO=["TRANCOSO PAGA O DOBRO DA COMISSÃO APURADA: a linha COMISSÃO PRODUTOS já multiplica por 2 o valor do InovaFarma (multiplicador na aba PARÂMETROS).",
            "Os incentivos são simples: entram pelo valor apurado, sem dobrar.",
            "Em julho/2026 a comissão foi lançada por média. Com a comissão dobrada a partir de agosto, a empresa vai reduzir nas premiações a diferença.",
            "UILLIAN: não recebe comissão sobre vendas (mesmo critério de julho/2026) — a rubrica fica zerada e o apurado dele aparece só na aba BASE."],
- PENDENCIAS=["Lançar na linha PRÊMIO COTA GERAL o valor já com a redução combinada, para compensar o aumento da comissão dobrada.",
+ PENDENCIAS=["TAMILES: atestado de 02/09 a 08/09/2026 — lançar na folha de SETEMBRO como falta justificada (abonada), sem desconto. Não entra nesta folha de agosto.",
+             "Lançar na linha PRÊMIO COTA GERAL o valor já com a redução combinada, para compensar o aumento da comissão dobrada.",
              "UILLIAN também registra vendas no relatório da loja Centro — conferir se alguma comissão deve ser rateada entre as lojas."],
 )
 
@@ -741,6 +746,26 @@ def build(cfg):
         c.alignment = Alignment(wrap_text=True, vertical="center")
         wsp.row_dimensions[pr].height = 24
         pr += 1
+    if cfg.get("PONTO_PROX"):
+        pr += 1
+        for i in range(1, 10):
+            wsp.cell(pr, i).fill = FILL_SEC
+        c = wsp.cell(pr, 1, "OCORRÊNCIAS PARA A PRÓXIMA COMPETÊNCIA (SETEMBRO/2026) — NÃO ENTRAM NESTA FOLHA")
+        c.font = font(11, True, "1F3864")
+        wsp.row_dimensions[pr].height = 19
+        pr += 1
+        for func, ocorrencia, detalhe in cfg["PONTO_PROX"]:
+            c = wsp.cell(pr, 1, func); c.font = font(10, True); c.border = BOX
+            wsp.merge_cells(start_row=pr, start_column=2, end_row=pr, end_column=9)
+            c = wsp.cell(pr, 2, ocorrencia); c.font = font(10, True, "C00000"); c.fill = FILL_ALERT
+            c.alignment = Alignment(wrap_text=True, vertical="center")
+            pr += 1
+            wsp.merge_cells(start_row=pr, start_column=2, end_row=pr, end_column=9)
+            c = wsp.cell(pr, 2, detalhe); c.font = font(9, it=True)
+            c.alignment = Alignment(wrap_text=True, vertical="center")
+            wsp.row_dimensions[pr].height = 30
+            pr += 1
+
     wsh = wb["HOLERITE AGO.26"]
     for rub, lh in (("HORAS EXTRAS", rows["HORAS EXTRAS"]), ("ADICIONAL NOTURNO", rows["ADICIONAL NOTURNO"])):
         for i, n in enumerate(EMP):
