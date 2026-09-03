@@ -125,3 +125,16 @@ Ocorrências já registradas:
 numa página só, por funcionário, com totais por loja e total geral. É o
 arquivo para mandar à contabilidade junto com os três detalhados.
 Gerado por `gerar_resumo_3_lojas.py`.
+
+## Férias registradas
+
+| Quem | Loja | Período | Situação |
+|---|---|---|---|
+| JOEL | Arraial | 01 a 31/08/2026 | recibo pago no início de agosto |
+| GENECIR | Centro | 01 a 30/08/2026 | recibo pago em agosto |
+| RENALDO | Centro | 01 a 30/09/2026 | entra na folha de setembro |
+| VALDICK | Trancoso | 01 a 30/09/2026 | entra na folha de setembro |
+
+Quem passa o mês inteiro de férias fica com salário zerado no holerite e
+sem desconto de vale-transporte; férias e 1/3 são pagos em recibo próprio
+e ficam registrados na linha FÉRIAS PAGAS À PARTE, fora do líquido.

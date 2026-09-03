@@ -68,6 +68,7 @@ CENTRO = dict(
  JUL_VT={"ELIANA": 270.0, "RENALDO": 260.0, "THAYANE": 260.0, "PEDRO": 350.0},
  JUL_VA={},
  JUL_ABA="CENTRO 05JULHO",
+ FERIAS_OBS="GENECIR: férias de 01 a 30/08/2026, pagas em recibo próprio — informar o valor.",
  PONTO=[],
  DEFINIDO=["ARIANE e PEDRO: não recebem comissão sobre vendas — a rubrica fica zerada e o apurado deles aparece só na aba BASE.",
            "GENECIR: férias de 01 a 30/08/2026, já pagas em recibo próprio — salário zerado neste holerite; confirmar o dia 31/08.",
@@ -109,6 +110,7 @@ TRANCOSO = dict(
  JUL_VT={"MANOEL": 750.0, "VALDICK": 400.0},
  JUL_VA={},
  JUL_ABA="TRANCOSO JULHO",
+ FERIAS_OBS="Não houve férias nesta loja em agosto/2026. RENALDO (Centro) e VALDICK (Trancoso) entram de férias em 01/09 — ver a folha de setembro.",
  PONTO=[("INIURLE", "HE50", 40, "40 horas extras normais em agosto/2026.")],
  PONTO_PROX=[("TAMILES", "Atestado médico de 7 dias, entregue em 02/09/2026 — cobre de 02/09 a 08/09/2026.",
               "Cai na competência SETEMBRO/2026 (holerite pago em 05/10/2026), não nesta folha de agosto. "
@@ -390,7 +392,7 @@ def build(cfg):
               kind="calc", bold=True, fill=FILL_TOT)
     r = sec(ws, r, "DESCONTOS  (lançar com sinal negativo)")
     rows["VALES"] = r
-    r = linha(ws, r, "ADIANTAMENTO / VALES", {}, "PREENCHER com os vales adiantados durante agosto.", kind="in")
+    r = linha(ws, r, "ADIANTAMENTO SALARIAL / VALES", {}, "PREENCHER com os vales adiantados durante agosto.", kind="in")
     rows["VALES INC"] = r
     r = linha(ws, r, "ADIANT. VALES INCENT. E APLIC.",
               {n: (f"=-({get_column_letter(C0+i)}{rows['INC APLIC']}+{get_column_letter(C0+i)}{rows['INC VIT']}"
@@ -425,6 +427,11 @@ def build(cfg):
     r = linha(ws, r, "VALE TRANSPORTE (compra set/26)", {}, "PREENCHER com as passagens compradas para setembro/2026.", kind="in")
     rows["VA"] = r
     r = linha(ws, r, "VALE ALIMENTAÇÃO FERIADOS E DOMINGOS", {}, "PREENCHER conforme escala de domingos e feriados.", kind="in")
+    rows["FERIAS PARTE"] = r
+    r = linha(ws, r, "FÉRIAS PAGAS À PARTE (CONTAS A PAGAR)", {},
+              "Recibo de férias pago fora do holerite — lembrete para o contas a pagar. "
+              + cfg.get("FERIAS_OBS", "Preencher se houve férias no mês."),
+              kind="in", fill=FILL_CONF)
     ws.auto_filter.ref = f"A4:{LO}{r-1}"
     r += 1
     for a, b in [("LEGENDA", ""),
@@ -544,7 +551,7 @@ def build(cfg):
              ("INC VIT", "INCENTIVO VITAMINAS", "Provento"),
              ("INC OUTROS", "OUTROS INCENTIVOS", "Provento"),
              ("TOTAL PROVENTOS", "TOTAL DE PROVENTOS", "Subtotal"),
-             ("VALES", "ADIANTAMENTO / VALES", "Desconto"),
+             ("VALES", "ADIANTAMENTO SALARIAL / VALES", "Desconto"),
              ("VALES INC", "ADIANT. VALES INCENT. E APLIC.", "Desconto"),
              ("CONVÊNIO", "CONVÊNIO", "Desconto"),
              ("FALTAS", "DESCONTO FALTAS / ATRASOS", "Desconto"),
@@ -607,7 +614,7 @@ def build(cfg):
               ("L", "Outros incentivos", rows["INC OUTROS"]),
               ("T", "TOTAL DE PROVENTOS", rows["TOTAL PROVENTOS"]),
               ("SEC", "DESCONTOS", None),
-              ("L", "Adiantamento / vales", rows["VALES"]),
+              ("L", "Adiantamento salarial / vales", rows["VALES"]),
               ("L", "Adiantamento de incentivos e aplicações", rows["VALES INC"]),
               ("L", "Convênio", rows["CONVÊNIO"]),
               ("L", "Faltas / atrasos", rows["FALTAS"]),

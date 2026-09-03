@@ -360,7 +360,7 @@ r = linha(ws, r, "TOTAL DE PROVENTOS",
 
 r = sec(ws, r, "DESCONTOS  (lançar com sinal negativo)")
 rows["VALES"] = r
-r = linha(ws, r, "ADIANTAMENTO / VALES", {}, "PREENCHER com os vales adiantados durante agosto.", kind="in")
+r = linha(ws, r, "ADIANTAMENTO SALARIAL / VALES", {}, "PREENCHER com os vales adiantados durante agosto.", kind="in")
 rows["VALES INC"] = r
 r = linha(ws, r, "ADIANT. VALES INCENT. E APLIC.",
           {n: f"=-({get_column_letter(C0+i)}{rows['INC APLIC']}+{get_column_letter(C0+i)}{rows['INC VIT']}+{get_column_letter(C0+i)}{rows['INC OUTROS']})" for i, n in enumerate(EMP)},
@@ -394,6 +394,10 @@ rows["VT"] = r
 r = linha(ws, r, "VALE TRANSPORTE (compra set/26)", {}, "PREENCHER com as passagens compradas para setembro/2026. JOEL: só a partir de 04/09, quando volta das férias.", kind="in")
 rows["VA"] = r
 r = linha(ws, r, "VALE ALIMENTAÇÃO FERIADOS E DOMINGOS", {}, "PREENCHER conforme escala de domingos/feriados de agosto.", kind="in")
+rows["FERIAS PARTE"] = r
+r = linha(ws, r, "FÉRIAS PAGAS À PARTE (CONTAS A PAGAR)", {},
+          "Recibo de férias pago fora do holerite — lembrete para o contas a pagar. JOEL: férias de 01 a 31/08/2026, pagas no início de agosto — informar o valor.",
+          kind="in", fill=FILL_CONF)
 
 ws.auto_filter.ref = f"A4:{LO}{r-1}"
 r += 1
@@ -511,7 +515,7 @@ LISTA = [("SALÁRIO BASE", "SALÁRIO BASE", "Provento"),
          ("INC VIT", "INCENTIVO VITAMINAS", "Provento"),
          ("INC OUTROS", "OUTROS INCENTIVOS", "Provento"),
          ("TOTAL PROVENTOS", "TOTAL DE PROVENTOS", "Subtotal"),
-         ("VALES", "ADIANTAMENTO / VALES", "Desconto"),
+         ("VALES", "ADIANTAMENTO SALARIAL / VALES", "Desconto"),
          ("VALES INC", "ADIANT. VALES INCENT. E APLIC.", "Desconto"),
          ("CONVÊNIO", "CONVÊNIO", "Desconto"),
          ("FALTAS", "DESCONTO FALTAS / ATRASOS", "Desconto"),

@@ -74,13 +74,16 @@ CENTRO = dict(
              ("ANA CELIA", "131", 100.00, 0.0, 0.0, 0.0)],
  GERAL=dict(bruta=0.0, desc=0.0, liq=0.0, com=0.0, inc=0.0),
  SALARIO={"ARIANE": 5648.41, "ELIANA": 1621.0, "GENECIR": 1621.0,
-          "RENALDO": 1621.0, "THAYANE": 1621.0, "PEDRO": 1621.0},
+          "RENALDO": 0.0, "THAYANE": 1621.0, "PEDRO": 1621.0},
  NOTURNO={}, AUXGER={}, METACX={},
- VT6={"ELIANA": -84.29, "GENECIR": -84.29, "RENALDO": -74.29, "THAYANE": -84.29},
+ VT6={"ELIANA": -84.29, "GENECIR": -84.29, "THAYANE": -84.29},
  SEM_COMISSAO=["ARIANE", "PEDRO"],
- PONTO=[("GENECIR", "INFO", 0, "Voltou das férias (01 a 30/08/2026) — salário integral em setembro.")],
+ FERIAS_OBS="RENALDO: férias de 01 a 30/09/2026 — informar o valor do recibo.",
+ PONTO=[("GENECIR", "INFO", 0, "Voltou das férias (01 a 30/08/2026) — salário integral em setembro."),
+        ("RENALDO", "INFO", 30, "Férias de 01 a 30/09/2026 — mês inteiro. Salário zerado no holerite; férias e 1/3 vão em recibo próprio.")],
  DEFINIDO=["ARIANE e PEDRO: não recebem comissão sobre vendas.",
            "GENECIR: voltou das férias, salário integral em setembro.",
+           "RENALDO: férias de 01 a 30/09/2026 (mês inteiro) — salário zerado e sem desconto de vale-transporte; férias e 1/3 em recibo próprio.",
            "SERGIO e ANA CELIA seguem como folguistas (diária de R$ 150,00 e R$ 100,00), na aba FOLGUISTAS."],
  PENDENCIAS=["Extrair o relatório de comissões de setembro no InovaFarma e preencher a aba BASE INOVAFARMA SET.26.",
              "Preencher a quantidade de diárias de SERGIO e ANA CELIA."],
@@ -94,16 +97,19 @@ TRANCOSO = dict(
         [("UILLIAN", 13), ("MANOEL", 92), ("VALDICK", 162), ("INIURLE", 83), ("TAMILES", 103)]},
  OUTROS_COD=[], OUTROS_NOTA="",
  GERAL=dict(bruta=0.0, desc=0.0, liq=0.0, com=0.0, inc=0.0),
- SALARIO={"UILLIAN": 5648.41, "MANOEL": 1621.0, "VALDICK": 1621.0,
+ SALARIO={"UILLIAN": 5648.41, "MANOEL": 1621.0, "VALDICK": 0.0,
           "INIURLE": 1621.0, "TAMILES": 1621.0},
  NOTURNO={}, AUXGER={}, METACX={}, VT6={},
  SEM_COMISSAO=["UILLIAN"],
- PONTO=[("TAMILES", "ATESTADO", 7, "Atestado médico de 02 a 08/09/2026, entregue em 02/09. Até 15 dias é abonado pela empresa: falta justificada, SEM desconto de salário nem de DSR. Anexar o atestado à pasta da funcionária.")],
+ FERIAS_OBS="VALDICK: férias de 01 a 30/09/2026 — informar o valor do recibo.",
+ PONTO=[("VALDICK", "INFO", 30, "Férias de 01 a 30/09/2026 — mês inteiro. Salário zerado no holerite; férias e 1/3 vão em recibo próprio."),
+        ("TAMILES", "ATESTADO", 7, "Atestado médico de 02 a 08/09/2026, entregue em 02/09. Até 15 dias é abonado pela empresa: falta justificada, SEM desconto de salário nem de DSR. Anexar o atestado à pasta da funcionária.")],
  DEFINIDO=["TRANCOSO PAGA O DOBRO DA COMISSÃO APURADA: a linha COMISSÃO PRODUTOS já multiplica por 2 o valor do InovaFarma.",
            "Os incentivos são simples: entram pelo valor apurado, sem dobrar.",
            "A diferença gerada pela comissão dobrada é reduzida nas premiações.",
            "UILLIAN: não recebe comissão sobre vendas.",
-           "TAMILES: atestado de 02 a 08/09 abonado — salário integral, sem desconto."],
+           "TAMILES: atestado de 02 a 08/09 abonado — salário integral, sem desconto.",
+           "VALDICK: férias de 01 a 30/09/2026 (mês inteiro) — salário zerado; férias e 1/3 em recibo próprio."],
  PENDENCIAS=["Extrair o relatório de comissões de setembro no InovaFarma e preencher a aba BASE INOVAFARMA SET.26.",
              "TAMILES: se o atestado for prorrogado além de 15 dias corridos, a partir do 16º dia passa a ser auxílio-doença do INSS.",
              "Lançar na linha PRÊMIO COTA GERAL o valor já com a redução combinada."],
@@ -383,7 +389,7 @@ def build(cfg):
               kind="calc", bold=True, fill=FILL_TOT)
     r = sec(ws, r, "DESCONTOS  (lançar com sinal negativo)")
     rows["VALES"] = r
-    r = linha(ws, r, "ADIANTAMENTO / VALES", {}, "PREENCHER com os vales adiantados durante setembro.", kind="in")
+    r = linha(ws, r, "ADIANTAMENTO SALARIAL / VALES", {}, "PREENCHER com os vales adiantados durante setembro.", kind="in")
     rows["VALES INC"] = r
     r = linha(ws, r, "ADIANT. VALES INCENT. E APLIC.",
               {n: (f"=-({get_column_letter(C0+i)}{rows['INC APLIC']}+{get_column_letter(C0+i)}{rows['INC VIT']}"
@@ -418,6 +424,11 @@ def build(cfg):
     r = linha(ws, r, "VALE TRANSPORTE (compra out/26)", {}, "PREENCHER com as passagens compradas para outubro/2026.", kind="in")
     rows["VA"] = r
     r = linha(ws, r, "VALE ALIMENTAÇÃO FERIADOS E DOMINGOS", {}, "PREENCHER conforme escala de domingos e feriados.", kind="in")
+    rows["FERIAS PARTE"] = r
+    r = linha(ws, r, "FÉRIAS PAGAS À PARTE (CONTAS A PAGAR)", {},
+              "Recibo de férias pago fora do holerite — lembrete para o contas a pagar. "
+              + cfg.get("FERIAS_OBS", "Preencher se houve férias no mês."),
+              kind="in", fill=FILL_CONF)
     ws.auto_filter.ref = f"A4:{LO}{r-1}"
     r += 1
     for a, b in [("LEGENDA", ""),
@@ -455,7 +466,7 @@ def build(cfg):
              ("INC VIT", "INCENTIVO VITAMINAS", "Provento"),
              ("INC OUTROS", "OUTROS INCENTIVOS", "Provento"),
              ("TOTAL PROVENTOS", "TOTAL DE PROVENTOS", "Subtotal"),
-             ("VALES", "ADIANTAMENTO / VALES", "Desconto"),
+             ("VALES", "ADIANTAMENTO SALARIAL / VALES", "Desconto"),
              ("VALES INC", "ADIANT. VALES INCENT. E APLIC.", "Desconto"),
              ("CONVÊNIO", "CONVÊNIO", "Desconto"),
              ("FALTAS", "DESCONTO FALTAS / ATRASOS", "Desconto"),
@@ -518,7 +529,7 @@ def build(cfg):
               ("L", "Outros incentivos", rows["INC OUTROS"]),
               ("T", "TOTAL DE PROVENTOS", rows["TOTAL PROVENTOS"]),
               ("SEC", "DESCONTOS", None),
-              ("L", "Adiantamento / vales", rows["VALES"]),
+              ("L", "Adiantamento salarial / vales", rows["VALES"]),
               ("L", "Adiantamento de incentivos e aplicações", rows["VALES INC"]),
               ("L", "Convênio", rows["CONVÊNIO"]),
               ("L", "Faltas / atrasos", rows["FALTAS"]),
