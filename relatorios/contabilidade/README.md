@@ -40,3 +40,16 @@ congelados (o cabeçalho e a coluna de rubrica ficam fixos ao rolar).
 - JOEL: férias em agosto/2026 — falta informar o período
 - CAMILA: contratada recentemente; agosto é o primeiro mês completo
 - DEAN: não recebe comissão sobre vendas — rubrica zerada na folha
+
+## Demonstrativo individual
+
+A aba GANHOS DO COLABORADOR tem uma lista suspensa com os nomes: ao
+escolher um colaborador, a tabela mostra os ganhos e descontos dele
+(puxados da aba HOLERITE AGO.26) e o resumo de vendas do mês no
+InovaFarma. A aba já está configurada para imprimir em uma página.
+
+## Férias
+
+- JOEL: férias de 01 a 31/08/2026, pagas em recibo próprio no início de
+  agosto — não se repetem neste holerite; salário e desconto de
+  vale-transporte zerados no mês

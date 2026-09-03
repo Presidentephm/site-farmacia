@@ -3,6 +3,7 @@
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
+from openpyxl.worksheet.datavalidation import DataValidation
 
 OUT = "/home/user/site-farmacia/relatorios/contabilidade/RELATORIO_HOLERITE_AGOSTO_2026_pgto_05-09-2026.xlsx"
 
@@ -53,12 +54,12 @@ OUTROS_COD = [("11", "GILSON MOURA SANTOS", 603.28, 0.0018, 0.0),
               ("73", "BALCONISTA", 48.58, 0.0, 0.0)]
 
 # valores recorrentes (vindos da competencia JULHO/2026) -> conferir
-SALARIO   = {"DEAN": 5648.41, "AGNOR": 1621.0, "EDEY": 1621.0, "JOEL": 1621.0,
+SALARIO   = {"DEAN": 5648.41, "AGNOR": 1621.0, "EDEY": 1621.0, "JOEL": 0.0,
              "VALÉRIA": 1621.0, "SARA": 1621.0, "CAMILA": 1621.0, "NATI": 1621.0}
 NOTURNO   = {"EDEY": 350.0}
 AUXGER    = {"AGNOR": 810.5, "SARA": 810.5}
 METACX    = {"VALÉRIA": 307.99, "NATI": 307.99}
-VT6       = {"EDEY": -84.29, "JOEL": -84.29, "VALÉRIA": -84.29, "NATI": -84.29}
+VT6       = {"EDEY": -84.29, "VALÉRIA": -84.29, "NATI": -84.29}
 
 # ------------------------------------------------------------------ JULHO/2026
 JUL = {  # rubrica -> {func: valor}   (exatamente como foi pago em 05/08/2026)
@@ -214,8 +215,8 @@ notas = [
  "CONFERÊNCIA — total geral do relatório InovaFarma: venda bruta R$ 300.371,95 · descontos R$ 90.276,65 · venda líquida R$ 210.095,30 · comissão R$ 4.856,69 · incentivo R$ 685,00.",
  "INCENT. APLIC. = incentivo do grupo INJETÁVEIS (aplicações). INCENT. VITAM. = grupo APLICAÇÃO E VITAMINAS INCENTIVO. OUTROS INCENT. = populares, oficinais e similar normal.",
  "A comissão acima é a APURADA pelo sistema. Comissões de PDV antigos e valores fixos acordados são lançados à parte na aba HOLERITE AGO.26.",
- "DEAN não recebe comissão em folha: no caso dele a comissão apurada acima é apenas informativa. Os incentivos continuam sendo lançados normalmente — confirmar se também ficam de fora.",
- "JOEL: venda bruta de apenas R$ 5.057,69 porque esteve de FÉRIAS em agosto/2026 — a comissão apurada (R$ 103,31) corresponde só aos dias trabalhados.",
+ "DEAN não recebe comissão em folha: no caso dele a comissão apurada acima é apenas informativa. Os incentivos dele continuam sendo lançados normalmente.",
+ "JOEL: esteve de FÉRIAS de 01 a 31/08/2026 (mês inteiro), mas o código dele registrou R$ 5.057,69 de venda bruta e R$ 103,31 de comissão — conferir quem operou o código no período.",
 ]
 for t in notas:
     ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=10)
@@ -292,7 +293,7 @@ rows = {}
 r = sec(ws, r, "PROVENTOS")
 rows["SALÁRIO BASE"] = r
 r = linha(ws, r, "SALÁRIO BASE", {n: SALARIO[n] for n in EMP},
-          "Piso 2026 R$ 1.621,00. CAMILA: admitida em jul/26 (salário proporcional naquele mês); agosto é o 1º mês completo. JOEL: ajustar aos dias trabalhados por conta das férias.",
+          "Piso 2026 R$ 1.621,00. CAMILA: admitida em jul/26 (salário proporcional naquele mês); agosto é o 1º mês completo. JOEL: zerado — esteve de férias de 01 a 31/08/2026, sem dias trabalhados no mês.",
           kind="in", fill=FILL_CONF)
 rows["ADICIONAL NOTURNO"] = r
 r = linha(ws, r, "ADICIONAL NOTURNO", NOTURNO, "Conforme apontamento do ponto (jul/26: EDEY R$ 350,00).", kind="in", fill=FILL_CONF)
@@ -301,7 +302,7 @@ r = linha(ws, r, "HORAS EXTRAS", {}, "PREENCHER com o apurado no ponto de agosto
 rows["COMISSÃO PRODUTOS (INOVAFARMA)"] = r
 r = linha(ws, r, "COMISSÃO PRODUTOS (INOVAFARMA)",
           {n: (0 if n == "DEAN" else f"={BASE}!F{BASE_ROW[n]}") for n in EMP},
-          "Apurado no InovaFarma (aba BASE INOVAFARMA AGO.26). DEAN NÃO RECEBE COMISSÃO — lançado zero (o apurado dele fica só como informação na aba BASE). AGNOR: mantido o fixo de R$ 2.000,00 pela linha de complemento abaixo.",
+          "Apurado no InovaFarma (aba BASE INOVAFARMA AGO.26). JOEL: R$ 103,31 apurados no código dele mesmo estando de férias o mês inteiro — conferir quem fez essas vendas e zerar se não forem dele. DEAN NÃO RECEBE COMISSÃO — lançado zero (o apurado dele fica só como informação na aba BASE). AGNOR: mantido o fixo de R$ 2.000,00 pela linha de complemento abaixo.",
           kind="link")
 rows["COMPLEMENTO / COMISSÃO PDV"] = r
 r = linha(ws, r, "COMPLEMENTO / COMISSÃO PDV",
@@ -327,11 +328,12 @@ rows["PRÊMIO PRÉ-VENCIDOS"] = r
 r = linha(ws, r, "PRÊMIO PRÉ-VENCIDOS", {}, "PREENCHER conforme apuração de pré-vencidos de agosto.", kind="in")
 rows["FÉRIAS"] = r
 r = linha(ws, r, "FÉRIAS (DIAS GOZADOS)", {},
-          "JOEL esteve de FÉRIAS em agosto/2026 — informar o período para a contabilidade calcular férias, média de comissões e o salário proporcional aos dias trabalhados.",
+          "JOEL: férias de 01 a 31/08/2026, JÁ PAGAS em recibo próprio no início de agosto — NÃO lançar de novo neste holerite. Linha mantida só para o caso de outras férias.",
           kind="in", fill=FILL_CONF)
 rows["1/3 FÉRIAS"] = r
 r = linha(ws, r, "1/3 CONSTITUCIONAL DE FÉRIAS", {},
-          "Calculado pela contabilidade sobre o valor das férias.", kind="in", fill=FILL_CONF)
+          "JOEL: também já pago com as férias no início de agosto. Linha mantida para eventuais férias de outros meses.",
+          kind="in", fill=FILL_CONF)
 rows["INC APLIC"] = r
 r = linha(ws, r, "INCENTIVO APLICAÇÕES", {n: f"={BASE}!G{BASE_ROW[n]}" for n in EMP},
           "Incentivo de injetáveis apurado no InovaFarma.", kind="link")
@@ -364,7 +366,7 @@ rows["FALTAS"] = r
 r = linha(ws, r, "DESCONTO FALTAS / ATRASOS", {}, "PREENCHER conforme o ponto.", kind="in")
 rows["VT6"] = r
 r = linha(ws, r, "DESCONTO VALE TRANSPORTE 6%", VT6,
-          "Valor praticado em jul/26. 6% sobre R$ 1.621,00 seria R$ 97,26 — CONFERIR a base usada.", kind="in", fill=FILL_CONF)
+          "Valor praticado em jul/26. 6% sobre R$ 1.621,00 seria R$ 97,26 — CONFERIR a base usada. JOEL: zerado, mês inteiro de férias.", kind="in", fill=FILL_CONF)
 rows["INSS"] = r
 r = linha(ws, r, "DESCONTO INSS", {}, "A CALCULAR PELA CONTABILIDADE sobre o total de proventos (tabela progressiva vigente).", kind="in")
 rows["IRRF"] = r
@@ -532,6 +534,94 @@ for i, n in enumerate(EMP):
 ws.auto_filter.ref = f"A4:E{r-2}"
 ws.freeze_panes = "A5"
 
+# ==================================================== aba GANHOS DO COLABORADOR
+wsg = wb.create_sheet("GANHOS DO COLABORADOR")
+wsg.sheet_view.showGridLines = False
+for col, w in zip("ABCD", [4, 44, 18, 58]):
+    wsg.column_dimensions[col].width = w
+title_block(wsg, "DEMONSTRATIVO DE GANHOS DO COLABORADOR",
+            "Competência AGOSTO/2026 · Pagamento em 05/09/2026 · Farmácia Tropical Multi Econômica", 4)
+wsg.cell(4, 2, "Escolha o colaborador:").font = font(11, True, "1F3864")
+sel = wsg.cell(4, 3, EMP[0])
+sel.font = font(12, True, BLUE); sel.fill = FILL_IN; sel.border = BOX
+sel.alignment = Alignment(horizontal="center")
+dv = DataValidation(type="list", formula1='"' + ",".join(EMP) + '"', allow_blank=False)
+dv.error = "Escolha um nome da lista."
+dv.promptTitle = "Colaborador"
+dv.prompt = "Selecione o colaborador para ver os ganhos dele."
+wsg.add_data_validation(dv)
+dv.add(sel)
+wsg.cell(4, 4, "Troque o nome aqui e a tabela abaixo muda sozinha — é o relatório para mandar para cada um.").font = font(9, it=True)
+
+COLREF = f"MATCH($C$4,{HOL}!$B$4:${get_column_letter(CT-1)}$4,0)"
+RECIBO = [("SEC", "PROVENTOS", None),
+          ("L", "Salário base", rows["SALÁRIO BASE"]),
+          ("L", "Adicional noturno", rows["ADICIONAL NOTURNO"]),
+          ("L", "Horas extras", rows["HORAS EXTRAS"]),
+          ("L", "Comissão sobre vendas", rows["COMISSÃO TOTAL"]),
+          ("L", "Repouso remunerado / DSR", rows["DSR"]),
+          ("L", "Auxílio gerência", rows["AUXÍLIO GERÊNCIA"]),
+          ("L", "Adicional prêmio meta caixa", rows["META CAIXA"]),
+          ("L", "Prêmio cota geral", rows["PRÊMIO COTA GERAL"]),
+          ("L", "Prêmio pré-vencidos", rows["PRÊMIO PRÉ-VENCIDOS"]),
+          ("L", "Férias", rows["FÉRIAS"]),
+          ("L", "1/3 constitucional de férias", rows["1/3 FÉRIAS"]),
+          ("L", "Incentivo aplicações", rows["INC APLIC"]),
+          ("L", "Incentivo vitaminas", rows["INC VIT"]),
+          ("L", "Outros incentivos", rows["INC OUTROS"]),
+          ("T", "TOTAL DE PROVENTOS", rows["TOTAL PROVENTOS"]),
+          ("SEC", "DESCONTOS", None),
+          ("L", "Adiantamento / vales", rows["VALES"]),
+          ("L", "Adiantamento de incentivos e aplicações", rows["VALES INC"]),
+          ("L", "Convênio", rows["CONVÊNIO"]),
+          ("L", "Faltas / atrasos", rows["FALTAS"]),
+          ("L", "Vale transporte 6%", rows["VT6"]),
+          ("L", "INSS", rows["INSS"]),
+          ("L", "IRRF", rows["IRRF"]),
+          ("T", "TOTAL DE DESCONTOS", rows["TOTAL DESC"]),
+          ("SEC", "LÍQUIDO", None),
+          ("Q", "LÍQUIDO A RECEBER EM 05/09/2026", rows["LIQ"])]
+r = 6
+for tipo, rot, linha_hol in RECIBO:
+    if tipo == "SEC":
+        for i in range(2, 5):
+            wsg.cell(r, i).fill = FILL_SEC
+        c = wsg.cell(r, 2, rot); c.font = font(11, True, "1F3864")
+        wsg.row_dimensions[r].height = 19
+        r += 1
+        continue
+    c = wsg.cell(r, 2, rot)
+    c.font = font(11 if tipo == "Q" else 10, tipo in ("T", "Q")); c.border = BOX
+    v = wsg.cell(r, 3, f"=IFERROR(INDEX({HOL}!$B${linha_hol}:${get_column_letter(CT-1)}${linha_hol},1,{COLREF}),0)")
+    v.number_format = MONEY; v.font = font(11 if tipo == "Q" else 10, tipo in ("T", "Q"), GREEN)
+    v.border = BOX
+    if tipo == "T":
+        wsg.cell(r, 2).fill = FILL_TOT; v.fill = FILL_TOT
+    if tipo == "Q":
+        wsg.cell(r, 2).fill = FILL_LIQ; v.fill = FILL_LIQ
+        wsg.row_dimensions[r].height = 22
+    r += 1
+r += 1
+wsg.cell(r, 2, "Vendas do colaborador no mês (InovaFarma):").font = font(10, True, "1F3864")
+r += 1
+for rot, colb in [("Venda bruta", "C"), ("Descontos concedidos", "D"), ("Venda líquida", "E"),
+                  ("Comissão apurada", "F"), ("Total de incentivos", "J")]:
+    wsg.cell(r, 2, rot).font = font(10); wsg.cell(r, 2).border = BOX
+    v = wsg.cell(r, 3, f"=IFERROR(INDEX({BASE}!${colb}${first}:${colb}${last},MATCH($C$4,{BASE}!$B${first}:$B${last},0)),0)")
+    v.number_format = MONEY; v.font = font(10, False, GREEN); v.border = BOX
+    r += 1
+r += 1
+for t in ["A comissão apurada acima é a apuração do sistema. O que entra na folha é a linha \"Comissão sobre vendas\" — pode ser diferente (valor fixo acordado, PDV antigos ou quem não recebe comissão).",
+          "Os valores de INSS e IRRF são calculados pela contabilidade e só aparecem aqui depois de preenchidos na aba HOLERITE AGO.26.",
+          "Para mandar para o colaborador: selecione o nome acima e imprima esta aba em PDF (ou tire um print).",
+          "Na aba LISTA CONTABILIDADE também dá para filtrar por FUNCIONÁRIO e ver só os lançamentos de uma pessoa."]:
+    wsg.cell(r, 2, t).font = font(9, it=True)
+    r += 1
+wsg.print_area = f"A1:D{r}"
+wsg.page_setup.fitToWidth = 1
+wsg.page_setup.fitToHeight = 1
+wsg.sheet_properties.pageSetUpPr.fitToPage = True
+
 # ============================================================== aba CAPA
 ws = wb.create_sheet("CAPA", 0)
 ws.sheet_view.showGridLines = False
@@ -559,14 +649,15 @@ blocos = [
  ("T", "DSR de agosto/2026: 5 domingos (02, 09, 16, 23 e 30) ÷ 26 dias úteis = fator 0,192307"),
  ("SEC", "JÁ DEFINIDO PELA EMPRESA"),
  ("T", "AGNOR: mantida a comissão fixa de R$ 2.000,00 — a linha COMPLEMENTO / COMISSÃO PDV calcula sozinha a diferença (R$ 1.090,49) sobre o apurado de R$ 909,51."),
- ("T", "JOEL: esteve de férias em agosto/2026 — por isso a venda e a comissão do mês ficaram baixas."),
+ ("T", "JOEL: férias de 01 a 31/08/2026 (mês inteiro), já pagas em recibo próprio no início de agosto. Neste holerite ele fica sem salário e sem desconto de vale-transporte; férias e 1/3 NÃO se repetem aqui."),
  ("T", "CAMILA: contratada recentemente; agosto é o primeiro mês completo, com salário integral de R$ 1.621,00."),
- ("T", "DEAN: não recebe comissão sobre vendas — a rubrica fica zerada na folha. A comissão apurada no InovaFarma (R$ 975,65) aparece apenas na aba BASE, como informação."),
+ ("T", "DEAN: não recebe comissão sobre vendas — a rubrica fica zerada na folha (a apurada, R$ 975,65, aparece só na aba BASE). Os incentivos dele continuam sendo pagos normalmente."),
  ("SEC", "PENDÊNCIAS — CONFIRMAR ANTES DE ENVIAR"),
  ("P", "Horas extras e adicional noturno de agosto (apontamento do ponto)."),
  ("P", "Prêmio cota geral e prêmio pré-vencidos de agosto."),
  ("P", "Vales adiantados, convênio e faltas de agosto."),
- ("P", "JOEL: informar o período de FÉRIAS de agosto/2026 para a contabilidade calcular férias, 1/3, média de comissões e o salário proporcional."),
+ ("P", "JOEL: o código dele registrou R$ 103,31 de comissão mesmo com o mês inteiro de férias — conferir quem operou o código e zerar a rubrica se as vendas não forem dele."),
+ ("P", "JOEL: confirmar se sobra algum desconto para agosto (convênio, vale ou adiantamento) ou se o holerite dele fica zerado."),
  ("P", "Comissões de PDV antigos, que em julho eram somadas à comissão do sistema."),
  ("P", "Desconto de vale-transporte: vem sendo lançado R$ 84,29; 6% do salário de R$ 1.621,00 seria R$ 97,26."),
  ("P", "DSR de julho/2026 foi calculado com o fator de agosto (5/26) em vez de 4/27 — ver aba JULHO.26 REVISADO e decidir se ajusta em setembro."),
@@ -574,6 +665,7 @@ blocos = [
  ("T", "As células de total e de cálculo são fórmulas. Ao abrir o arquivo no Excel ou no Google Planilhas os valores aparecem calculados automaticamente; em visualizadores simples (prévia de celular, por exemplo) elas podem aparecer em branco até o arquivo ser aberto de fato."),
  ("SEC", "ABAS DO ARQUIVO"),
  ("T", "HOLERITE AGO.26 — relatório principal da competência agosto/2026."),
+ ("T", "GANHOS DO COLABORADOR — escolha o nome na lista e saia o demonstrativo individual, pronto para imprimir/mandar."),
  ("T", "LISTA CONTABILIDADE — os mesmos lançamentos em formato de lista por funcionário."),
  ("T", "BASE INOVAFARMA AGO.26 — apuração de comissões e incentivos por vendedor."),
  ("T", "JULHO.26 REVISADO — a folha de julho reorganizada e conferida (valores pagos preservados)."),
