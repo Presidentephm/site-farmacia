@@ -129,8 +129,12 @@ P = [
  ("Salário DEAN", 5648.41, "Conforme jul/2026."),
  ("Auxílio gerência", 810.50, "AGNOR e SARA (conforme jul/2026)."),
  ("Adicional prêmio meta caixa", 307.99, "VALÉRIA e NATI (conforme jul/2026)."),
- ("Adicional noturno EDEY", 350.00, "Conforme jul/2026 — conferir apontamento do ponto."),
+ ("Adicional noturno EDEY", 350.00, "Referência de jul/2026. O valor efetivo é lançado na aba PONTO AGO.26 — conferir com o apontamento."),
  ("Comissão fixa acordada — AGNOR", 2000.00, "Valor fixo mantido pela empresa. O complemento é a diferença entre este valor e a comissão apurada no InovaFarma."),
+ ("Horas mensais (base do salário-hora)", 220, "Salário-hora = salário base ÷ 220."),
+ ("Adicional de hora extra", 0.5, "50% sobre a hora normal (hora extra = salário-hora × 1,5)."),
+ ("Adicional noturno", 0.2, "20% sobre a hora normal, nas horas entre 22h e 5h."),
+ ("Dias do mês para o salário-dia", 30, "Salário-dia = salário base ÷ 30. Usado no feriado trabalhado."),
  ("Desconto vale-transporte 6%", -84.29, "Valor praticado em jul/2026. 6% do salário base daria R$ 97,26 — CONFERIR."),
  ("SEÇÃO", "INSS / IRRF", ""),
  ("INSS", "a calcular", "Calculado pela contabilidade sobre o total de proventos (tabela progressiva vigente)."),
@@ -318,7 +322,7 @@ r = linha(ws, r, "= COMISSÃO TOTAL",
 rows["DSR"] = r
 r = linha(ws, r, "REPOUSO REMUNERADO / DSR",
           {n: f"=ROUND(({get_column_letter(C0+i)}{rows['COMISSÃO TOTAL']}+{get_column_letter(C0+i)}{rows['HORAS EXTRAS']})*{FATOR},2)" for i, n in enumerate(EMP)},
-          "= (comissão total + horas extras) × 5 domingos ÷ 26 dias úteis de agosto/2026 (fator na aba PARÂMETROS).",
+          "= (comissão total + horas extras) × 5 domingos ÷ 26 dias úteis de agosto/2026 (fator na aba PARÂMETROS). A linha HORAS EXTRAS inclui o feriado trabalhado vindo da aba PONTO AGO.26.",
           kind="calc")
 rows["AUXÍLIO GERÊNCIA"] = r
 r = linha(ws, r, "AUXÍLIO GERÊNCIA", AUXGER, "AGNOR e SARA — valor recorrente de jul/26.", kind="in", fill=FILL_CONF)
@@ -624,6 +628,119 @@ wsg.page_setup.fitToWidth = 1
 wsg.page_setup.fitToHeight = 1
 wsg.sheet_properties.pageSetUpPr.fitToPage = True
 
+
+# ================================================== aba PONTO
+PONTO = [  # (funcionario, tipo, qtde, observacao)
+ ("EDEY",    "HE50", 24, "24 horas extras normais em agosto/2026."),
+ ("EDEY",    "VALOR", 350.0, "Adicional noturno lançado como valor fixo desde jul/26 — CONFERIR com o apontamento do ponto."),
+ ("NATI",    "NOT",  17, "17 horas noturnas."),
+ ("NATI",    "FER",   1, "Feriado de 15/08/2026 trabalhado, sem folga compensatória — pago em dobro (1 dia a mais)."),
+ ("CAMILA",  "FER",   1, "Dia 15/08/2026 (feriado) trabalhado."),
+ ("SARA",    "FER",   1, "Dia 15/08/2026 (feriado) trabalhado."),
+ ("VALÉRIA", "FER",   1, "Dia 15/08/2026 (feriado) trabalhado."),
+ ("VALÉRIA", "NOT", None, "2 madrugadas trabalhadas, com folga normal no dia seguinte — cabe só o adicional noturno. INFORMAR o total de horas noturnas das 2 madrugadas."),
+ ("AGNOR",   "NOT", None, "3 madrugadas trabalhadas, com folga normal — cabe só o adicional noturno. INFORMAR o total de horas noturnas das 3 madrugadas."),
+ ("DEAN",    "FER_COMP", 1, "Dia 15/08/2026 trabalhado, com folga compensatória — nada a pagar, registro apenas."),
+]
+TIPOS = {"HE50": ("Horas extras 50%", "horas", "HORAS EXTRAS"),
+         "NOT": ("Adicional noturno", "horas", "ADICIONAL NOTURNO"),
+         "FER": ("Feriado trabalhado (dobra)", "dias", "HORAS EXTRAS"),
+         "FER_COMP": ("Feriado com folga compensatória", "dias", "—"),
+         "VALOR": ("Adicional noturno (valor fixo)", "valor", "ADICIONAL NOTURNO")}
+
+wsp = wb.create_sheet("PONTO AGO.26")
+wsp.sheet_view.showGridLines = False
+for col, w in zip("ABCDEFGHI", [14, 32, 10, 10, 14, 14, 14, 22, 62]):
+    wsp.column_dimensions[col].width = w
+title_block(wsp, "APONTAMENTO DO PONTO — AGOSTO/2026",
+            "Horas extras, adicional noturno e feriado trabalhado · alimenta as rubricas da aba HOLERITE AGO.26", 9)
+for i, h in enumerate(["FUNCIONÁRIO", "OCORRÊNCIA", "QTDE", "UNIDADE", "SALÁRIO BASE",
+                       "VALOR UNITÁRIO", "TOTAL", "RUBRICA DESTINO", "OBSERVAÇÃO"], 1):
+    c = wsp.cell(4, i, h); c.font = font(9, True, "FFFFFF"); c.fill = FILL_HDR
+    c.alignment = Alignment(horizontal="center", wrap_text=True); c.border = BOX
+wsp.row_dimensions[4].height = 26
+SALROW = rows["SALÁRIO BASE"]
+P_HORAS = f"PARÂMETROS!$B${PROW['Horas mensais (base do salário-hora)']}"
+P_HE = f"PARÂMETROS!$B${PROW['Adicional de hora extra']}"
+P_NOT = f"PARÂMETROS!$B${PROW['Adicional noturno']}"
+P_DIAS = f"PARÂMETROS!$B${PROW['Dias do mês para o salário-dia']}"
+pr = 5
+for func, tipo, qtd, obs in PONTO:
+    rot, uni, dest = TIPOS[tipo]
+    wsp.cell(pr, 1, func).font = font(10, True)
+    wsp.cell(pr, 2, rot).font = font(10)
+    c = wsp.cell(pr, 3, qtd if tipo != "VALOR" else 1)
+    c.font = font(10, False, BLUE); c.fill = FILL_IN
+    c.alignment = Alignment(horizontal="center")
+    wsp.cell(pr, 4, uni).alignment = Alignment(horizontal="center")
+    c = wsp.cell(pr, 5, f"=IFERROR(INDEX({HOL}!$B${SALROW}:${get_column_letter(CT-1)}${SALROW},1,"
+                        f"MATCH(A{pr},{HOL}!$B$4:${get_column_letter(CT-1)}$4,0)),0)")
+    c.number_format = MONEY; c.font = font(10, False, GREEN)
+    if tipo == "HE50":
+        f_unit = f"=ROUND(E{pr}/{P_HORAS}*(1+{P_HE}),4)"
+    elif tipo == "NOT":
+        f_unit = f"=ROUND(E{pr}/{P_HORAS}*{P_NOT},4)"
+    elif tipo == "FER":
+        f_unit = f"=ROUND(E{pr}/{P_DIAS},2)"
+    elif tipo == "FER_COMP":
+        f_unit = 0
+    else:
+        f_unit = qtd
+    c = wsp.cell(pr, 6, f_unit); c.number_format = MONEY
+    c.font = font(10, False, BLUE if tipo == "VALOR" else "000000")
+    if tipo == "VALOR":
+        c.fill = FILL_CONF
+    c = wsp.cell(pr, 7, f"=ROUND(C{pr}*F{pr},2)"); c.number_format = MONEY
+    c.font = font(10, True); c.fill = FILL_TOT
+    wsp.cell(pr, 8, dest).font = font(9, True, "1F3864")
+    c = wsp.cell(pr, 9, obs); c.font = font(9, it=True)
+    c.alignment = Alignment(wrap_text=True, vertical="center")
+    for i in range(1, 10):
+        wsp.cell(pr, i).border = BOX
+    pr += 1
+P_INI = 5
+for extra in range(6):
+    for i in range(1, 10):
+        cell = wsp.cell(pr, i); cell.border = BOX
+        if i in (1, 2, 3, 4, 8, 9):
+            cell.font = font(10, False, BLUE); cell.fill = FILL_IN
+    wsp.cell(pr, 5, f"=IFERROR(INDEX({HOL}!$B${SALROW}:${get_column_letter(CT-1)}${SALROW},1,"
+                    f"MATCH(A{pr},{HOL}!$B$4:${get_column_letter(CT-1)}$4,0)),0)").number_format = MONEY
+    wsp.cell(pr, 5).font = font(10, False, GREEN)
+    wsp.cell(pr, 6).number_format = MONEY
+    wsp.cell(pr, 6).font = font(10, False, BLUE); wsp.cell(pr, 6).fill = FILL_IN
+    wsp.cell(pr, 7, f"=ROUND(C{pr}*F{pr},2)").number_format = MONEY
+    wsp.cell(pr, 7).font = font(10, True); wsp.cell(pr, 7).fill = FILL_TOT
+    pr += 1
+P_FIM = pr - 1
+wsp.cell(pr, 2, "TOTAL").font = font(10, True)
+c = wsp.cell(pr, 7, f"=SUM(G{P_INI}:G{P_FIM})"); c.number_format = MONEY; c.font = font(10, True)
+for i in range(1, 10):
+    wsp.cell(pr, i).fill = FILL_TOT; wsp.cell(pr, i).border = BOX
+wsp.auto_filter.ref = f"A4:I{P_FIM}"
+wsp.freeze_panes = "A5"
+pr += 2
+for t in ["Salário-hora = salário base ÷ 220. Hora extra = salário-hora × 1,5. Adicional noturno = salário-hora × 20%. Feriado trabalhado sem folga = 1 salário-dia a mais (salário base ÷ 30).",
+          "Confira: 40 horas extras dão R$ 442,09 e 24 horas dão R$ 265,25 no salário de R$ 1.621,00 — é a mesma conta usada na planilha de julho.",
+          "As linhas em branco no fim da tabela são para acrescentar outras ocorrências: preencha funcionário, ocorrência, quantidade, valor unitário e a rubrica de destino (HORAS EXTRAS ou ADICIONAL NOTURNO).",
+          "Os totais desta aba entram sozinhos nas linhas HORAS EXTRAS e ADICIONAL NOTURNO da aba HOLERITE AGO.26 — não digite nada por cima lá."]:
+    wsp.merge_cells(start_row=pr, start_column=1, end_row=pr, end_column=9)
+    c = wsp.cell(pr, 1, t); c.font = font(9, it=True)
+    c.alignment = Alignment(wrap_text=True, vertical="center")
+    wsp.row_dimensions[pr].height = 24
+    pr += 1
+
+# as rubricas do holerite passam a somar o apontamento
+wsh = wb["HOLERITE AGO.26"]
+for rub, linha_hol in (("HORAS EXTRAS", rows["HORAS EXTRAS"]), ("ADICIONAL NOTURNO", rows["ADICIONAL NOTURNO"])):
+    for i, n in enumerate(EMP):
+        c = wsh.cell(linha_hol, C0 + i,
+                     f"=SUMIFS('PONTO AGO.26'!$G${P_INI}:$G${P_FIM},'PONTO AGO.26'!$A${P_INI}:$A${P_FIM},"
+                     f"{get_column_letter(C0+i)}$4,'PONTO AGO.26'!$H${P_INI}:$H${P_FIM},\"{rub}\")")
+        c.number_format = MONEY; c.font = font(10, False, GREEN); c.fill = PatternFill()
+    wsh.cell(linha_hol, CO).value = ("Somado automaticamente da aba PONTO AGO.26 (apontamento de agosto/2026). "
+                                     "Para mudar, edite lá.")
+
 # ============================================================== aba CAPA
 ws = wb.create_sheet("CAPA", 0)
 ws.sheet_view.showGridLines = False
@@ -649,6 +766,13 @@ blocos = [
  ("T", "Comissão total apurada no InovaFarma para os 8 funcionários: R$ 4.856,68 · Incentivos: R$ 685,00"),
  ("T", "Venda bruta geral do mês: R$ 300.371,95 · Descontos concedidos: R$ 90.276,65 · Venda líquida: R$ 210.095,30"),
  ("T", "DSR de agosto/2026: 5 domingos (02, 09, 16, 23 e 30) ÷ 26 dias úteis = fator 0,192307"),
+ ("SEC", "APONTAMENTO DE AGOSTO/2026 (aba PONTO AGO.26)"),
+ ("T", "EDEY: 24 horas extras normais → R$ 265,25."),
+ ("T", "NATI: 17 horas noturnas → R$ 25,05 de adicional; e o feriado de 15/08 trabalhado sem folga → R$ 54,03."),
+ ("T", "CAMILA, SARA e VALÉRIA: dia 15/08 (feriado) trabalhado → R$ 54,03 cada."),
+ ("T", "VALÉRIA: 2 madrugadas com folga no dia seguinte — cabe só o adicional noturno; falta informar as horas."),
+ ("T", "AGNOR: 3 madrugadas com folga — cabe só o adicional noturno; falta informar as horas."),
+ ("T", "DEAN: dia 15/08 trabalhado com folga compensatória — nada a pagar."),
  ("SEC", "JÁ DEFINIDO PELA EMPRESA"),
  ("T", "AGNOR: mantida a comissão fixa de R$ 2.000,00 — a linha COMPLEMENTO / COMISSÃO PDV calcula sozinha a diferença (R$ 1.090,49) sobre o apurado de R$ 909,51."),
  ("T", "JOEL: por acordo interno saiu em 04/08 e volta em 04/09, mas o recibo de férias saiu como 01 a 31/08 e já foi pago no início de agosto. Por isso ele tem comissão dos dias 01 e 02/08 (R$ 103,31) e fica sem salário e sem desconto de vale-transporte neste holerite; férias e 1/3 NÃO se repetem aqui."),
@@ -656,7 +780,9 @@ blocos = [
  ("T", "SARA: a comissão dela na loja Centro (R$ 2,65) foi somada aqui, na linha COMPLEMENTO / COMISSÃO PDV."),
  ("T", "DEAN: não recebe comissão sobre vendas — a rubrica fica zerada na folha (a apurada, R$ 975,65, aparece só na aba BASE). Os incentivos dele continuam sendo pagos normalmente."),
  ("SEC", "PENDÊNCIAS — CONFIRMAR ANTES DE ENVIAR"),
- ("P", "Horas extras e adicional noturno de agosto (apontamento do ponto)."),
+ ("P", "VALÉRIA e AGNOR: informar na aba PONTO AGO.26 quantas horas noturnas tiveram as madrugadas trabalhadas (2 e 3 madrugadas)."),
+ ("P", "EDEY: o adicional noturno está lançado como valor fixo de R$ 350,00 — conferir com o apontamento do ponto."),
+ ("P", "Confirmar o critério do feriado trabalhado: está sendo pago 1 salário-dia a mais (R$ 54,03) por feriado sem folga."),
  ("P", "Prêmio cota geral e prêmio pré-vencidos de agosto."),
  ("P", "Vales adiantados, convênio e faltas de agosto."),
  ("P", "JOEL: confirmar se há algum desconto para agosto (convênio, vale ou adiantamento) — hoje o holerite dele fica só com a comissão de R$ 103,31 e o DSR."),
@@ -668,6 +794,7 @@ blocos = [
  ("T", "As células de total e de cálculo são fórmulas. Ao abrir o arquivo no Excel ou no Google Planilhas os valores aparecem calculados automaticamente; em visualizadores simples (prévia de celular, por exemplo) elas podem aparecer em branco até o arquivo ser aberto de fato."),
  ("SEC", "ABAS DO ARQUIVO"),
  ("T", "HOLERITE AGO.26 — relatório principal da competência agosto/2026."),
+ ("T", "PONTO AGO.26 — apontamento de horas extras, adicional noturno e feriado trabalhado; alimenta o holerite."),
  ("T", "GANHOS DO COLABORADOR — escolha o nome na lista e saia o demonstrativo individual, pronto para imprimir/mandar."),
  ("T", "LISTA CONTABILIDADE — os mesmos lançamentos em formato de lista por funcionário."),
  ("T", "BASE INOVAFARMA AGO.26 — apuração de comissões e incentivos por vendedor."),

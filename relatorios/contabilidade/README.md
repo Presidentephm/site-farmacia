@@ -85,3 +85,16 @@ As três seguem a mesma estrutura de abas. Diferenças por loja:
 - Comissão paga em dobro; incentivos simples, sem dobrar
 - Julho foi lançado por média; a diferença gerada pela comissão dobrada
   será reduzida nas premiações
+
+## Apontamento do ponto (aba PONTO AGO.26)
+
+Cada arquivo tem uma aba com as ocorrências de ponto do mês. Os totais
+entram sozinhos nas linhas HORAS EXTRAS e ADICIONAL NOTURNO do holerite
+(via SUMIFS), então essas duas rubricas não devem ser digitadas à mão.
+
+Critérios, com os parâmetros na aba PARÂMETROS:
+
+- salário-hora = salário base ÷ 220
+- hora extra = salário-hora × 1,5
+- adicional noturno = salário-hora × 20%
+- feriado trabalhado sem folga = 1 salário-dia a mais (salário ÷ 30)

@@ -68,6 +68,7 @@ CENTRO = dict(
  JUL_VT={"ELIANA": 270.0, "RENALDO": 260.0, "THAYANE": 260.0, "PEDRO": 350.0},
  JUL_VA={},
  JUL_ABA="CENTRO 05JULHO",
+ PONTO=[],
  DEFINIDO=["ARIANE e PEDRO: não recebem comissão sobre vendas — a rubrica fica zerada e o apurado deles aparece só na aba BASE.",
            "GENECIR: férias de 01 a 30/08/2026, já pagas em recibo próprio — salário zerado neste holerite; confirmar o dia 31/08.",
            "SERGIO e ANA CELIA são folguistas (diária de R$ 150,00 e R$ 100,00) — ficam na aba FOLGUISTAS, para o contas a pagar, fora do holerite.",
@@ -108,13 +109,13 @@ TRANCOSO = dict(
  JUL_VT={"MANOEL": 750.0, "VALDICK": 400.0},
  JUL_VA={},
  JUL_ABA="TRANCOSO JULHO",
+ PONTO=[("INIURLE", "HE50", 40, "40 horas extras normais em agosto/2026.")],
  JUL_NOTA="OBSERVAÇÃO: em julho/2026 a comissão foi lançada por uma MÉDIA, e não pelo apurado do sistema. A partir de agosto/2026 a loja passa a pagar a comissão em dobro, e a empresa vai reduzir nas premiações a diferença gerada por esse aumento.",
  DEFINIDO=["TRANCOSO PAGA O DOBRO DA COMISSÃO APURADA: a linha COMISSÃO PRODUTOS já multiplica por 2 o valor do InovaFarma (multiplicador na aba PARÂMETROS).",
            "Os incentivos são simples: entram pelo valor apurado, sem dobrar.",
            "Em julho/2026 a comissão foi lançada por média. Com a comissão dobrada a partir de agosto, a empresa vai reduzir nas premiações a diferença.",
            "UILLIAN: não recebe comissão sobre vendas (mesmo critério de julho/2026) — a rubrica fica zerada e o apurado dele aparece só na aba BASE."],
  PENDENCIAS=["Lançar na linha PRÊMIO COTA GERAL o valor já com a redução combinada, para compensar o aumento da comissão dobrada.",
-             "INIURLE: em julho as horas extras foram lançadas como R$ 442,09, exatamente o mesmo valor do EDEY na loja Arraial — conferir se não houve cópia de célula.",
              "UILLIAN também registra vendas no relatório da loja Centro — conferir se alguma comissão deve ser rateada entre as lojas."],
 )
 
@@ -155,6 +156,10 @@ def build(cfg):
          ("SEÇÃO", "VALORES FIXOS / RECORRENTES", ""),
          ("Salário base (piso 2026)", 1621.00, "Valor praticado em jul/2026."),
          ("Salário do gerente", 5648.41, "Conforme jul/2026."),
+         ("Horas mensais (base do salário-hora)", 220, "Salário-hora = salário base ÷ 220."),
+         ("Adicional de hora extra", 0.5, "50% sobre a hora normal (hora extra = salário-hora × 1,5)."),
+         ("Adicional noturno", 0.2, "20% sobre a hora normal, nas horas entre 22h e 5h."),
+         ("Dias do mês para o salário-dia", 30, "Salário-dia = salário base ÷ 30. Usado no feriado trabalhado."),
          ("Multiplicador da comissão", cfg["mult"],
           "TRANCOSO paga o dobro do valor apurado no InovaFarma." if cfg["mult"] != 1
           else "1 = paga o valor apurado no InovaFarma, sem multiplicador."),
@@ -649,6 +654,102 @@ def build(cfg):
     wsg.page_setup.fitToHeight = 1
     wsg.sheet_properties.pageSetUpPr.fitToPage = True
 
+    # ---------------------------------------------------------- PONTO
+    TIPOS = {"HE50": ("Horas extras 50%", "horas", "HORAS EXTRAS"),
+             "NOT": ("Adicional noturno", "horas", "ADICIONAL NOTURNO"),
+             "FER": ("Feriado trabalhado (dobra)", "dias", "HORAS EXTRAS"),
+             "FER_COMP": ("Feriado com folga compensatória", "dias", "—"),
+             "VALOR": ("Adicional noturno (valor fixo)", "valor", "ADICIONAL NOTURNO")}
+    wsp = wb.create_sheet("PONTO AGO.26")
+    wsp.sheet_view.showGridLines = False
+    for col, w in zip("ABCDEFGHI", [14, 32, 10, 10, 14, 14, 14, 22, 62]):
+        wsp.column_dimensions[col].width = w
+    title_block(wsp, "APONTAMENTO DO PONTO — AGOSTO/2026",
+                f"Loja {cfg['loja']} · horas extras, adicional noturno e feriado trabalhado · alimenta a aba HOLERITE AGO.26", 9)
+    for i, h in enumerate(["FUNCIONÁRIO", "OCORRÊNCIA", "QTDE", "UNIDADE", "SALÁRIO BASE",
+                           "VALOR UNITÁRIO", "TOTAL", "RUBRICA DESTINO", "OBSERVAÇÃO"], 1):
+        c = wsp.cell(4, i, h); c.font = font(9, True, "FFFFFF"); c.fill = FILL_HDR
+        c.alignment = Alignment(horizontal="center", wrap_text=True); c.border = BOX
+    wsp.row_dimensions[4].height = 26
+    SALROW = rows["SALÁRIO BASE"]
+    LEMP = get_column_letter(CT - 1)
+    P_HORAS = f"PARÂMETROS!$B${PROW['Horas mensais (base do salário-hora)']}"
+    P_HE = f"PARÂMETROS!$B${PROW['Adicional de hora extra']}"
+    P_NOT = f"PARÂMETROS!$B${PROW['Adicional noturno']}"
+    P_DIAS = f"PARÂMETROS!$B${PROW['Dias do mês para o salário-dia']}"
+    pr = 5; P_INI = 5
+    def linha_sal(pr):
+        c = wsp.cell(pr, 5, f"=IFERROR(INDEX({HOL}!$B${SALROW}:${LEMP}${SALROW},1,"
+                            f"MATCH(A{pr},{HOL}!$B$4:${LEMP}$4,0)),0)")
+        c.number_format = MONEY; c.font = font(10, False, GREEN)
+    for func, tipo, qtd, obs in cfg.get("PONTO", []):
+        rot, uni, dest = TIPOS[tipo]
+        wsp.cell(pr, 1, func).font = font(10, True)
+        wsp.cell(pr, 2, rot).font = font(10)
+        c = wsp.cell(pr, 3, qtd if tipo != "VALOR" else 1)
+        c.font = font(10, False, BLUE); c.fill = FILL_IN
+        c.alignment = Alignment(horizontal="center")
+        wsp.cell(pr, 4, uni).alignment = Alignment(horizontal="center")
+        linha_sal(pr)
+        if tipo == "HE50":
+            fu = f"=ROUND(E{pr}/{P_HORAS}*(1+{P_HE}),4)"
+        elif tipo == "NOT":
+            fu = f"=ROUND(E{pr}/{P_HORAS}*{P_NOT},4)"
+        elif tipo == "FER":
+            fu = f"=ROUND(E{pr}/{P_DIAS},2)"
+        elif tipo == "FER_COMP":
+            fu = 0
+        else:
+            fu = qtd
+        c = wsp.cell(pr, 6, fu); c.number_format = MONEY
+        c.font = font(10, False, BLUE if tipo == "VALOR" else "000000")
+        if tipo == "VALOR":
+            c.fill = FILL_CONF
+        c = wsp.cell(pr, 7, f"=ROUND(C{pr}*F{pr},2)"); c.number_format = MONEY
+        c.font = font(10, True); c.fill = FILL_TOT
+        wsp.cell(pr, 8, dest).font = font(9, True, "1F3864")
+        c = wsp.cell(pr, 9, obs); c.font = font(9, it=True)
+        c.alignment = Alignment(wrap_text=True, vertical="center")
+        for i in range(1, 10):
+            wsp.cell(pr, i).border = BOX
+        pr += 1
+    for extra in range(8):
+        for i in range(1, 10):
+            cell = wsp.cell(pr, i); cell.border = BOX
+            if i in (1, 2, 3, 4, 8, 9):
+                cell.font = font(10, False, BLUE); cell.fill = FILL_IN
+        linha_sal(pr)
+        wsp.cell(pr, 6).number_format = MONEY
+        wsp.cell(pr, 6).font = font(10, False, BLUE); wsp.cell(pr, 6).fill = FILL_IN
+        wsp.cell(pr, 7, f"=ROUND(C{pr}*F{pr},2)").number_format = MONEY
+        wsp.cell(pr, 7).font = font(10, True); wsp.cell(pr, 7).fill = FILL_TOT
+        pr += 1
+    P_FIM = pr - 1
+    wsp.cell(pr, 2, "TOTAL").font = font(10, True)
+    c = wsp.cell(pr, 7, f"=SUM(G{P_INI}:G{P_FIM})"); c.number_format = MONEY; c.font = font(10, True)
+    for i in range(1, 10):
+        wsp.cell(pr, i).fill = FILL_TOT; wsp.cell(pr, i).border = BOX
+    wsp.auto_filter.ref = f"A4:I{P_FIM}"
+    wsp.freeze_panes = "A5"
+    pr += 2
+    for t in ["Salário-hora = salário base ÷ 220. Hora extra = salário-hora × 1,5. Adicional noturno = salário-hora × 20%. Feriado trabalhado sem folga = 1 salário-dia a mais (salário base ÷ 30).",
+              "No salário de R$ 1.621,00: 40 horas extras dão R$ 442,09 e 24 horas dão R$ 265,25 — é a mesma conta usada na planilha de julho.",
+              "As linhas em branco são para acrescentar ocorrências: preencha funcionário, ocorrência, quantidade, valor unitário e a rubrica de destino (HORAS EXTRAS ou ADICIONAL NOTURNO).",
+              "Os totais desta aba entram sozinhos nas linhas HORAS EXTRAS e ADICIONAL NOTURNO da aba HOLERITE AGO.26."]:
+        wsp.merge_cells(start_row=pr, start_column=1, end_row=pr, end_column=9)
+        c = wsp.cell(pr, 1, t); c.font = font(9, it=True)
+        c.alignment = Alignment(wrap_text=True, vertical="center")
+        wsp.row_dimensions[pr].height = 24
+        pr += 1
+    wsh = wb["HOLERITE AGO.26"]
+    for rub, lh in (("HORAS EXTRAS", rows["HORAS EXTRAS"]), ("ADICIONAL NOTURNO", rows["ADICIONAL NOTURNO"])):
+        for i, n in enumerate(EMP):
+            c = wsh.cell(lh, C0 + i,
+                         f"=SUMIFS('PONTO AGO.26'!$G${P_INI}:$G${P_FIM},'PONTO AGO.26'!$A${P_INI}:$A${P_FIM},"
+                         f"{get_column_letter(C0+i)}$4,'PONTO AGO.26'!$H${P_INI}:$H${P_FIM},\"{rub}\")")
+            c.number_format = MONEY; c.font = font(10, False, GREEN); c.fill = PatternFill()
+        wsh.cell(lh, CO).value = "Somado automaticamente da aba PONTO AGO.26 (apontamento de agosto/2026). Para mudar, edite lá."
+
     # ---------------------------------------------------------- FOLGUISTAS
     if cfg.get("FOLGUISTAS"):
         wf = wb.create_sheet("FOLGUISTAS")
@@ -725,7 +826,7 @@ def build(cfg):
     for t in cfg["DEFINIDO"]:
         blocos.append(("T", t))
     blocos.append(("SEC", "PENDÊNCIAS — CONFIRMAR ANTES DE ENVIAR"))
-    for t in ["Horas extras e adicional noturno de agosto (apontamento do ponto).",
+    for t in ["Horas extras, adicional noturno e feriados trabalhados de agosto — lançar na aba PONTO AGO.26.",
               "Prêmio cota geral e prêmio pré-vencidos, conforme a tabela de metas da loja.",
               "Vales adiantados, convênio e faltas de agosto.",
               "Férias, afastamentos e admissões que mudem o salário do mês."] + cfg["PENDENCIAS"]:
@@ -738,7 +839,8 @@ def build(cfg):
                ("T", "LISTA CONTABILIDADE — os mesmos lançamentos em formato de lista."),
                ("T", "BASE INOVAFARMA AGO.26 — apuração de comissões e incentivos por vendedor."),
                ("T", f"JULHO.26 REVISADO — a folha de julho ({cfg['JUL_ABA']}) reorganizada e conferida."),
-               ("T", "PARÂMETROS — calendário do mês, fator do DSR e valores fixos.")]
+               ("T", "PARÂMETROS — calendário do mês, fator do DSR e valores fixos."),
+               ("T", "PONTO AGO.26 — horas extras, adicional noturno e feriado trabalhado; alimenta o holerite.")]
     if cfg.get("FOLGUISTAS"):
         blocos.append(("T", "FOLGUISTAS — diárias de SERGIO e ANA CELIA para o contas a pagar (fora do holerite)."))
     r = 4
