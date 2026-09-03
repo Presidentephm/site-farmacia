@@ -138,3 +138,15 @@ Gerado por `gerar_resumo_3_lojas.py`.
 Quem passa o mês inteiro de férias fica com salário zerado no holerite e
 sem desconto de vale-transporte; férias e 1/3 são pagos em recibo próprio
 e ficam registrados na linha FÉRIAS PAGAS À PARTE, fora do líquido.
+
+## Média de comissões para férias
+
+`MEDIA_COMISSOES_12_MESES_FERIAS.xlsx` (gerado por
+`gerar_media_12_meses.py`) tem uma aba por colaborador — VALDICK,
+RENALDO e MANOEL — com os 12 meses a preencher, a soma e a média mensal
+calculadas por fórmula, mais o passo a passo de como extrair cada mês na
+tela Comissão de Vendedores do InovaFarma.
+
+Janelas de 12 meses: VALDICK e RENALDO de 01/09/2025 a 31/08/2026
+(férias em 01 a 30/09/2026); MANOEL de 01/05/2025 a 30/04/2026 (férias
+gozadas em maio/2026).
