@@ -30,7 +30,7 @@ def E(nome, sal, com, he=0.0, notu=0.0, aux=0.0, meta=0.0, inc=0.0, vt6=0.0, obs
     prov = round(sal + he + notu + com + dsr + aux + meta + inc, 2)
     desc = round(-inc + vt6, 2)
     return dict(nome=nome, sal=sal, he=he, notu=notu, com=com, dsr=dsr, aux=aux,
-                meta=meta, inc=inc, prov=prov, vt6=vt6, adiant_inc=-inc, adiant_sal=None,
+                meta=meta, inc=inc, prov=prov, vt6=vt6, adiant_inc=-inc, adiant_sal=None, ferias=None,
                 desc=desc, liq=round(prov + desc, 2), obs=obs)
 
 ARRAIAL = [
@@ -77,7 +77,8 @@ COLS = [("FUNCIONÁRIO", "nome", 15), ("SALÁRIO", "sal", 12), ("HORAS EXTRAS", 
         ("TOTAL PROVENTOS", "prov", 14), ("ADIANT. INCENT.", "adiant_inc", 13),
         ("ADIANTAMENTO SALARIAL / VALES", "adiant_sal", 15),
         ("VALE TRANSP. 6%", "vt6", 13), ("TOTAL DESCONTOS", "desc", 14),
-        ("LÍQUIDO PARCIAL", "liq", 14), ("OBSERVAÇÃO", "obs", 70)]
+        ("LÍQUIDO PARCIAL", "liq", 14),
+        ("FÉRIAS PAGAS À PARTE (contas a pagar)", "ferias", 16), ("OBSERVAÇÃO", "obs", 70)]
 
 wb = openpyxl.Workbook()
 ws = wb.active; ws.title = "RESUMO 3 LOJAS AGO.26"
@@ -135,7 +136,7 @@ for loja, emps in LOJAS:
                     c.fill = FILL_LIQ
                 elif k in ("prov", "desc"):
                     c.fill = FILL_TOT
-                elif k == "adiant_sal":
+                elif k in ("adiant_sal", "ferias"):
                     c.font = font(10, False, "0000FF"); c.fill = FILL_IN
         r += 1
     fim = r - 1
@@ -170,6 +171,7 @@ avisos = [
  "• Convênio e descontos de falta do mês.",
  "• A coluna ADIANTAMENTO SALARIAL / VALES está em amarelo, para preencher com o valor adiantado a cada um (em negativo). O total de descontos e o líquido se atualizam sozinhos.",
  "• Prêmio cota geral e prêmio pré-vencidos, conforme a apuração de metas de cada loja.",
+ "• A coluna FÉRIAS PAGAS À PARTE é só lembrete para o contas a pagar: recibo de férias pago fora do holerite, NÃO entra no líquido. Em agosto: JOEL (Arraial, férias de 01 a 31/08) e GENECIR (Centro, férias de 01 a 30/08).",
  "• Diárias dos folguistas SERGIO (R$ 150,00) e ANA CELIA (R$ 100,00), na loja Centro — vão para o contas a pagar, fora do holerite.",
  "",
  "CRITÉRIOS USADOS:",
