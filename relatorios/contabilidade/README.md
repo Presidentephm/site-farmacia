@@ -98,3 +98,23 @@ Critérios, com os parâmetros na aba PARÂMETROS:
 - hora extra = salário-hora × 1,5
 - adicional noturno = salário-hora × 20%
 - feriado trabalhado sem folga = 1 salário-dia a mais (salário ÷ 30)
+
+## Competência setembro/2026 (pagamento 05/10/2026)
+
+Arquivos `RELATORIO_HOLERITE_SETEMBRO_2026_<LOJA>_pgto_05-10-2026.xlsx`,
+gerados por `gerar_relatorio_setembro_2026.py`.
+
+São a folha já montada com o que se sabe hoje: salários, rubricas fixas,
+parâmetros do mês e as ocorrências conhecidas. Comissões e incentivos
+ficam zerados até o relatório do InovaFarma de setembro ser extraído no
+início de outubro e lançado na aba BASE INOVAFARMA SET.26.
+
+Calendário do DSR em setembro: 4 domingos mais o feriado de 07/09
+(segunda-feira) ÷ 25 dias úteis = fator 0,200000.
+
+Ocorrências já registradas:
+
+- JOEL (Arraial): férias até 03/09, volta em 04/09 — salário proporcional
+  a 27 dias (R$ 1.458,90)
+- TAMILES (Trancoso): atestado de 02 a 08/09, abonado, sem desconto
+- GENECIR (Centro): voltou das férias, salário integral
