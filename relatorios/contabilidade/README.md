@@ -54,3 +54,19 @@ InovaFarma. A aba já está configurada para imprimir em uma página.
   férias saiu como 01 a 31/08/2026 e foi pago no início de
   agosto — não se repetem neste holerite; salário e desconto de
   vale-transporte zerados no mês
+
+## Lojas
+
+| Loja | Arquivo |
+|---|---|
+| Arraial | `RELATORIO_HOLERITE_AGOSTO_2026_pgto_05-09-2026.xlsx` |
+| Centro | `RELATORIO_HOLERITE_AGOSTO_2026_CENTRO_pgto_05-09-2026.xlsx` |
+| Trancoso | `RELATORIO_HOLERITE_AGOSTO_2026_TRANCOSO_pgto_05-09-2026.xlsx` |
+
+As três seguem a mesma estrutura de abas. Diferenças por loja:
+
+- **Trancoso**: a comissão paga é o dobro da apurada no InovaFarma. O
+  multiplicador fica na aba PARÂMETROS e a linha de comissão já sai
+  multiplicada; os incentivos ficam pelo valor apurado
+- **Trancoso**: UILLIAN é o gerente e não recebe comissão
+- **Centro**: ARIANE é a gerente e não recebe comissão
