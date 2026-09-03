@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 """Media de comissoes dos ultimos 12 meses - base de calculo de ferias.
-VALDICK (Trancoso), RENALDO (Centro) e MANOEL (Trancoso)."""
+Fonte: InovaFarma, relatorio RESUMIDO POR GRUPO, extraido em 03/09/2026."""
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-from openpyxl.utils import get_column_letter
 
 OUT = "/home/user/site-farmacia/relatorios/contabilidade/MEDIA_COMISSOES_12_MESES_FERIAS.xlsx"
 F = "Arial"
@@ -12,7 +11,6 @@ def font(sz=10, b=False, color="000000", it=False):
     return Font(name=F, size=sz, bold=b, color=color, italic=it)
 FILL_TIT = PatternFill("solid", fgColor="1F3864")
 FILL_SEC = PatternFill("solid", fgColor="D9E2F3")
-FILL_HDR = PatternFill("solid", fgColor="2E5496")
 FILL_IN = PatternFill("solid", fgColor="FFF2CC")
 FILL_TOT = PatternFill("solid", fgColor="E2EFDA")
 FILL_LIQ = PatternFill("solid", fgColor="C6E0B4")
@@ -21,120 +19,144 @@ thin = Side(style="thin", color="BFBFBF")
 BOX = Border(left=thin, right=thin, top=thin, bottom=thin)
 BLUE = "0000FF"
 
-MESES = ["set/2025", "out/2025", "nov/2025", "dez/2025", "jan/2026", "fev/2026",
-         "mar/2026", "abr/2026", "mai/2026", "jun/2026", "jul/2026", "ago/2026"]
-MESES_MANOEL = ["mai/2025", "jun/2025", "jul/2025", "ago/2025", "set/2025", "out/2025",
-                "nov/2025", "dez/2025", "jan/2026", "fev/2026", "mar/2026", "abr/2026"]
-
 CASOS = [
- dict(nome="VALDICK GONÇALVES RODRIGUES", cod="162", loja="TRANCOSO", meses=MESES,
+ dict(aba="VALDICK", nome="VALDIC GONÇALVES RODRIGUES", cod="162", loja="TRANCOSO",
       periodo="01/09/2025 a 31/08/2026", ferias="férias de 01 a 30/09/2026",
-      dobro=True,
-      conhecidos={"jul/2026": (908.70, None), "ago/2026": (886.30, 260.00)}),
- dict(nome="RENALDO RODRIGUES", cod="151", loja="CENTRO (MATRIZ)", meses=MESES,
+      itens=17252, bruta=562715.75, desc=224944.06, liq=337771.69,
+      com=10200.3462, inc=2702.00, salario=1621.00, dobro=True),
+ dict(aba="RENALDO", nome="RENALDO RODRIGUES", cod="151", loja="CENTRO (MATRIZ)",
       periodo="01/09/2025 a 31/08/2026", ferias="férias de 01 a 30/09/2026",
-      dobro=False,
-      conhecidos={"fev/2026": (855.00, 395.00), "mar/2026": (942.00, 253.00),
-                  "abr/2026": (960.00, 426.00), "jul/2026": (1200.00, None),
-                  "ago/2026": (847.94, 96.00)}),
- dict(nome="MANOEL SILVA", cod="92", loja="TRANCOSO", meses=MESES_MANOEL,
+      itens=15854, bruta=481964.11, desc=191683.4454, liq=290280.6646,
+      com=9714.1688, inc=1676.00, salario=1621.00, dobro=False),
+ dict(aba="MANOEL", nome="MANOEL SILVA", cod="92", loja="TRANCOSO",
       periodo="01/05/2025 a 30/04/2026", ferias="férias gozadas em maio/2026",
-      dobro=True,
-      conhecidos={"fev/2026": (845.00, 202.00), "mar/2026": (1350.00, 240.00),
-                  "abr/2026": (150.00, 263.00)}),
+      itens=11545, bruta=363522.79, desc=133067.63, liq=230455.16,
+      com=7253.0803, inc=421.00, salario=1621.00, dobro=True),
 ]
 
 wb = openpyxl.Workbook()
 primeiro = True
-for caso in CASOS:
+for c_ in CASOS:
     ws = wb.active if primeiro else wb.create_sheet()
-    ws.title = caso["nome"].split()[0][:20]
-    primeiro = False
+    ws.title = c_["aba"]; primeiro = False
     ws.sheet_view.showGridLines = False
-    for col, w in zip("ABCDEF", [14, 18, 18, 18, 18, 60]):
+    for col, w in zip("ABC", [46, 20, 66]):
         ws.column_dimensions[col].width = w
-    ws.merge_cells("A1:F1")
-    c = ws.cell(1, 1, f"MÉDIA DE COMISSÕES DOS ÚLTIMOS 12 MESES — {caso['nome']}")
+    ws.merge_cells("A1:C1")
+    c = ws.cell(1, 1, f"MÉDIA DOS ÚLTIMOS 12 MESES — {c_['nome']}")
     c.font = font(13, True, "FFFFFF"); c.fill = FILL_TIT
     c.alignment = Alignment(horizontal="center", vertical="center")
     ws.row_dimensions[1].height = 26
-    ws.merge_cells("A2:F2")
-    c = ws.cell(2, 1, f"Loja {caso['loja']} · código {caso['cod']} · período {caso['periodo']} · base para {caso['ferias']}")
+    ws.merge_cells("A2:C2")
+    c = ws.cell(2, 1, f"Loja {c_['loja']} · código {c_['cod']} · período {c_['periodo']} · base para {c_['ferias']}")
     c.font = font(10, True, "1F3864"); c.alignment = Alignment(horizontal="center")
-    hdr = ["MÊS", "COMISSÃO APURADA", "INCENTIVOS", "COMISSÃO PAGA", "TOTAL VARIÁVEL", "OBSERVAÇÃO"]
-    for i, h in enumerate(hdr, 1):
-        c = ws.cell(4, i, h); c.font = font(9, True, "FFFFFF"); c.fill = FILL_HDR
-        c.alignment = Alignment(horizontal="center", wrap_text=True); c.border = BOX
-    ws.row_dimensions[4].height = 28
-    ws.freeze_panes = "A5"
-    r = 5
-    ini = r
-    for m in caso["meses"]:
-        ws.cell(r, 1, m).font = font(10, True)
-        conhecido = caso["conhecidos"].get(m)
-        for i in (2, 3):
-            c = ws.cell(r, i, conhecido[i - 2] if conhecido else None)
-            c.number_format = MONEY; c.font = font(10, False, BLUE); c.fill = FILL_IN
-        mult = 2 if caso["dobro"] else 1
-        c = ws.cell(r, 4, f"=ROUND(B{r}*{mult},2)")
-        c.number_format = MONEY; c.font = font(10)
-        c = ws.cell(r, 5, f"=D{r}+C{r}")
-        c.number_format = MONEY; c.font = font(10, True); c.fill = FILL_TOT
-        obs = ""
-        if conhecido:
-            obs = "Valor localizado nas planilhas que você já enviou — CONFERIR com o relatório do InovaFarma."
-        c = ws.cell(r, 6, obs); c.font = font(9, it=True)
-        c.alignment = Alignment(wrap_text=True, vertical="center")
-        for i in range(1, 7):
-            ws.cell(r, i).border = BOX
-        r += 1
-    fim = r - 1
-    ws.cell(r, 1, "SOMA 12 MESES").font = font(10, True)
-    for i in (2, 3, 4, 5):
-        L = get_column_letter(i)
-        c = ws.cell(r, i, f"=SUM({L}{ini}:{L}{fim})")
-        c.number_format = MONEY; c.font = font(10, True)
-    for i in range(1, 7):
-        ws.cell(r, i).fill = FILL_TOT; ws.cell(r, i).border = BOX
-    soma = r
-    r += 1
-    ws.cell(r, 1, "MÉDIA MENSAL (÷ 12)").font = font(11, True)
-    for i in (2, 3, 4, 5):
-        L = get_column_letter(i)
-        c = ws.cell(r, i, f"=ROUND({L}{soma}/12,2)")
-        c.number_format = MONEY; c.font = font(11, True)
-    for i in range(1, 7):
-        ws.cell(r, i).fill = FILL_LIQ; ws.cell(r, i).border = BOX
-    ws.row_dimensions[r].height = 22
-    c = ws.cell(r, 6, "É esta média (coluna TOTAL VARIÁVEL) que entra na base das férias, somada ao salário.")
-    c.font = font(9, True, "1F3864"); c.alignment = Alignment(wrap_text=True, vertical="center")
-    ws.auto_filter.ref = f"A4:F{fim}"
-    r += 2
-    passos = [
-     "COMO PUXAR NO INOVAFARMA (tela Comissão de Vendedores):",
-     f"1. EMPRESA: selecione a loja {caso['loja']}.",
-     "2. TIPO: PRODUTOS VENDIDOS. VISUALIZAÇÃO: pode usar RESUMIDO POR VENDEDOR — para a média só interessam os totais do mês.",
-     f"3. PERÍODO: rode MÊS A MÊS (do dia 1 ao último dia de cada mês), de {caso['periodo']}.",
-     f"4. VENDEDOR: {caso['nome']} (código {caso['cod']}).",
-     "5. COMISSÃO: TODOS OS PRODUTOS. Clique em VISUALIZA e anote TOTAL COMISSÃO VENDEDOR e TOTAL INCENTIVO VENDEDOR.",
-     "6. Lance os dois valores nas colunas amarelas deste quadro; a soma e a média saem sozinhas.",
-     "",
-     "OBSERVAÇÕES:",
-     "• Se o sistema deixar rodar o período inteiro de uma vez, ainda assim é preciso o valor mês a mês: a média de férias é a soma dos 12 meses dividida por 12.",
-     "• O aviso da tela lembra que vendas da Farmácia Popular não geram comissão — elas já ficam de fora do relatório.",
-     "• Meses em que a pessoa esteve de férias ou afastada entram com o valor que houve; se não houve nada, deixe zero.",
-    ]
-    if caso["dobro"]:
-        passos.insert(7, "• TRANCOSO paga o dobro da comissão apurada: a coluna COMISSÃO PAGA já multiplica por 2. É esse valor que vale para a média, porque é o que foi efetivamente pago.")
-    for t in passos:
-        ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=6)
+
+    pos = [4]
+    def sec(txt):
+        r = pos[0]
+        for i in range(1, 4):
+            ws.cell(r, i).fill = FILL_SEC
+        ws.cell(r, 1, txt).font = font(11, True, "1F3864")
+        ws.row_dimensions[r].height = 19
+        pos[0] += 1
+    def linha(rot, val, obs="", fill=None, bold=False, fmt=MONEY, cor=None):
+        r = pos[0]
+        c = ws.cell(r, 1, rot); c.font = font(10, bold); c.border = BOX
+        c2 = ws.cell(r, 2, val); c2.number_format = fmt
+        c2.font = font(11 if bold else 10, bold, cor or "000000"); c2.border = BOX
+        if fill:
+            c.fill = fill; c2.fill = fill
+        c3 = ws.cell(r, 3, obs); c3.font = font(9, it=True)
+        c3.alignment = Alignment(wrap_text=True, vertical="center"); c3.border = BOX
+        pos[0] += 1
+        return r
+
+    sec("APURADO NO INOVAFARMA — 12 MESES")
+    linha("Total de itens vendidos", c_["itens"], "", fmt='#,##0')
+    linha("Venda bruta", c_["bruta"])
+    linha("Descontos concedidos", -c_["desc"])
+    linha("Venda líquida", c_["liq"], "", fill=FILL_TOT)
+    l_com = linha("Comissão apurada (12 meses)", c_["com"], "Total do relatório RESUMIDO POR GRUPO.", fill=FILL_TOT, bold=True)
+    l_inc = linha("Incentivos (12 meses)", c_["inc"], "Injetáveis, populares, oficinais e demais incentivos.", fill=FILL_TOT, bold=True)
+
+    sec("MÉDIA MENSAL (÷ 12)")
+    m_com = linha("Média da comissão apurada", f"=ROUND(B{l_com}/12,2)", "", bold=True)
+    m_inc = linha("Média dos incentivos", f"=ROUND(B{l_inc}/12,2)", "", bold=True)
+    if c_["dobro"]:
+        m_dob = linha("Média da comissão em dobro", f"=ROUND(B{m_com}*2,2)",
+                      "Só vale se a loja pagou em dobro no período — ver o aviso no rodapé.", fill=FILL_ALERT)
+    m_tot = linha("MÉDIA DA PARTE VARIÁVEL", f"=ROUND(B{m_com}+B{m_inc},2)",
+                  "Comissão apurada + incentivos. É esta média que entra na base das férias.",
+                  fill=FILL_LIQ, bold=True)
+
+    sec("BASE DE FÉRIAS — SIMULAÇÃO PARA O CONTAS A PAGAR (30 dias)")
+    l_sal = linha("Salário base", c_["salario"], "Piso 2026. Conferir se era outro no mês das férias.", cor=BLUE, fill=FILL_IN)
+    l_base = linha("Base de férias (salário + média variável)", f"=ROUND(B{l_sal}+B{m_tot},2)", "", fill=FILL_TOT, bold=True)
+    l_ter = linha("1/3 constitucional", f"=ROUND(B{l_base}/3,2)", "", fill=FILL_TOT)
+    linha("TOTAL BRUTO DAS FÉRIAS", f"=ROUND(B{l_base}+B{l_ter},2)",
+          "Valor bruto. INSS e IRRF sobre férias são calculados pela contabilidade.",
+          fill=FILL_LIQ, bold=True)
+
+    r = pos[0] + 1
+    notas = ["OBSERVAÇÕES:",
+             f"Fonte: InovaFarma, relatório PRODUTOS VENDIDOS RESUMIDO POR GRUPO, vendedor {c_['nome']}, período {c_['periodo']}, extraído em 03/09/2026.",
+             "A média de férias é a soma dos 12 meses dividida por 12 — o relatório do período inteiro já dá essa soma, não precisa dos meses separados.",
+             "Só a parte variável entra nesta média. Horas extras, adicional noturno e prêmios, se houver, têm média própria e devem ser somados pela contabilidade.",
+             "Esta aba é uma simulação para o contas a pagar. O cálculo oficial do recibo de férias é da contabilidade."]
+    if c_["dobro"]:
+        notas.insert(2, "ATENÇÃO — TRANCOSO: o pagamento em dobro da comissão começou em agosto/2026, e em julho a comissão foi lançada por média. Nos meses anteriores dessa janela o que foi pago pode ter sido diferente do apurado. A média correta é sobre o que foi EFETIVAMENTE PAGO: se o dobro valeu em poucos meses, use a média da comissão apurada; se valeu no período todo, use a média em dobro. Confira com as planilhas de cada mês antes de fechar o recibo.")
+    for t in notas:
+        ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=3)
         c = ws.cell(r, 1, t)
-        neg = t.endswith(":")
-        c.font = font(9, neg, "C00000" if neg else "000000")
+        alerta = t.startswith("ATENÇÃO")
+        c.font = font(9, t.endswith(":") or alerta, "C00000" if alerta or t.endswith(":") else "000000")
         c.alignment = Alignment(wrap_text=True, vertical="center")
-        if neg:
+        if alerta:
             c.fill = FILL_ALERT
+            ws.row_dimensions[r].height = 40
         r += 1
 
+# aba comparativa
+ws = wb.create_sheet("COMPARATIVO", 0)
+ws.sheet_view.showGridLines = False
+for col, w in zip("ABCDEFG", [26, 12, 24, 16, 16, 18, 18]):
+    ws.column_dimensions[col].width = w
+ws.merge_cells("A1:G1")
+c = ws.cell(1, 1, "MÉDIA DOS 12 MESES — RESUMO DOS TRÊS CASOS")
+c.font = font(13, True, "FFFFFF"); c.fill = FILL_TIT
+c.alignment = Alignment(horizontal="center", vertical="center")
+ws.row_dimensions[1].height = 26
+ws.merge_cells("A2:G2")
+c = ws.cell(2, 1, "Base de cálculo das férias · fonte InovaFarma, extraído em 03/09/2026")
+c.font = font(10, True, "1F3864"); c.alignment = Alignment(horizontal="center")
+hdr = ["FUNCIONÁRIO", "CÓD.", "PERÍODO", "COMISSÃO 12M", "INCENTIVOS 12M",
+       "MÉDIA MENSAL", "BASE DE FÉRIAS"]
+for i, h in enumerate(hdr, 1):
+    c = ws.cell(4, i, h); c.font = font(9, True, "FFFFFF")
+    c.fill = PatternFill("solid", fgColor="2E5496")
+    c.alignment = Alignment(horizontal="center", wrap_text=True); c.border = BOX
+ws.row_dimensions[4].height = 28
+r = 5
+for c_ in CASOS:
+    ws.cell(r, 1, c_["nome"]).font = font(10, True)
+    ws.cell(r, 2, c_["cod"]).alignment = Alignment(horizontal="center")
+    ws.cell(r, 3, c_["periodo"]).font = font(10)
+    for i, v in ((4, c_["com"]), (5, c_["inc"])):
+        cc = ws.cell(r, i, v); cc.number_format = MONEY
+    cc = ws.cell(r, 6, f"=ROUND((D{r}+E{r})/12,2)")
+    cc.number_format = MONEY; cc.font = font(10, True); cc.fill = FILL_TOT
+    cc = ws.cell(r, 7, f"=ROUND(F{r}+{c_['salario']},2)")
+    cc.number_format = MONEY; cc.font = font(10, True); cc.fill = FILL_LIQ
+    for i in range(1, 8):
+        ws.cell(r, i).border = BOX
+    r += 1
+r += 1
+for t in ["BASE DE FÉRIAS = salário base + média mensal da parte variável (comissão + incentivos).",
+          "Cada aba traz o detalhe do funcionário, com o 1/3 constitucional e o total bruto das férias.",
+          "TRANCOSO (VALDICK e MANOEL): conferir o efeito do pagamento em dobro antes de fechar — ver o aviso na aba de cada um."]:
+    ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=7)
+    c = ws.cell(r, 1, t); c.font = font(9, it=True)
+    c.alignment = Alignment(wrap_text=True, vertical="center")
+    r += 1
 wb.save(OUT)
 print("ok", OUT)
