@@ -70,3 +70,18 @@ As três seguem a mesma estrutura de abas. Diferenças por loja:
   multiplicada; os incentivos ficam pelo valor apurado
 - **Trancoso**: UILLIAN é o gerente e não recebe comissão
 - **Centro**: ARIANE é a gerente e não recebe comissão
+
+## Definições de agosto/2026 por loja
+
+**Centro**
+- ARIANE e PEDRO não recebem comissão
+- GENECIR: férias de 01 a 30/08 — salário zerado; falta confirmar o dia 31/08
+- SERGIO (diária R$ 150,00) e ANA CELIA (diária R$ 100,00) são folguistas:
+  ficam na aba FOLGUISTAS, para o contas a pagar, fora do holerite
+- GILSON, UILLIAN e FABIANA não recebem comissão pela loja
+- SARA: o saldo dela no Centro (R$ 2,65) foi somado à folha do Arraial
+
+**Trancoso**
+- Comissão paga em dobro; incentivos simples, sem dobrar
+- Julho foi lançado por média; a diferença gerada pela comissão dobrada
+  será reduzida nas premiações

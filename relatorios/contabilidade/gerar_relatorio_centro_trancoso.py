@@ -33,22 +33,24 @@ CENTRO = dict(
  # nome: (cod, venda bruta, descontos, venda liquida, comissao, inj, vit, outros)
  INOVA={"ARIANE":  (211, 16556.20,  5188.17, 11368.03,  257.46, 120.0,  0.0,   5.0),
         "ELIANA":  ( 81, 60046.70, 20690.58, 39356.12, 1511.36, 170.0, 20.0,  35.0),
-        "GENECIR": (241,   188.86,     5.99,   182.87,    0.62,   0.0,  0.0,   0.0),
+        "GENECIR": (241,   188.86,     5.99,   182.87,    0.62,   0.0,  0.0,   0.0),  # ferias 01 a 30/08
         "RENALDO": (151, 49529.57, 21504.43, 28025.14,  847.94,  80.0, 10.0,   6.0),
         "THAYANE": ( 61,  6772.99,   199.94,  6573.05,   57.33,   0.0,  0.0,  10.0),
         "PEDRO":   ( 41,  1689.51,   310.63,  1378.88,   12.18,   0.0,  0.0,   0.0)},
  OUTROS_COD=[("11", "GILSON MOURA SANTOS", 7066.28, 26.43, 31.0),
              ("13", "UILLIAN SILVA SANTOS", 2134.49, 0.0, 0.0),
              ("31", "FABIANA RODRIGUES", 241.91, 5.83, 0.0),
-             ("43", "SARA", 365.03, 2.65, 0.0),
-             ("51", "SERGIO", 6023.97, 128.80, 40.0),
-             ("131", "ANA CELIA", 3924.63, 83.56, 0.0)],
+             ("43", "SARA", 365.03, 2.65, 0.0)],
+ OUTROS_NOTA="GILSON, UILLIAN e FABIANA não recebem comissão. O saldo da SARA (loja Arraial) foi somado à folha dela no relatório do Arraial.",
+ FOLGUISTAS=[("SERGIO", "51", 150.00, 6023.97, 128.80, 40.0),
+             ("ANA CELIA", "131", 100.00, 3924.63, 83.56, 0.0)],
  GERAL=dict(bruta=154540.14, desc=52653.74, liq=101886.40, com=2934.17, inc=527.0),
  SALARIO={"ARIANE": 5648.41, "ELIANA": 1621.0, "GENECIR": 1621.0,
           "RENALDO": 1621.0, "THAYANE": 1621.0, "PEDRO": 1621.0},
  NOTURNO={}, AUXGER={}, METACX={},
  VT6={"ELIANA": -84.29, "GENECIR": -84.29, "RENALDO": -74.29, "THAYANE": -84.29},
- SEM_COMISSAO=["ARIANE"],
+ SEM_COMISSAO=["ARIANE", "PEDRO"],
+ SALARIO_ZERO={"GENECIR": "férias de 01 a 30/08/2026, pagas em recibo próprio"},
  JUL={"COMISSÃO PRODUTOS + PDV": {"ELIANA": 1400.0, "GENECIR": 100.0, "RENALDO": 1200.0, "THAYANE": 60.0},
       "PRÊMIO COTA GERAL":       {"ELIANA": 300.0, "GENECIR": 100.0, "RENALDO": 150.0, "THAYANE": 100.0},
       "PRÊMIO PRÉ-VENCIDOS":     {"ELIANA": 250.0, "RENALDO": 100.0},
@@ -66,10 +68,14 @@ CENTRO = dict(
  JUL_VT={"ELIANA": 270.0, "RENALDO": 260.0, "THAYANE": 260.0, "PEDRO": 350.0},
  JUL_VA={},
  JUL_ABA="CENTRO 05JULHO",
- DEFINIDO=["ARIANE: não recebe comissão sobre vendas (mesmo critério de julho/2026) — a rubrica fica zerada e o apurado dela aparece só na aba BASE."],
- PENDENCIAS=["GENECIR: esteve de férias em julho e em agosto vendeu apenas R$ 188,86 (comissão de R$ 0,62) — confirmar se seguiu de férias, afastado ou desligado.",
-             "PEDRO: em julho recebeu só o salário, sem comissão. Em agosto apurou R$ 12,18 — confirmar se entra.",
-             "Códigos de vendedor que aparecem no relatório do InovaFarma mas não estão nesta folha (SERGIO, ANA CELIA, FABIANA, UILLIAN, SARA e GILSON) — conferir se alguém deles deve receber comissão pela loja Centro."],
+ DEFINIDO=["ARIANE e PEDRO: não recebem comissão sobre vendas — a rubrica fica zerada e o apurado deles aparece só na aba BASE.",
+           "GENECIR: férias de 01 a 30/08/2026, já pagas em recibo próprio — salário zerado neste holerite; confirmar o dia 31/08.",
+           "SERGIO e ANA CELIA são folguistas (diária de R$ 150,00 e R$ 100,00) — ficam na aba FOLGUISTAS, para o contas a pagar, fora do holerite.",
+           "GILSON, UILLIAN e FABIANA não recebem comissão pela loja Centro.",
+           "SARA: o saldo dela na loja Centro foi somado à folha do Arraial."],
+ PENDENCIAS=["GENECIR: as férias vão até 30/08 e o mês tem 31 dias — confirmar se o dia 31/08 foi trabalhado e lançar o salário desse dia (R$ 1.621,00 ÷ 30 = R$ 54,03).",
+             "Preencher a quantidade de diárias de SERGIO e ANA CELIA na aba FOLGUISTAS.",
+             "Confirmar se os folguistas recebem a comissão apurada no código deles (SERGIO R$ 128,80 e ANA CELIA R$ 83,56) além da diária."],
 )
 
 TRANCOSO = dict(
@@ -102,11 +108,12 @@ TRANCOSO = dict(
  JUL_VT={"MANOEL": 750.0, "VALDICK": 400.0},
  JUL_VA={},
  JUL_ABA="TRANCOSO JULHO",
- JUL_NOTA="ATENÇÃO: as comissões desta aba estão pelo valor da planilha (R$ 850,00 do MANOEL, R$ 908,70 do VALDICK etc.), na mesma ordem de grandeza do apurado no sistema. Como o pagamento da loja é o DOBRO da comissão, o líquido revisado acima reproduz a planilha e não o valor efetivamente pago — conferir com a contabilidade como julho foi lançado.",
+ JUL_NOTA="OBSERVAÇÃO: em julho/2026 a comissão foi lançada por uma MÉDIA, e não pelo apurado do sistema. A partir de agosto/2026 a loja passa a pagar a comissão em dobro, e a empresa vai reduzir nas premiações a diferença gerada por esse aumento.",
  DEFINIDO=["TRANCOSO PAGA O DOBRO DA COMISSÃO APURADA: a linha COMISSÃO PRODUTOS já multiplica por 2 o valor do InovaFarma (multiplicador na aba PARÂMETROS).",
+           "Os incentivos são simples: entram pelo valor apurado, sem dobrar.",
+           "Em julho/2026 a comissão foi lançada por média. Com a comissão dobrada a partir de agosto, a empresa vai reduzir nas premiações a diferença.",
            "UILLIAN: não recebe comissão sobre vendas (mesmo critério de julho/2026) — a rubrica fica zerada e o apurado dele aparece só na aba BASE."],
- PENDENCIAS=["Conferir como as comissões de julho foram efetivamente pagas: a planilha traz o valor simples e o pagamento da loja é em dobro.",
-             "Confirmar se o dobro vale só para a comissão. Os incentivos estão lançados pelo valor apurado, sem dobrar.",
+ PENDENCIAS=["Lançar na linha PRÊMIO COTA GERAL o valor já com a redução combinada, para compensar o aumento da comissão dobrada.",
              "INIURLE: em julho as horas extras foram lançadas como R$ 442,09, exatamente o mesmo valor do EDEY na loja Arraial — conferir se não houve cópia de célula.",
              "UILLIAN também registra vendas no relatório da loja Centro — conferir se alguma comissão deve ser rateada entre as lojas."],
 )
@@ -216,6 +223,8 @@ def build(cfg):
     ws.freeze_panes = "A5"
     r += 2
     ws.cell(r, 1, "Códigos sem vínculo de folha nesta loja:").font = font(9, True, "1F3864")
+    if cfg.get("OUTROS_NOTA"):
+        ws.cell(r, 3, cfg["OUTROS_NOTA"]).font = font(9, it=True)
     r += 1
     for cod, nome, vb, com, inc in cfg["OUTROS_COD"]:
         ws.cell(r, 1, cod).alignment = Alignment(horizontal="center")
@@ -304,9 +313,12 @@ def build(cfg):
     sem = cfg["SEM_COMISSAO"]
     r = sec(ws, r, "PROVENTOS")
     rows["SALÁRIO BASE"] = r
-    r = linha(ws, r, "SALÁRIO BASE", cfg["SALARIO"],
-              "Piso 2026 R$ 1.621,00; gerente conforme jul/2026. CONFERIR admissões, afastamentos e férias do mês.",
-              kind="in", fill=FILL_CONF)
+    sal = dict(cfg["SALARIO"])
+    obs_sal = "Piso 2026 R$ 1.621,00; gerente conforme jul/2026. CONFERIR admissões, afastamentos e férias do mês."
+    for n, motivo in cfg.get("SALARIO_ZERO", {}).items():
+        sal[n] = 0.0
+        obs_sal += f" {n}: zerado — {motivo}."
+    r = linha(ws, r, "SALÁRIO BASE", sal, obs_sal, kind="in", fill=FILL_CONF)
     rows["ADICIONAL NOTURNO"] = r
     r = linha(ws, r, "ADICIONAL NOTURNO", cfg["NOTURNO"], "Conforme apontamento do ponto.", kind="in")
     rows["HORAS EXTRAS"] = r
@@ -338,8 +350,10 @@ def build(cfg):
     rows["META CAIXA"] = r
     r = linha(ws, r, "ADICIONAL PRÊMIO META CAIXA", cfg["METACX"], "Conforme apuração do caixa.", kind="in")
     rows["PRÊMIO COTA GERAL"] = r
-    r = linha(ws, r, "PRÊMIO COTA GERAL", {},
-              "PREENCHER conforme a tabela de metas da loja (aba METAS da planilha original).", kind="in")
+    obs_cota = "PREENCHER conforme a tabela de metas da loja (aba METAS da planilha original)."
+    if cfg["mult"] != 1:
+        obs_cota += " Lançar já com a redução combinada para compensar o aumento da comissão dobrada."
+    r = linha(ws, r, "PRÊMIO COTA GERAL", {}, obs_cota, kind="in", fill=FILL_CONF if cfg["mult"] != 1 else None)
     rows["PRÊMIO PRÉ-VENCIDOS"] = r
     r = linha(ws, r, "PRÊMIO PRÉ-VENCIDOS", {}, "PREENCHER conforme a apuração de pré-vencidos de agosto.", kind="in")
     rows["FÉRIAS"] = r
@@ -349,7 +363,7 @@ def build(cfg):
     rows["INC APLIC"] = r
     inc_obs = "Incentivo de injetáveis apurado no InovaFarma."
     if cfg["mult"] != 1:
-        inc_obs += " NÃO está multiplicado por 2 — confirmar se o dobro vale só para a comissão."
+        inc_obs += " Incentivo é simples: NÃO entra em dobro."
     r = linha(ws, r, "INCENTIVO APLICAÇÕES", {n: f"={BASE}!G{BROW[n]}" for n in EMP}, inc_obs, kind="link")
     rows["INC VIT"] = r
     r = linha(ws, r, "INCENTIVO VITAMINAS", {n: f"={BASE}!H{BROW[n]}" for n in EMP},
@@ -635,6 +649,55 @@ def build(cfg):
     wsg.page_setup.fitToHeight = 1
     wsg.sheet_properties.pageSetUpPr.fitToPage = True
 
+    # ---------------------------------------------------------- FOLGUISTAS
+    if cfg.get("FOLGUISTAS"):
+        wf = wb.create_sheet("FOLGUISTAS")
+        wf.sheet_view.showGridLines = False
+        for col, w in zip("ABCDEFGH", [22, 8, 14, 12, 16, 16, 15, 15]):
+            wf.column_dimensions[col].width = w
+        title_block(wf, "FOLGUISTAS — CONTAS A PAGAR",
+                    f"Loja {cfg['loja']} · agosto/2026 · NÃO entram no holerite: pagamento por diária, lançar no contas a pagar", 8)
+        hdr = ["COLABORADOR", "CÓD.", "VALOR DIÁRIA", "Nº DIÁRIAS", "TOTAL DIÁRIAS",
+               "COMISSÃO APURADA", "INCENTIVOS", "TOTAL A PAGAR"]
+        for i, h in enumerate(hdr, 1):
+            c = wf.cell(4, i, h); c.font = font(9, True, "FFFFFF"); c.fill = FILL_HDR
+            c.alignment = Alignment(horizontal="center", wrap_text=True); c.border = BOX
+        wf.row_dimensions[4].height = 28
+        rr = 5; ini = rr
+        for nome, cod, diaria, bruta, com, inc in cfg["FOLGUISTAS"]:
+            wf.cell(rr, 1, nome).font = font(10, True)
+            wf.cell(rr, 2, cod).alignment = Alignment(horizontal="center")
+            c = wf.cell(rr, 3, diaria); c.number_format = MONEY; c.font = font(10, False, BLUE); c.fill = FILL_IN
+            c = wf.cell(rr, 4); c.font = font(10, False, BLUE); c.fill = FILL_IN
+            c.alignment = Alignment(horizontal="center")
+            wf.cell(rr, 5, f"=C{rr}*D{rr}").number_format = MONEY
+            c = wf.cell(rr, 6, com); c.number_format = MONEY; c.font = font(10, False, BLUE); c.fill = FILL_IN
+            c = wf.cell(rr, 7, inc); c.number_format = MONEY; c.font = font(10, False, BLUE); c.fill = FILL_IN
+            c = wf.cell(rr, 8, f"=E{rr}+F{rr}+G{rr}"); c.number_format = MONEY; c.font = font(10, True)
+            c.fill = FILL_LIQ
+            for i in range(1, 9):
+                wf.cell(rr, i).border = BOX
+            rr += 1
+        fim = rr - 1
+        wf.cell(rr, 1, "TOTAL").font = font(10, True)
+        for i in (5, 6, 7, 8):
+            L = get_column_letter(i)
+            c = wf.cell(rr, i, f"=SUM({L}{ini}:{L}{fim})")
+            c.number_format = MONEY; c.font = font(10, True)
+        for i in range(1, 9):
+            wf.cell(rr, i).fill = FILL_TOT; wf.cell(rr, i).border = BOX
+        wf.auto_filter.ref = f"A4:H{fim}"
+        wf.freeze_panes = "A5"
+        rr += 2
+        for t in ["PREENCHER a coluna Nº DIÁRIAS com os dias trabalhados em agosto/2026.",
+                  "Valor da diária combinado: SERGIO R$ 150,00 e ANA CELIA R$ 100,00.",
+                  "Comissão e incentivos vêm do relatório do InovaFarma (códigos 51 e 131) — CONFIRMAR se o folguista recebe esses valores além da diária; se não receber, zerar as colunas.",
+                  "Estes valores não entram no holerite: são pagamento de prestação de serviço, para baixa no contas a pagar."]:
+            wf.merge_cells(start_row=rr, start_column=1, end_row=rr, end_column=8)
+            c = wf.cell(rr, 1, t); c.font = font(9, it=True)
+            c.alignment = Alignment(wrap_text=True, vertical="center")
+            rr += 1
+
     # ---------------------------------------------------------- CAPA
     ws = wb.create_sheet("CAPA", 0)
     ws.sheet_view.showGridLines = False
@@ -676,6 +739,8 @@ def build(cfg):
                ("T", "BASE INOVAFARMA AGO.26 — apuração de comissões e incentivos por vendedor."),
                ("T", f"JULHO.26 REVISADO — a folha de julho ({cfg['JUL_ABA']}) reorganizada e conferida."),
                ("T", "PARÂMETROS — calendário do mês, fator do DSR e valores fixos.")]
+    if cfg.get("FOLGUISTAS"):
+        blocos.append(("T", "FOLGUISTAS — diárias de SERGIO e ANA CELIA para o contas a pagar (fora do holerite)."))
     r = 4
     for tipo, txt in blocos:
         if tipo == "SEC":

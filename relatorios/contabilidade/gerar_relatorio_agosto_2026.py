@@ -215,6 +215,7 @@ notas = [
  "CONFERÊNCIA — total geral do relatório InovaFarma: venda bruta R$ 300.371,95 · descontos R$ 90.276,65 · venda líquida R$ 210.095,30 · comissão R$ 4.856,69 · incentivo R$ 685,00.",
  "INCENT. APLIC. = incentivo do grupo INJETÁVEIS (aplicações). INCENT. VITAM. = grupo APLICAÇÃO E VITAMINAS INCENTIVO. OUTROS INCENT. = populares, oficinais e similar normal.",
  "A comissão acima é a APURADA pelo sistema. Comissões de PDV antigos e valores fixos acordados são lançados à parte na aba HOLERITE AGO.26.",
+ "SARA também vendeu R$ 365,03 pelo código dela na loja CENTRO, com R$ 2,65 de comissão. Esse valor foi somado à folha dela aqui, na linha COMPLEMENTO / COMISSÃO PDV.",
  "DEAN não recebe comissão em folha: no caso dele a comissão apurada acima é apenas informativa. Os incentivos dele continuam sendo lançados normalmente.",
  "JOEL: vendeu R$ 3.684,97 nos dias 01 e 02/08 e saiu de férias em 04/08 (retorno em 04/09) — daí a comissão de R$ 103,31. Constam ainda 2 itens de R$ 11,68 em 07/08 no código dele.",
 ]
@@ -306,8 +307,9 @@ r = linha(ws, r, "COMISSÃO PRODUTOS (INOVAFARMA)",
           kind="link")
 rows["COMPLEMENTO / COMISSÃO PDV"] = r
 r = linha(ws, r, "COMPLEMENTO / COMISSÃO PDV",
-          {"AGNOR": f"=ROUND(PARÂMETROS!$B${PROW['Comissão fixa acordada — AGNOR']}-C{rows['COMISSÃO PRODUTOS (INOVAFARMA)']},2)"},
-          "AGNOR: complemento até a comissão fixa de R$ 2.000,00 (parâmetro na aba PARÂMETROS). Demais: preencher com PDV antigos, se houver.",
+          {"AGNOR": f"=ROUND(PARÂMETROS!$B${PROW['Comissão fixa acordada — AGNOR']}-C{rows['COMISSÃO PRODUTOS (INOVAFARMA)']},2)",
+           "SARA": 2.65},
+          "AGNOR: complemento até a comissão fixa de R$ 2.000,00 (parâmetro na aba PARÂMETROS). SARA: R$ 2,65 de comissão apurada no código dela na loja CENTRO (venda bruta de R$ 365,03), trazida para a folha do Arraial. Demais: preencher com PDV antigos, se houver.",
           kind="in", fill=FILL_CONF)
 rows["COMISSÃO TOTAL"] = r
 r = linha(ws, r, "= COMISSÃO TOTAL",
@@ -651,6 +653,7 @@ blocos = [
  ("T", "AGNOR: mantida a comissão fixa de R$ 2.000,00 — a linha COMPLEMENTO / COMISSÃO PDV calcula sozinha a diferença (R$ 1.090,49) sobre o apurado de R$ 909,51."),
  ("T", "JOEL: por acordo interno saiu em 04/08 e volta em 04/09, mas o recibo de férias saiu como 01 a 31/08 e já foi pago no início de agosto. Por isso ele tem comissão dos dias 01 e 02/08 (R$ 103,31) e fica sem salário e sem desconto de vale-transporte neste holerite; férias e 1/3 NÃO se repetem aqui."),
  ("T", "CAMILA: contratada recentemente; agosto é o primeiro mês completo, com salário integral de R$ 1.621,00."),
+ ("T", "SARA: a comissão dela na loja Centro (R$ 2,65) foi somada aqui, na linha COMPLEMENTO / COMISSÃO PDV."),
  ("T", "DEAN: não recebe comissão sobre vendas — a rubrica fica zerada na folha (a apurada, R$ 975,65, aparece só na aba BASE). Os incentivos dele continuam sendo pagos normalmente."),
  ("SEC", "PENDÊNCIAS — CONFIRMAR ANTES DE ENVIAR"),
  ("P", "Horas extras e adicional noturno de agosto (apontamento do ponto)."),
