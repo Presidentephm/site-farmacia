@@ -25,48 +25,63 @@ HE = round(HORA * 1.5, 4)     # 11,0523
 NOT_ = round(HORA * 0.2, 4)   # 1,4736
 DIA = round(1621 / 30, 2)     # 54,03
 
-def E(nome, sal, com, he=0.0, notu=0.0, aux=0.0, meta=0.0, inc=0.0, vt6=0.0, obs=""):
+def E(nome, sal, com, he=0.0, notu=0.0, aux=0.0, meta=0.0, inc=0.0, vt6=0.0, obs="",
+      bonif=0.0, dsrhe=0.0, salfam=0.0, insuf=0.0, vales=0.0, inss=0.0, irrf=0.0, liq_betel=None):
     dsr = round((com + he) * FATOR, 2)
-    prov = round(sal + he + notu + com + dsr + aux + meta + inc, 2)
-    desc = round(-inc + vt6, 2)
-    return dict(nome=nome, sal=sal, he=he, notu=notu, com=com, dsr=dsr, aux=aux,
-                meta=meta, inc=inc, prov=prov, vt6=vt6, adiant_inc=-inc, adiant_sal=None, ferias=None,
-                desc=desc, liq=round(prov + desc, 2), obs=obs)
+    prov = round(sal + he + notu + com + dsr + dsrhe + aux + meta + bonif + inc + salfam + insuf, 2)
+    desc = round(-inc + vt6 + vales + inss + irrf, 2)
+    return dict(nome=nome, sal=sal, he=he, notu=notu, com=com, dsr=dsr, dsrhe=dsrhe, aux=aux,
+                meta=meta, bonif=bonif, salfam=salfam, insuf=insuf, inc=inc, prov=prov,
+                vt6=vt6, adiant_inc=-inc, adiant_sal=vales, inss=inss, irrf=irrf, ferias=None,
+                desc=desc, liq=round(prov + desc, 2), liq_betel=liq_betel,
+                dif=round(round(prov + desc, 2) - (liq_betel if liq_betel is not None else 0), 2), obs=obs)
 
 ARRAIAL = [
- E("DEAN",    5648.41, 0.0,   inc=199.0, obs="Não recebe comissão. Dia 15/08 trabalhado com folga compensatória."),
- E("AGNOR",   1621.00, 2000.00, notu=round(NOT_*24,2), aux=810.50, inc=189.0,
-   obs="Comissão fixa de R$ 2.000,00 (apurado R$ 909,51 + complemento R$ 1.090,49). 3 madrugadas = 24 h noturnas."),
- E("EDEY",    1621.00, 873.76, he=round(HE*24,2), notu=350.00, vt6=-84.29,
-   inc=73.0, obs="24 horas extras. Adicional noturno fixo de R$ 350,00 — conferir com o ponto."),
- E("JOEL",    0.0,     103.31, inc=22.0,
-   obs="Férias de 01 a 31/08 pagas em recibo próprio (saiu em 04/08, volta em 04/09). Comissão dos dias 01 e 02/08."),
- E("VALÉRIA", 1621.00, 1141.03, he=DIA, notu=round(NOT_*16,2), meta=307.99, inc=192.0, vt6=-84.29,
+ E("DEAN",    5648.41, 0.0, inc=199.0, vales=-705.00, inss=-592.27, irrf=-251.04, liq_betel=4100.10,
+   obs="Não recebe comissão. Dia 15/08 trabalhado com folga compensatória."),
+ E("AGNOR",   1621.00, 2000.00, notu=35.37, aux=810.50, inc=189.0, vales=-2694.00, inss=-480.71,
+   liq_betel=1676.78,
+   obs="Comissão fixa de R$ 2.000,00 (apurado R$ 909,51 + complemento). 3 madrugadas = 24 h noturnas."),
+ E("EDEY",    1621.00, 873.76, he=265.25, notu=350.00, dsrhe=51.01, bonif=350.00, inc=73.0,
+   vales=-247.00, vt6=-84.29, inss=-336.19, liq_betel=3062.58,
+   obs="24 horas extras. Adicional noturno de R$ 350,00."),
+ E("JOEL",    0.0, 103.31, inc=22.0, salfam=67.54, insuf=3.24, vt6=-3.24, liq_betel=67.54,
+   obs="Férias de 01 a 31/08 em recibo próprio. A comissão de R$ 103,31 e o DSR NÃO entraram no holerite — verificar."),
+ E("VALÉRIA", 1621.00, 1141.03, he=53.97, notu=23.58, dsrhe=10.38, bonif=350.00, meta=307.99, inc=192.0,
+   vales=-2351.00, vt6=-84.29, inss=-337.12, liq_betel=965.35,
    obs="Feriado 15/08 trabalhado. 2 madrugadas = 16 h noturnas, com folga no dia seguinte."),
- E("SARA",    1621.00, 371.43, he=DIA, aux=810.50, inc=10.0,
+ E("SARA",    1621.00, 371.43, he=53.97, dsrhe=10.38, aux=810.50, bonif=350.00, inc=10.0,
+   vales=-310.00, inss=-284.48, liq_betel=2704.61,
    obs="Comissão do Arraial (R$ 368,78) + loja Centro (R$ 2,65). Feriado 15/08 trabalhado."),
- E("CAMILA",  1621.00, 241.50, he=DIA, inc=0.0,
+ E("CAMILA",  1621.00, 241.50, he=53.97, dsrhe=10.38, bonif=250.00, inss=-176.71, liq_betel=2056.96,
    obs="1º mês completo após a admissão. Feriado 15/08 trabalhado."),
- E("NATI",    1621.00, 243.14, he=round(HE*17,2)+DIA, notu=round(NOT_*17,2), meta=307.99,
-   inc=0.0, vt6=-84.29,
-   obs="17 horas extras noturnas (hora extra + adicional). Feriado 15/08 trabalhado."),
+ E("NATI",    1621.00, 243.14, he=241.86, notu=25.05, dsrhe=46.51, bonif=250.00, meta=307.99,
+   vt6=-84.29, inss=-230.27, liq_betel=2514.26,
+   obs="17 horas extras noturnas e o feriado de 15/08."),
 ]
 CENTRO = [
- E("ARIANE",  5648.41, 0.0, inc=125.0, obs="Não recebe comissão."),
- E("ELIANA",  1621.00, 1511.36, inc=225.0, vt6=-84.29, obs=""),
- E("GENECIR", 0.0,     0.62, inc=0.0,
-   obs="Férias de 01 a 30/08 pagas em recibo próprio — conferir o dia 31/08."),
- E("RENALDO", 1621.00, 847.94, inc=96.0, vt6=-74.29, obs=""),
- E("THAYANE", 1621.00, 57.33, inc=10.0, vt6=-84.29, obs=""),
- E("PEDRO",   1621.00, 0.0, obs="Não recebe comissão (apurado R$ 12,18 fica só como informação)."),
+ E("ARIANE",  5648.41, 0.0, inc=125.0, inss=-592.27, irrf=-251.04, liq_betel=4805.10, obs="Não recebe comissão."),
+ E("ELIANA",  1621.00, 1511.36, bonif=600.00, inc=225.0, vales=-2192.00, vt6=-84.29, inss=-371.35,
+   liq_betel=1375.37, obs=""),
+ E("GENECIR", 0.0, 0.62, insuf=3.24, vt6=-3.24, liq_betel=0.0,
+   obs="Férias de 01 a 30/08 em recibo próprio. A comissão residual de R$ 0,62 não entrou no holerite."),
+ E("RENALDO", 1621.00, 847.94, bonif=250.00, inc=96.0, vales=-1955.00, vt6=-68.08, inss=-235.06,
+   liq_betel=623.87, obs="Férias de 01 a 30/09/2026 — entram na folha de setembro."),
+ E("THAYANE", 1621.00, 57.33, bonif=100.00, inc=10.0, vales=-200.00, vt6=-84.29, inss=-136.72,
+   liq_betel=1368.35, obs=""),
+ E("PEDRO",   1621.00, 0.0, liq_betel=None,
+   obs="NÃO CONSTA no holerite de agosto emitido pela Betel para esta loja — verificar em qual empresa foi lançado."),
 ]
 TRANCOSO = [
- E("UILLIAN", 5648.41, 0.0, inc=25.0, obs="Não recebe comissão."),
- E("MANOEL",  1621.00, 1650.76, inc=49.0, obs="Comissão apurada R$ 825,38 × 2."),
- E("VALDICK", 1621.00, 1772.60, inc=260.0, obs="Comissão apurada R$ 886,30 × 2."),
- E("INIURLE", 1621.00, 470.84, he=round(HE*40,2), inc=0.0,
+ E("UILLIAN", 5648.41, 0.0, inc=25.0, vales=-810.00, inss=-592.27, irrf=-251.04, liq_betel=3995.10,
+   obs="Não recebe comissão."),
+ E("MANOEL",  1621.00, 1650.76, bonif=200.00, inc=49.0, vales=-465.00, inss=-343.29, liq_betel=2980.92,
+   obs="Comissão apurada R$ 825,38 × 2."),
+ E("VALDICK", 1621.00, 1772.60, bonif=100.00, inc=260.0, vales=-580.00, inss=-348.72, liq_betel=2905.76,
+   obs="Comissão apurada R$ 886,30 × 2. Férias de 01 a 30/09/2026."),
+ E("INIURLE", 1621.00, 470.84, he=442.09, dsrhe=85.02, bonif=100.00, inss=-236.18, liq_betel=2658.33,
    obs="Comissão apurada R$ 235,42 × 2. 40 horas extras."),
- E("TAMILES", 1621.00, 251.16, inc=0.0,
+ E("TAMILES", 1621.00, 251.16, bonif=100.00, inss=-157.52, liq_betel=1862.94,
    obs="Comissão apurada R$ 125,58 × 2. Atestado de 02 a 08/09 é competência de setembro."),
 ]
 LOJAS = [("ARRAIAL", ARRAIAL), ("CENTRO", CENTRO), ("TRANCOSO", TRANCOSO)]
@@ -74,10 +89,13 @@ LOJAS = [("ARRAIAL", ARRAIAL), ("CENTRO", CENTRO), ("TRANCOSO", TRANCOSO)]
 COLS = [("FUNCIONÁRIO", "nome", 15), ("SALÁRIO", "sal", 12), ("HORAS EXTRAS", "he", 12),
         ("AD. NOTURNO", "notu", 12), ("COMISSÃO", "com", 12), ("DSR", "dsr", 11),
         ("AUX. GERÊNCIA", "aux", 12), ("PRÊMIO META CX", "meta", 12), ("INCENTIVOS", "inc", 12),
+        ("PRÊMIOS / BONIFIC.", "bonif", 13), ("DSR S/ HORA EXTRA", "dsrhe", 12),
+        ("SAL. FAMÍLIA", "salfam", 11), ("INSUF. SALDO", "insuf", 11),
         ("TOTAL PROVENTOS", "prov", 14), ("ADIANT. INCENT.", "adiant_inc", 13),
         ("ADIANTAMENTO SALARIAL / VALES", "adiant_sal", 15),
-        ("VALE TRANSP. 6%", "vt6", 13), ("TOTAL DESCONTOS", "desc", 14),
-        ("LÍQUIDO PARCIAL", "liq", 14),
+        ("VALE TRANSP.", "vt6", 12), ("INSS", "inss", 12), ("IRRF", "irrf", 12),
+        ("TOTAL DESCONTOS", "desc", 14),
+        ("LÍQUIDO", "liq", 14), ("LÍQUIDO HOLERITE BETEL", "liq_betel", 14), ("DIFERENÇA", "dif", 11),
         ("FÉRIAS PAGAS À PARTE (contas a pagar)", "ferias", 16), ("OBSERVAÇÃO", "obs", 70)]
 
 wb = openpyxl.Workbook()
@@ -115,11 +133,13 @@ for loja, emps in LOJAS:
     for e in emps:
         for i, (_, k, _) in enumerate(COLS, 1):
             if k == "prov":
-                v = f"=SUM({L['sal']}{r}:{L['inc']}{r})"
+                v = f"=SUM({L['sal']}{r}:{L['insuf']}{r})"
             elif k == "desc":
-                v = f"=SUM({L['adiant_inc']}{r}:{L['vt6']}{r})"
+                v = f"=SUM({L['adiant_inc']}{r}:{L['irrf']}{r})"
             elif k == "liq":
                 v = f"={L['prov']}{r}+{L['desc']}{r}"
+            elif k == "dif":
+                v = f"=ROUND({L['liq']}{r}-{L['liq_betel']}{r},2)"
             else:
                 v = e[k]
             c = ws.cell(r, i, v)
@@ -134,9 +154,11 @@ for loja, emps in LOJAS:
                 c.font = font(10, True if k == "liq" else False)
                 if k == "liq":
                     c.fill = FILL_LIQ
+                elif k == "dif":
+                    c.fill = FILL_TOT; c.font = font(10, True)
                 elif k in ("prov", "desc"):
                     c.fill = FILL_TOT
-                elif k in ("adiant_sal", "ferias"):
+                elif k in ("ferias",):
                     c.font = font(10, False, "0000FF"); c.fill = FILL_IN
         r += 1
     fim = r - 1
@@ -166,10 +188,11 @@ for i in range(1, N + 1):
 ws.row_dimensions[r].height = 22
 r += 2
 avisos = [
- "O QUE AINDA NÃO ESTÁ NESTE RESUMO — precisa ser somado antes de fechar o holerite:",
- "• INSS e IRRF de cada funcionário (cálculo da contabilidade) — por isso a última coluna é LÍQUIDO PARCIAL.",
- "• Convênio e descontos de falta do mês.",
- "• A coluna ADIANTAMENTO SALARIAL / VALES está em amarelo, para preencher com o valor adiantado a cada um (em negativo). O total de descontos e o líquido se atualizam sozinhos.",
+ "PONTOS EM ABERTO:",
+ "• JOEL (Arraial): a comissão de R$ 103,31 e o DSR não entraram no holerite — só saiu o salário família. Verificar folha complementar ou recibo de férias.",
+ "• GENECIR (Centro): comissão residual de R$ 0,62 fora do holerite.",
+ "• PEDRO (Centro): não consta no holerite emitido pela Betel para esta loja.",
+ "• DSR EM DUPLICIDADE: a rubrica 420 (Repouso Remunerado) já foi calculada sobre comissão + horas extras, e a Betel ainda lançou a rubrica 057 (DSR/hora extra). São R$ 51,01 do EDEY, R$ 46,51 da NATI, R$ 10,38 de VALÉRIA, SARA e CAMILA e R$ 85,02 do INIURLE — R$ 213,68 no total. Confirmar com a contabilidade.",
  "• Prêmio cota geral e prêmio pré-vencidos, conforme a apuração de metas de cada loja.",
  "• A coluna FÉRIAS PAGAS À PARTE é só lembrete para o contas a pagar: recibo de férias pago fora do holerite, NÃO entra no líquido. Em agosto: JOEL (Arraial, férias de 01 a 31/08) e GENECIR (Centro, férias de 01 a 30/08).",
  "• Diárias dos folguistas SERGIO (R$ 150,00) e ANA CELIA (R$ 100,00), na loja Centro — vão para o contas a pagar, fora do holerite.",
@@ -179,7 +202,8 @@ avisos = [
  "• Salário-hora = salário ÷ 220. Hora extra = salário-hora × 1,5 (R$ 11,0523). Adicional noturno = salário-hora × 20% (R$ 1,4736).",
  "• Feriado de 15/08 trabalhado sem folga = 1 salário-dia a mais (R$ 54,03).",
  "• TRANCOSO paga o dobro da comissão apurada no InovaFarma; os incentivos entram pelo valor simples.",
- "• Os incentivos são adiantados em dinheiro durante o mês, por isso aparecem como provento e como desconto (ADIANT. INCENT.).",
+ "• Os incentivos são adiantados em dinheiro durante o mês e NÃO aparecem no holerite da Betel; aqui entram como provento e como desconto, sem afetar o líquido.",
+ "• Prêmios, vales, vale-transporte, INSS e IRRF foram lidos do holerite de agosto/2026 emitido pela Betel Contabilidade.",
  "• Comissões e incentivos vêm do relatório do InovaFarma de 01/08 a 31/08/2026, extraído em 03/09/2026.",
 ]
 for t in avisos:

@@ -150,3 +150,25 @@ tela Comissão de Vendedores do InovaFarma.
 Janelas de 12 meses: VALDICK e RENALDO de 01/09/2025 a 31/08/2026
 (férias em 01 a 30/09/2026); MANOEL de 01/05/2025 a 30/04/2026 (férias
 gozadas em maio/2026).
+
+## Conferência com o holerite da Betel Contabilidade
+
+Os demonstrativos de agosto/2026 das três empresas (Farmácia Tropical
+Multi Econômica, Farmácia Tropical e Drogaria Trancoso) foram lidos e os
+valores lançados nas planilhas:
+
+| Rubrica no holerite | Linha na planilha |
+|---|---|
+| 011 Bonificação/Prêmios | PRÊMIO COTA GERAL / BONIFICAÇÃO |
+| 017 Dif. Salarial Gratificação | AUXÍLIO GERÊNCIA |
+| 057 DSR/hora extra | DSR SOBRE HORAS EXTRAS |
+| 063 Quebra de caixa | ADICIONAL PRÊMIO META CAIXA |
+| 599 Salário Família | SALÁRIO FAMÍLIA |
+| 630 Desconto - verbas | ADIANTAMENTO SALARIAL / VALES |
+| 604 Vale Transporte | DESCONTO VALE TRANSPORTE |
+| 903 INSS / 914 IRRF | DESCONTO INSS / DESCONTO IRRF |
+| 998 Insuficiência de Saldo | INSUFICIÊNCIA DE SALDO |
+
+O líquido da planilha bate com o do holerite em 17 dos 19 funcionários.
+Os incentivos não constam no holerite (são pagos em dinheiro no mês) e
+entram como provento e desconto, sem afetar o líquido.

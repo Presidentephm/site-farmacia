@@ -61,6 +61,20 @@ AUXGER    = {"AGNOR": 810.5, "SARA": 810.5}
 METACX    = {"VALÉRIA": 307.99, "NATI": 307.99}
 VT6       = {"EDEY": -84.29, "VALÉRIA": -84.29, "NATI": -84.29}
 
+# ------------------------------ HOLERITE DA BETEL CONTABILIDADE - AGOSTO/2026
+BONIF     = {"EDEY": 350.0, "VALÉRIA": 350.0, "SARA": 350.0, "CAMILA": 250.0, "NATI": 250.0}
+DSR_HE    = {"EDEY": 51.01, "VALÉRIA": 10.38, "SARA": 10.38, "CAMILA": 10.38, "NATI": 46.51}
+SAL_FAMILIA = {"JOEL": 67.54}
+INSUF     = {"JOEL": 3.24}
+VALES     = {"DEAN": -705.00, "AGNOR": -2694.00, "EDEY": -247.00, "VALÉRIA": -2351.00, "SARA": -310.00}
+VT_DESC   = {"EDEY": -84.29, "JOEL": -3.24, "VALÉRIA": -84.29, "NATI": -84.29}
+INSS      = {"DEAN": -592.27, "AGNOR": -480.71, "EDEY": -336.19, "VALÉRIA": -337.12,
+             "SARA": -284.48, "CAMILA": -176.71, "NATI": -230.27}
+IRRF      = {"DEAN": -251.04}
+LIQ_BETEL = {"DEAN": 4100.10, "AGNOR": 1676.78, "EDEY": 3062.58, "JOEL": 67.54,
+             "VALÉRIA": 965.35, "SARA": 2704.61, "CAMILA": 2056.96, "NATI": 2514.26}
+HE_BETEL  = {"EDEY": 265.25, "VALÉRIA": 53.97, "SARA": 53.97, "CAMILA": 53.97, "NATI": 241.86}
+
 # ------------------------------------------------------------------ JULHO/2026
 JUL = {  # rubrica -> {func: valor}   (exatamente como foi pago em 05/08/2026)
  "ADICIONAL PRÊMIO META CAIXA": {"VALÉRIA": 307.99, "NATI": 307.99},
@@ -360,7 +374,8 @@ r = linha(ws, r, "TOTAL DE PROVENTOS",
 
 r = sec(ws, r, "DESCONTOS  (lançar com sinal negativo)")
 rows["VALES"] = r
-r = linha(ws, r, "ADIANTAMENTO SALARIAL / VALES", {}, "PREENCHER com os vales adiantados durante agosto.", kind="in")
+r = linha(ws, r, "ADIANTAMENTO SALARIAL / VALES", VALES,
+          "Rubrica 630 (Desconto - verbas / Adiantamento) do holerite da Betel.", kind="in", fill=FILL_CONF)
 rows["VALES INC"] = r
 r = linha(ws, r, "ADIANT. VALES INCENT. E APLIC.",
           {n: f"=-({get_column_letter(C0+i)}{rows['INC APLIC']}+{get_column_letter(C0+i)}{rows['INC VIT']}+{get_column_letter(C0+i)}{rows['INC OUTROS']})" for i, n in enumerate(EMP)},
@@ -371,12 +386,13 @@ r = linha(ws, r, "CONVÊNIO", {}, "PREENCHER (jul/26: AGNOR -300, JOEL -500, VAL
 rows["FALTAS"] = r
 r = linha(ws, r, "DESCONTO FALTAS / ATRASOS", {}, "PREENCHER conforme o ponto.", kind="in")
 rows["VT6"] = r
-r = linha(ws, r, "DESCONTO VALE TRANSPORTE 6%", VT6,
-          "Valor praticado em jul/26. 6% sobre R$ 1.621,00 seria R$ 97,26 — CONFERIR a base usada. JOEL: zerado, mês de férias.", kind="in", fill=FILL_CONF)
+r = linha(ws, r, "DESCONTO VALE TRANSPORTE 6%", VT_DESC,
+          "Rubrica 604 do holerite da Betel. JOEL: R$ 3,24, com a contrapartida na insuficiência de saldo.",
+          kind="in", fill=FILL_CONF)
 rows["INSS"] = r
-r = linha(ws, r, "DESCONTO INSS", {}, "A CALCULAR PELA CONTABILIDADE sobre o total de proventos (tabela progressiva vigente).", kind="in")
+r = linha(ws, r, "DESCONTO INSS", INSS, "Rubrica 903 do holerite da Betel.", kind="in", fill=FILL_CONF)
 rows["IRRF"] = r
-r = linha(ws, r, "DESCONTO IRRF", {}, "A CALCULAR PELA CONTABILIDADE.", kind="in")
+r = linha(ws, r, "DESCONTO IRRF", IRRF, "Rubrica 914 do holerite da Betel.", kind="in", fill=FILL_CONF)
 rows["TOTAL DESC"] = r
 r = linha(ws, r, "TOTAL DE DESCONTOS",
           {n: f"=SUM({get_column_letter(C0+i)}{rows['VALES']}:{get_column_letter(C0+i)}{rows['IRRF']})" for i, n in enumerate(EMP)},
@@ -388,6 +404,16 @@ r = linha(ws, r, "LÍQUIDO A RECEBER (05/09/2026)",
           {n: f"={get_column_letter(C0+i)}{rows['TOTAL PROVENTOS']}+{get_column_letter(C0+i)}{rows['TOTAL DESC']}" for i, n in enumerate(EMP)},
           "Total de proventos menos descontos. Só fica definitivo depois do INSS/IRRF da contabilidade.",
           kind="calc", bold=True, fill=FILL_LIQ)
+
+rows["LIQ BETEL"] = r
+r = linha(ws, r, "LÍQUIDO DO HOLERITE (BETEL)", LIQ_BETEL,
+          "Valor líquido que consta no demonstrativo de pagamento emitido pela Betel Contabilidade.",
+          kind="in", fill=FILL_CONF)
+rows["DIF BETEL"] = r
+r = linha(ws, r, "DIFERENÇA (planilha − holerite)",
+          {n: f"=ROUND({get_column_letter(C0+i)}{rows['LIQ']}-{get_column_letter(C0+i)}{rows['LIQ BETEL']},2)" for i, n in enumerate(EMP)},
+          "Deve ser zero. Os incentivos entram como provento e como desconto, então não afetam o líquido.",
+          kind="calc", bold=True, fill=FILL_TOT)
 
 r = sec(ws, r, "INFORMATIVO — PAGO PELA EMPRESA, NÃO ENTRA NO HOLERITE")
 rows["VT"] = r
@@ -771,6 +797,12 @@ blocos = [
  ("T", "Comissão total apurada no InovaFarma para os 8 funcionários: R$ 4.856,68 · Incentivos: R$ 685,00"),
  ("T", "Venda bruta geral do mês: R$ 300.371,95 · Descontos concedidos: R$ 90.276,65 · Venda líquida: R$ 210.095,30"),
  ("T", "DSR de agosto/2026: 5 domingos (02, 09, 16, 23 e 30) ÷ 26 dias úteis = fator 0,192307"),
+ ("SEC", "CONFERÊNCIA COM O HOLERITE DA BETEL CONTABILIDADE"),
+ ("T", "Os valores de prêmios, vales, vale-transporte, INSS e IRRF foram lidos do demonstrativo de agosto/2026 emitido pela Betel e lançados nas linhas correspondentes."),
+ ("T", "A linha DIFERENÇA (planilha − holerite) fecha em zero para todos, exceto JOEL — ver as pendências abaixo."),
+ ("P", "DSR EM DUPLICIDADE: a rubrica 420 (Repouso Remunerado) já foi calculada sobre comissão + horas extras, e a Betel ainda lançou a rubrica 057 (DSR/hora extra). São R$ 51,01 do EDEY, R$ 46,51 da NATI e R$ 10,38 de VALÉRIA, SARA e CAMILA — R$ 128,66 na loja. Confirmar com a contabilidade."),
+ ("P", "JOEL: a comissão de R$ 103,31 (dias 01 e 02/08) e o DSR não entraram no holerite dele — só saiu o salário família. Verificar se entra em folha complementar ou no recibo de férias."),
+ ("P", "Os incentivos de aplicações e vitaminas não constam no holerite: são pagos em dinheiro durante o mês. Por isso entram aqui como provento e como desconto, sem afetar o líquido."),
  ("SEC", "APONTAMENTO DE AGOSTO/2026 (aba PONTO AGO.26)"),
  ("T", "EDEY: 24 horas extras normais → R$ 265,25."),
  ("T", "NATI: 17 horas extras noturnas → R$ 187,89 de hora extra mais R$ 25,05 de adicional noturno; e o feriado de 15/08 trabalhado sem folga → R$ 54,03."),

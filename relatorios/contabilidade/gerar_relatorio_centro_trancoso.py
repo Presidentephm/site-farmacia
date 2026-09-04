@@ -69,13 +69,23 @@ CENTRO = dict(
  JUL_VA={},
  JUL_ABA="CENTRO 05JULHO",
  FERIAS_OBS="GENECIR: férias de 01 a 30/08/2026, pagas em recibo próprio — informar o valor.",
+ BONIF={"ELIANA": 600.0, "THAYANE": 100.0, "RENALDO": 250.0},
+ DSR_HE={}, SAL_FAMILIA={}, INSUF={"GENECIR": 3.24},
+ VALES={"ELIANA": -2192.0, "THAYANE": -200.0, "RENALDO": -1955.0},
+ VT_DESC={"ELIANA": -84.29, "THAYANE": -84.29, "RENALDO": -68.08, "GENECIR": -3.24},
+ INSS={"ELIANA": -371.35, "ARIANE": -592.27, "THAYANE": -136.72, "RENALDO": -235.06},
+ IRRF={"ARIANE": -251.04},
+ LIQ_BETEL={"ELIANA": 1375.37, "ARIANE": 4805.10, "THAYANE": 1368.35,
+            "RENALDO": 623.87, "GENECIR": 0.0},
  PONTO=[],
  DEFINIDO=["ARIANE e PEDRO: não recebem comissão sobre vendas — a rubrica fica zerada e o apurado deles aparece só na aba BASE.",
            "GENECIR: férias de 01 a 30/08/2026, já pagas em recibo próprio — salário zerado neste holerite; confirmar o dia 31/08.",
            "SERGIO e ANA CELIA são folguistas (diária de R$ 150,00 e R$ 100,00) — ficam na aba FOLGUISTAS, para o contas a pagar, fora do holerite.",
            "GILSON, UILLIAN e FABIANA não recebem comissão pela loja Centro.",
            "SARA: o saldo dela na loja Centro foi somado à folha do Arraial."],
- PENDENCIAS=["GENECIR: as férias vão até 30/08 e o mês tem 31 dias — confirmar se o dia 31/08 foi trabalhado e lançar o salário desse dia (R$ 1.621,00 ÷ 30 = R$ 54,03).",
+ PENDENCIAS=["PEDRO não aparece no holerite de agosto emitido pela Betel para esta loja — verificar em qual empresa ele foi lançado.",
+             "GENECIR: a comissão de R$ 0,62 não entrou no holerite (ele passou o mês de férias) — conferir se vale lançar.",
+             "GENECIR: as férias vão até 30/08 e o mês tem 31 dias — confirmar se o dia 31/08 foi trabalhado e lançar o salário desse dia (R$ 1.621,00 ÷ 30 = R$ 54,03).",
              "Preencher a quantidade de diárias de SERGIO e ANA CELIA na aba FOLGUISTAS.",
              "Confirmar se os folguistas recebem a comissão apurada no código deles (SERGIO R$ 128,80 e ANA CELIA R$ 83,56) além da diária."],
 )
@@ -110,6 +120,15 @@ TRANCOSO = dict(
  JUL_VT={"MANOEL": 750.0, "VALDICK": 400.0},
  JUL_VA={},
  JUL_ABA="TRANCOSO JULHO",
+ BONIF={"VALDICK": 100.0, "MANOEL": 200.0, "INIURLE": 100.0, "TAMILES": 100.0},
+ DSR_HE={"INIURLE": 85.02}, SAL_FAMILIA={}, INSUF={},
+ VALES={"UILLIAN": -810.0, "VALDICK": -580.0, "MANOEL": -465.0},
+ VT_DESC={},
+ INSS={"UILLIAN": -592.27, "VALDICK": -348.72, "MANOEL": -343.29,
+       "INIURLE": -236.18, "TAMILES": -157.52},
+ IRRF={"UILLIAN": -251.04},
+ LIQ_BETEL={"UILLIAN": 3995.10, "VALDICK": 2905.76, "MANOEL": 2980.92,
+            "INIURLE": 2658.33, "TAMILES": 1862.94},
  FERIAS_OBS="Não houve férias nesta loja em agosto/2026. RENALDO (Centro) e VALDICK (Trancoso) entram de férias em 01/09 — ver a folha de setembro.",
  PONTO=[("INIURLE", "HE50", 40, "40 horas extras normais em agosto/2026.")],
  PONTO_PROX=[("TAMILES", "Atestado médico de 7 dias, entregue em 02/09/2026 — cobre de 02/09 a 08/09/2026.",
@@ -117,7 +136,8 @@ TRANCOSO = dict(
               "Atestado de até 15 dias é abonado pela empresa: falta justificada, sem desconto de salário nem de DSR. "
               "A partir do 16º dia seria auxílio-doença pelo INSS. Anexar o atestado à pasta da funcionária.")],
  JUL_NOTA="OBSERVAÇÃO: em julho/2026 a comissão foi lançada por uma MÉDIA, e não pelo apurado do sistema. A partir de agosto/2026 a loja passa a pagar a comissão em dobro, e a empresa vai reduzir nas premiações a diferença gerada por esse aumento.",
- DEFINIDO=["TRANCOSO PAGA O DOBRO DA COMISSÃO APURADA: a linha COMISSÃO PRODUTOS já multiplica por 2 o valor do InovaFarma (multiplicador na aba PARÂMETROS).",
+ DEFINIDO=["Os prêmios, vales, INSS e IRRF vieram do holerite de agosto emitido pela Betel Contabilidade. A linha DIFERENÇA fecha em zero para os cinco.",
+           "TRANCOSO PAGA O DOBRO DA COMISSÃO APURADA: a linha COMISSÃO PRODUTOS já multiplica por 2 o valor do InovaFarma (multiplicador na aba PARÂMETROS).",
            "Os incentivos são simples: entram pelo valor apurado, sem dobrar.",
            "Em julho/2026 a comissão foi lançada por média. Com a comissão dobrada a partir de agosto, a empresa vai reduzir nas premiações a diferença.",
            "UILLIAN: não recebe comissão sobre vendas (mesmo critério de julho/2026) — a rubrica fica zerada e o apurado dele aparece só na aba BASE."],
@@ -357,6 +377,18 @@ def build(cfg):
               {n: (f"=ROUND(({get_column_letter(C0+i)}{rows['COMISSÃO TOTAL']}"
                    f"+{get_column_letter(C0+i)}{rows['HORAS EXTRAS']})*{FATOR},2)") for i, n in enumerate(EMP)},
               "Cálculo: (comissão total + horas extras) × 5 domingos ÷ 26 dias úteis de agosto/2026.", kind="calc")
+    rows["DSR HE"] = r
+    r = linha(ws, r, "DSR SOBRE HORAS EXTRAS", cfg.get("DSR_HE", {}),
+              "Rubrica 057 do holerite da Betel. ATENÇÃO: a rubrica 420 acima já leva as horas extras na base, "
+              "então este valor paga o DSR das horas extras uma segunda vez — conferir com a contabilidade.",
+              kind="in", fill=FILL_ALERT)
+    rows["SALÁRIO FAMÍLIA"] = r
+    r = linha(ws, r, "SALÁRIO FAMÍLIA", cfg.get("SAL_FAMILIA", {}), "Rubrica 599 do holerite da Betel.",
+              kind="in", fill=FILL_CONF)
+    rows["INSUFICIÊNCIA"] = r
+    r = linha(ws, r, "INSUFICIÊNCIA DE SALDO", cfg.get("INSUF", {}),
+              "Rubrica 998 do holerite da Betel — contrapartida do vale-transporte de quem ficou sem saldo.",
+              kind="in", fill=FILL_CONF)
     rows["AUXÍLIO GERÊNCIA"] = r
     r = linha(ws, r, "AUXÍLIO GERÊNCIA", cfg["AUXGER"], "Conforme acordo da loja.", kind="in")
     rows["META CAIXA"] = r
@@ -365,9 +397,11 @@ def build(cfg):
     obs_cota = "PREENCHER conforme a tabela de metas da loja (aba METAS da planilha original)."
     if cfg["mult"] != 1:
         obs_cota += " Lançar já com a redução combinada para compensar o aumento da comissão dobrada."
-    r = linha(ws, r, "PRÊMIO COTA GERAL", {}, obs_cota, kind="in", fill=FILL_CONF if cfg["mult"] != 1 else None)
+    obs_cota = ("Rubrica 011 (Bonificação/Prêmios) do holerite da Betel — já engloba cota geral e pré-vencidos. "
+                + ("Lançar já com a redução combinada pela comissão dobrada." if cfg["mult"] != 1 else ""))
+    r = linha(ws, r, "PRÊMIO COTA GERAL / BONIFICAÇÃO", cfg.get("BONIF", {}), obs_cota, kind="in", fill=FILL_CONF)
     rows["PRÊMIO PRÉ-VENCIDOS"] = r
-    r = linha(ws, r, "PRÊMIO PRÉ-VENCIDOS", {}, "PREENCHER conforme a apuração de pré-vencidos de agosto.", kind="in")
+    r = linha(ws, r, "PRÊMIO PRÉ-VENCIDOS", {}, "Vem somado na linha acima, na rubrica 011 do holerite.", kind="in")
     rows["FÉRIAS"] = r
     r = linha(ws, r, "FÉRIAS (DIAS GOZADOS)", {}, "PREENCHER se houve férias no mês; informar o período.", kind="in")
     rows["1/3 FÉRIAS"] = r
@@ -392,7 +426,8 @@ def build(cfg):
               kind="calc", bold=True, fill=FILL_TOT)
     r = sec(ws, r, "DESCONTOS  (lançar com sinal negativo)")
     rows["VALES"] = r
-    r = linha(ws, r, "ADIANTAMENTO SALARIAL / VALES", {}, "PREENCHER com os vales adiantados durante agosto.", kind="in")
+    r = linha(ws, r, "ADIANTAMENTO SALARIAL / VALES", cfg.get("VALES", {}),
+              "Rubrica 630 (Desconto - verbas / Adiantamento) do holerite da Betel.", kind="in", fill=FILL_CONF)
     rows["VALES INC"] = r
     r = linha(ws, r, "ADIANT. VALES INCENT. E APLIC.",
               {n: (f"=-({get_column_letter(C0+i)}{rows['INC APLIC']}+{get_column_letter(C0+i)}{rows['INC VIT']}"
@@ -404,13 +439,12 @@ def build(cfg):
     rows["FALTAS"] = r
     r = linha(ws, r, "DESCONTO FALTAS / ATRASOS", {}, "PREENCHER conforme o ponto.", kind="in")
     rows["VT6"] = r
-    r = linha(ws, r, "DESCONTO VALE TRANSPORTE 6%", cfg["VT6"],
-              "Valores praticados em jul/26. 6% sobre R$ 1.621,00 seria R$ 97,26 — CONFERIR a base usada. Quem passou o mês em férias fica sem desconto.",
-              kind="in", fill=FILL_CONF)
+    r = linha(ws, r, "DESCONTO VALE TRANSPORTE 6%", cfg.get("VT_DESC", cfg["VT6"]),
+              "Rubrica 604 do holerite da Betel.", kind="in", fill=FILL_CONF)
     rows["INSS"] = r
-    r = linha(ws, r, "DESCONTO INSS", {}, "A CALCULAR PELA CONTABILIDADE sobre o total de proventos.", kind="in")
+    r = linha(ws, r, "DESCONTO INSS", cfg.get("INSS", {}), "Rubrica 903 do holerite da Betel.", kind="in", fill=FILL_CONF)
     rows["IRRF"] = r
-    r = linha(ws, r, "DESCONTO IRRF", {}, "A CALCULAR PELA CONTABILIDADE.", kind="in")
+    r = linha(ws, r, "DESCONTO IRRF", cfg.get("IRRF", {}), "Rubrica 914 do holerite da Betel.", kind="in", fill=FILL_CONF)
     rows["TOTAL DESC"] = r
     r = linha(ws, r, "TOTAL DE DESCONTOS",
               {n: f"=SUM({get_column_letter(C0+i)}{rows['VALES']}:{get_column_letter(C0+i)}{rows['IRRF']})"
@@ -422,6 +456,17 @@ def build(cfg):
                for i, n in enumerate(EMP)},
               "Total de proventos menos descontos. Só fica definitivo depois do INSS/IRRF da contabilidade.",
               kind="calc", bold=True, fill=FILL_LIQ)
+    if cfg.get("LIQ_BETEL"):
+        rows["LIQ BETEL"] = r
+        r = linha(ws, r, "LÍQUIDO DO HOLERITE (BETEL)", cfg["LIQ_BETEL"],
+                  "Valor líquido do demonstrativo emitido pela Betel Contabilidade.", kind="in", fill=FILL_CONF)
+        rows["DIF BETEL"] = r
+        r = linha(ws, r, "DIFERENÇA (planilha − holerite)",
+                  {n: f"=ROUND({get_column_letter(C0+i)}{rows['LIQ']}-{get_column_letter(C0+i)}{rows['LIQ BETEL']},2)"
+                   for i, n in enumerate(EMP)},
+                  "Deve ser zero. Os incentivos entram como provento e como desconto, então não afetam o líquido.",
+                  kind="calc", bold=True, fill=FILL_TOT)
+
     r = sec(ws, r, "INFORMATIVO — PAGO PELA EMPRESA, NÃO ENTRA NO HOLERITE")
     rows["VT"] = r
     r = linha(ws, r, "VALE TRANSPORTE (compra set/26)", {}, "PREENCHER com as passagens compradas para setembro/2026.", kind="in")
