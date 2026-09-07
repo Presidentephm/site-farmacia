@@ -5,9 +5,13 @@ import openpyxl, re, datetime
 from collections import defaultdict
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 
+import sys
 SRC = "/root/.claude/uploads/f4fc9be7-f091-55cf-869c-2f6961829939/6e9cc1cb-Comiss_o_de_Vendedores0309centro.xlsx"
-OUT = "/home/user/site-farmacia/relatorios/contabilidade/ANA_CELIA_DIAS_TRABALHADOS_AGOSTO_2026.xlsx"
-VENDEDOR, COD, DIARIA = "ANA CELIA", "131", 100.00
+QUEM = sys.argv[1] if len(sys.argv) > 1 else "ANA CELIA"
+CONF = {"ANA CELIA": ("131", 100.00, "ANA_CELIA"), "SERGIO": ("51", 150.00, "SERGIO")}
+COD, DIARIA, SLUG = CONF[QUEM]
+VENDEDOR = QUEM
+OUT = f"/home/user/site-farmacia/relatorios/contabilidade/{SLUG}_DIAS_TRABALHADOS_AGOSTO_2026.xlsx"
 
 F = "Arial"; MONEY = 'R$ #,##0.00;-R$ #,##0.00;"-"'
 def font(sz=10, b=False, color="000000", it=False):
@@ -43,13 +47,17 @@ for r in rows:
         x["hmin"] = min(x["hmin"], h); x["hmax"] = max(x["hmax"], h)
 
 SEM = ["segunda", "terça", "quarta", "quinta", "sexta", "sábado", "domingo"]
+import collections
+_dias_sem = collections.Counter(SEM[datetime.date(*map(int, d.split("-"))).weekday()] for d in dias)
+PADRAO = ("Dias da semana em que houve venda: "
+          + ", ".join(f"{k} ({v}x)" for k, v in sorted(_dias_sem.items(), key=lambda t: -t[1])) + ".")
 wb = openpyxl.Workbook()
-ws = wb.active; ws.title = "ANA CELIA AGO.26"
+ws = wb.active; ws.title = f"{VENDEDOR} AGO.26"[:31]
 ws.sheet_view.showGridLines = False
 for col, w in zip("ABCDEFGHI", [13, 12, 9, 9, 14, 14, 12, 11, 16]):
     ws.column_dimensions[col].width = w
 ws.merge_cells("A1:I1")
-c = ws.cell(1, 1, "DIAS TRABALHADOS E VENDAS — ANA CELIA (FOLGUISTA)")
+c = ws.cell(1, 1, f"DIAS TRABALHADOS E VENDAS — {VENDEDOR} (FOLGUISTA)")
 c.font = font(13, True, "FFFFFF"); c.fill = FILL_TIT
 c.alignment = Alignment(horizontal="center", vertical="center")
 ws.row_dimensions[1].height = 26
@@ -113,9 +121,16 @@ def bloco(rot, val, obs="", fill=None, bold=False, fmt=MONEY, cor=None):
     c3.alignment = Alignment(wrap_text=True, vertical="center")
     r += 1
     return r - 1
-l_dias = bloco("Dias com venda registrada", len(dias), "Cada dia com pedido no código dela conta como um dia trabalhado.", fmt="0")
+AVULSOS = [d for d, x in dias.items() if len(x["ped"]) == 1 and x["liq"] < 10]
+EFETIVOS = len(dias) - len(AVULSOS)
+l_dias = bloco("Dias com venda registrada", len(dias),
+               "Todo dia com pedido lançado no código, mesmo que uma venda só.", fmt="0")
+if AVULSOS:
+    bloco("Dias com movimento efetivo", EFETIVOS,
+          "Sem os dias que tiveram uma única venda de valor simbólico — ver a observação no rodapé.", fmt="0")
 l_diaria = bloco("Valor da diária", DIARIA, "Valor combinado com a empresa.", cor=BLUE, fill=FILL_IN)
-bloco("TOTAL DE DIÁRIAS", f"=E{l_dias}*E{l_diaria}", "Levar para o contas a pagar / aba FOLGUISTAS do relatório do Centro.",
+bloco("TOTAL DE DIÁRIAS", f"=E{l_dias}*E{l_diaria}",
+      "Levar para o contas a pagar / aba FOLGUISTAS do relatório do Centro. Ajustar a quantidade de dias se algum não valer diária.",
       fill=FILL_LIQ, bold=True)
 bloco("Comissão apurada no período", f"=G{tot}", "Confirmar se folguista recebe comissão além da diária.")
 r += 1
@@ -124,7 +139,11 @@ notas = ["COMO LER ESTE RELATÓRIO:",
          "A lista traz os dias em que houve VENDA registrada no código 131. Um dia em que ela tenha trabalhado sem realizar nenhuma venda não aparece aqui — conferir com a escala da loja.",
          "Os horários da última coluna são da primeira e da última venda do dia; servem para conferir o turno, não são registro de ponto.",
          "Os domingos estão destacados em vermelho claro.",
-         "Ela trabalhou sempre nas quartas, sextas e domingos — cobrindo as folgas da equipe. A única sexta sem venda no mês foi 21/08.",
+         PADRAO,
+         (("ATENÇÃO: " + ", ".join(datetime.date(*map(int, d.split("-"))).strftime("%d/%m") for d in sorted(AVULSOS))
+           + " teve(tiveram) uma única venda de valor simbólico no código dele — provavelmente lançamento avulso, "
+             "não um dia de trabalho. Conferir com a escala antes de contar a diária.") if AVULSOS else
+          "Todos os dias listados tiveram movimento normal de vendas."),
          "Estes valores NÃO entram no holerite: folguista é pagamento por diária, lançado no contas a pagar."]
 for t in notas:
     ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=9)

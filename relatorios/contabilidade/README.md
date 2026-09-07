@@ -179,3 +179,8 @@ entram como provento e desconto, sem afetar o líquido.
 da ANA CELIA (código 131) na loja Centro em agosto/2026, com pedidos,
 itens, venda, comissão e o horário da primeira e da última venda, mais o
 cálculo das diárias para o contas a pagar.
+
+`SERGIO_DIAS_TRABALHADOS_AGOSTO_2026.xlsx` traz o mesmo levantamento do
+SERGIO (código 51). Os dois arquivos saem de
+`gerar_relatorio_folguistas.py`, que recebe o nome do folguista como
+argumento.

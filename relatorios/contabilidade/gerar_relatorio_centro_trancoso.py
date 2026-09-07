@@ -44,7 +44,7 @@ CENTRO = dict(
  OUTROS_NOTA="GILSON, UILLIAN e FABIANA não recebem comissão. O saldo da SARA (loja Arraial) foi somado à folha dela no relatório do Arraial.",
  FOLGUISTAS=[("SERGIO", "51", 150.00, 6023.97, 128.80, 40.0),
              ("ANA CELIA", "131", 100.00, 3924.63, 83.56, 0.0)],
- FOLG_DIAS={"ANA CELIA": 12},
+ FOLG_DIAS={"ANA CELIA": 12, "SERGIO": 7},
  GERAL=dict(bruta=154540.14, desc=52653.74, liq=101886.40, com=2934.17, inc=527.0),
  SALARIO={"ARIANE": 5648.41, "ELIANA": 1621.0, "GENECIR": 1621.0,
           "RENALDO": 1621.0, "THAYANE": 1621.0, "PEDRO": 1621.0},
@@ -871,7 +871,9 @@ def build(cfg):
         rr += 2
         for t in ["PREENCHER a coluna Nº DIÁRIAS com os dias trabalhados em agosto/2026.",
                   "Valor da diária combinado: SERGIO R$ 150,00 e ANA CELIA R$ 100,00.",
-                  "ANA CELIA: 12 dias com venda registrada em agosto/2026 (quartas, sextas e domingos) — ver o relatório ANA_CELIA_DIAS_TRABALHADOS_AGOSTO_2026.xlsx. Conferir com a escala.",
+                  "ANA CELIA: 12 dias com venda registrada em agosto/2026 (quartas, sextas e domingos).",
+                  "SERGIO: 7 dias com venda registrada, sendo 5 com movimento efetivo — 01/08 e 26/08 tiveram uma única venda simbólica no código dele. Ajustar a quantidade se esses dois dias não valerem diária.",
+                  "Detalhe dia a dia nos relatórios ANA_CELIA_ e SERGIO_DIAS_TRABALHADOS_AGOSTO_2026.xlsx. Conferir com a escala da loja.",
                   "Comissão e incentivos vêm do relatório do InovaFarma (códigos 51 e 131) — CONFIRMAR se o folguista recebe esses valores além da diária; se não receber, zerar as colunas.",
                   "Estes valores não entram no holerite: são pagamento de prestação de serviço, para baixa no contas a pagar."]:
             wf.merge_cells(start_row=rr, start_column=1, end_row=rr, end_column=8)
