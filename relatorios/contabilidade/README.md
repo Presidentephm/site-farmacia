@@ -172,3 +172,10 @@ valores lançados nas planilhas:
 O líquido da planilha bate com o do holerite em 17 dos 19 funcionários.
 Os incentivos não constam no holerite (são pagos em dinheiro no mês) e
 entram como provento e desconto, sem afetar o líquido.
+
+## Folguistas — dias trabalhados
+
+`ANA_CELIA_DIAS_TRABALHADOS_AGOSTO_2026.xlsx` lista dia a dia as vendas
+da ANA CELIA (código 131) na loja Centro em agosto/2026, com pedidos,
+itens, venda, comissão e o horário da primeira e da última venda, mais o
+cálculo das diárias para o contas a pagar.

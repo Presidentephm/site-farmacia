@@ -44,6 +44,7 @@ CENTRO = dict(
  OUTROS_NOTA="GILSON, UILLIAN e FABIANA não recebem comissão. O saldo da SARA (loja Arraial) foi somado à folha dela no relatório do Arraial.",
  FOLGUISTAS=[("SERGIO", "51", 150.00, 6023.97, 128.80, 40.0),
              ("ANA CELIA", "131", 100.00, 3924.63, 83.56, 0.0)],
+ FOLG_DIAS={"ANA CELIA": 12},
  GERAL=dict(bruta=154540.14, desc=52653.74, liq=101886.40, com=2934.17, inc=527.0),
  SALARIO={"ARIANE": 5648.41, "ELIANA": 1621.0, "GENECIR": 1621.0,
           "RENALDO": 1621.0, "THAYANE": 1621.0, "PEDRO": 1621.0},
@@ -846,7 +847,8 @@ def build(cfg):
             wf.cell(rr, 1, nome).font = font(10, True)
             wf.cell(rr, 2, cod).alignment = Alignment(horizontal="center")
             c = wf.cell(rr, 3, diaria); c.number_format = MONEY; c.font = font(10, False, BLUE); c.fill = FILL_IN
-            c = wf.cell(rr, 4); c.font = font(10, False, BLUE); c.fill = FILL_IN
+            c = wf.cell(rr, 4, cfg.get("FOLG_DIAS", {}).get(nome))
+            c.font = font(10, False, BLUE); c.fill = FILL_IN
             c.alignment = Alignment(horizontal="center")
             wf.cell(rr, 5, f"=C{rr}*D{rr}").number_format = MONEY
             c = wf.cell(rr, 6, com); c.number_format = MONEY; c.font = font(10, False, BLUE); c.fill = FILL_IN
@@ -869,6 +871,7 @@ def build(cfg):
         rr += 2
         for t in ["PREENCHER a coluna Nº DIÁRIAS com os dias trabalhados em agosto/2026.",
                   "Valor da diária combinado: SERGIO R$ 150,00 e ANA CELIA R$ 100,00.",
+                  "ANA CELIA: 12 dias com venda registrada em agosto/2026 (quartas, sextas e domingos) — ver o relatório ANA_CELIA_DIAS_TRABALHADOS_AGOSTO_2026.xlsx. Conferir com a escala.",
                   "Comissão e incentivos vêm do relatório do InovaFarma (códigos 51 e 131) — CONFIRMAR se o folguista recebe esses valores além da diária; se não receber, zerar as colunas.",
                   "Estes valores não entram no holerite: são pagamento de prestação de serviço, para baixa no contas a pagar."]:
             wf.merge_cells(start_row=rr, start_column=1, end_row=rr, end_column=8)
