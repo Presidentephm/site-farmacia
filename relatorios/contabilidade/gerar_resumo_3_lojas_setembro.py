@@ -60,7 +60,7 @@ OBS_SET = {
  "ARIANE": "Não recebe comissão.",
  "GENECIR": "Feriados de 07/09 e 08/09 trabalhados (R$ 108,06). Adiantamento de R$ 500,00 em 09/09. VT de R$ 270,00.",
  "RENALDO": "Férias de 01 a 30/09 — salário zerado; férias e 1/3 em recibo próprio.",
- "PEDRO": "Salário corrigido para R$ 4.000,00. Não recebe comissão. Não constou no holerite do Centro em agosto — conferir a empresa.",
+ "PEDRO": "Registrado na matriz. Salário corrigido para R$ 4.000,00. Não recebe comissão. O holerite de agosto dele não veio da Betel — pedir junto.",
  "UILLIAN": "Não recebe comissão.",
  "VALDICK": "Férias de 01 a 30/09 — salário zerado; férias e 1/3 em recibo próprio.",
  "TAMILES": "Atestado de 02 a 08/09, abonado — sem desconto.",

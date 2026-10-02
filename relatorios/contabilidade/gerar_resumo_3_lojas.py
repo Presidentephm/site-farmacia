@@ -70,7 +70,7 @@ CENTRO = [
  E("THAYANE", 1621.00, 57.33, bonif=100.00, inc=10.0, vales=-200.00, vt6=-84.29, inss=-136.72,
    liq_betel=1368.35, obs=""),
  E("PEDRO",   1621.00, 0.0, liq_betel=None,
-   obs="NÃO CONSTA no holerite de agosto emitido pela Betel para esta loja — verificar em qual empresa foi lançado."),
+   obs="Registrado na matriz, mas o holerite de agosto dele NÃO veio no arquivo da Betel — pedir o holerite (R$ 1.621,00)."),
 ]
 TRANCOSO = [
  E("UILLIAN", 5648.41, 0.0, inc=25.0, vales=-810.00, inss=-592.27, irrf=-251.04, liq_betel=3995.10,
@@ -191,7 +191,7 @@ avisos = [
  "PONTOS EM ABERTO:",
  "• JOEL (Arraial): a comissão de R$ 103,31 e o DSR não entraram no holerite — só saiu o salário família. Verificar folha complementar ou recibo de férias.",
  "• GENECIR (Centro): comissão residual de R$ 0,62 fora do holerite.",
- "• PEDRO (Centro): não consta no holerite emitido pela Betel para esta loja.",
+ "• PEDRO (Centro): registrado na matriz, mas o holerite de agosto dele não veio no arquivo da Betel — pedir o holerite (R$ 1.621,00).",
  "• INIURLE (Trancoso): horas extras corrigidas para 16 h a 50% + 24 h a 100% (R$ 530,51, eram R$ 442,09). A diferença de R$ 105,43 é antes do novo INSS — a Betel precisa refazer o holerite.",
  "• DSR EM DUPLICIDADE: a rubrica 420 (Repouso Remunerado) já foi calculada sobre comissão + horas extras, e a Betel ainda lançou a rubrica 057 (DSR/hora extra). São R$ 51,01 do EDEY, R$ 46,51 da NATI, R$ 10,38 de VALÉRIA, SARA e CAMILA e R$ 85,02 do INIURLE — R$ 213,68 no total. Confirmar com a contabilidade.",
  "• Prêmio cota geral e prêmio pré-vencidos, conforme a apuração de metas de cada loja.",

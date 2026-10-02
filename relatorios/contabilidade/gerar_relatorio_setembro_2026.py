@@ -87,6 +87,7 @@ CENTRO = dict(
         ("GENECIR", "FER", 2, "Feriados de 07/09 e 08/09/2026 trabalhados, sem folga compensatória — 1 salário-dia a mais por feriado."),
         ("RENALDO", "INFO", 30, "Férias de 01 a 30/09/2026 — mês inteiro. Salário zerado no holerite; férias e 1/3 vão em recibo próprio.")],
  DEFINIDO=["ARIANE e PEDRO: não recebem comissão sobre vendas.",
+           "PEDRO: registrado na empresa matriz; salário de R$ 4.000,00 a partir de setembro/2026.",
            "GENECIR: voltou das férias, salário integral em setembro. Trabalhou os feriados de 07/09 e 08/09 (R$ 108,06), recebeu adiantamento de R$ 500,00 em 09/09 e R$ 270,00 de vale-transporte.",
            "RENALDO: férias de 01 a 30/09/2026 (mês inteiro) — salário zerado e sem desconto de vale-transporte; férias e 1/3 em recibo próprio.",
            "SERGIO e ANA CELIA seguem como folguistas (diária de R$ 150,00 e R$ 100,00), na aba FOLGUISTAS."],

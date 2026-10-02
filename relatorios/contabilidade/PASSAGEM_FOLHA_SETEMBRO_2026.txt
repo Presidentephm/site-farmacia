@@ -175,7 +175,7 @@ LÍQUIDO DO HOLERITE (BETEL) + DIFERENÇA.
   no total — EDEY 51,01, NATI 46,51, VALÉRIA/SARA/CAMILA 10,38 cada, INIURLE
   85,02. Precisa alinhar com a Betel qual critério fica.
 - **JOEL**: comissão de R$ 103,31 de agosto não entrou no holerite.
-- **PEDRO**: não apareceu no holerite de agosto do Centro.
+- **PEDRO**: é registrado na matriz, mas o holerite de agosto dele não veio da Betel — pedir. Salário passa a R$ 4.000,00 em setembro.
 
 ## 8. Armadilhas técnicas
 
