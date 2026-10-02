@@ -74,7 +74,7 @@ CENTRO = dict(
              ("ANA CELIA", "131", 100.00, 0.0, 0.0, 0.0)],
  GERAL=dict(bruta=0.0, desc=0.0, liq=0.0, com=0.0, inc=0.0),
  SALARIO={"ARIANE": 5648.41, "ELIANA": 1621.0, "GENECIR": 1621.0,
-          "RENALDO": 0.0, "THAYANE": 1621.0, "PEDRO": 1621.0},
+          "RENALDO": 0.0, "THAYANE": 1621.0, "PEDRO": 4000.0},
  NOTURNO={}, AUXGER={}, METACX={},
  VT6={"ELIANA": -84.29, "GENECIR": -84.29, "THAYANE": -84.29},
  SEM_COMISSAO=["ARIANE", "PEDRO"],
