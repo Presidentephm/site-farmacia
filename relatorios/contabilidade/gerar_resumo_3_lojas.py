@@ -79,8 +79,8 @@ TRANCOSO = [
    obs="Comissão apurada R$ 825,38 × 2."),
  E("VALDICK", 1621.00, 1772.60, bonif=100.00, inc=260.0, vales=-580.00, inss=-348.72, liq_betel=2905.76,
    obs="Comissão apurada R$ 886,30 × 2. Férias de 01 a 30/09/2026."),
- E("INIURLE", 1621.00, 470.84, he=442.09, dsrhe=85.02, bonif=100.00, inss=-236.18, liq_betel=2658.33,
-   obs="Comissão apurada R$ 235,42 × 2. 40 horas extras."),
+ E("INIURLE", 1621.00, 470.84, he=530.51, dsrhe=85.02, bonif=100.00, inss=-236.18, liq_betel=2658.33,
+   obs="Comissão apurada R$ 235,42 × 2. Horas extras corrigidas: 16 h a 50% (R$ 176,84) + 24 h a 100% (R$ 353,67). O holerite da Betel saiu com 40 h a 50% — pedir para refazer (sobem HE, DSR e INSS)."),
  E("TAMILES", 1621.00, 251.16, bonif=100.00, inss=-157.52, liq_betel=1862.94,
    obs="Comissão apurada R$ 125,58 × 2. Atestado de 02 a 08/09 é competência de setembro."),
 ]
@@ -192,6 +192,7 @@ avisos = [
  "• JOEL (Arraial): a comissão de R$ 103,31 e o DSR não entraram no holerite — só saiu o salário família. Verificar folha complementar ou recibo de férias.",
  "• GENECIR (Centro): comissão residual de R$ 0,62 fora do holerite.",
  "• PEDRO (Centro): não consta no holerite emitido pela Betel para esta loja.",
+ "• INIURLE (Trancoso): horas extras corrigidas para 16 h a 50% + 24 h a 100% (R$ 530,51, eram R$ 442,09). A diferença de R$ 105,43 é antes do novo INSS — a Betel precisa refazer o holerite.",
  "• DSR EM DUPLICIDADE: a rubrica 420 (Repouso Remunerado) já foi calculada sobre comissão + horas extras, e a Betel ainda lançou a rubrica 057 (DSR/hora extra). São R$ 51,01 do EDEY, R$ 46,51 da NATI, R$ 10,38 de VALÉRIA, SARA e CAMILA e R$ 85,02 do INIURLE — R$ 213,68 no total. Confirmar com a contabilidade.",
  "• Prêmio cota geral e prêmio pré-vencidos, conforme a apuração de metas de cada loja.",
  "• A coluna FÉRIAS PAGAS À PARTE é só lembrete para o contas a pagar: recibo de férias pago fora do holerite, NÃO entra no líquido. Em agosto: JOEL (Arraial, férias de 01 a 31/08) e GENECIR (Centro, férias de 01 a 30/08).",

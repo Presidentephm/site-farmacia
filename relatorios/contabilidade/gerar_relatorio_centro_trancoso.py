@@ -131,13 +131,14 @@ TRANCOSO = dict(
  LIQ_BETEL={"UILLIAN": 3995.10, "VALDICK": 2905.76, "MANOEL": 2980.92,
             "INIURLE": 2658.33, "TAMILES": 1862.94},
  FERIAS_OBS="Não houve férias nesta loja em agosto/2026. RENALDO (Centro) e VALDICK (Trancoso) entram de férias em 01/09 — ver a folha de setembro.",
- PONTO=[("INIURLE", "HE50", 40, "40 horas extras normais em agosto/2026.")],
+ PONTO=[("INIURLE", "HE50", 16, "16 horas extras a 50% em agosto/2026."),
+        ("INIURLE", "HE100", 24, "24 horas extras a 100% em agosto/2026 (antes lançadas como 40 h a 50%).")],
  PONTO_PROX=[("TAMILES", "Atestado médico de 7 dias, entregue em 02/09/2026 — cobre de 02/09 a 08/09/2026.",
               "Cai na competência SETEMBRO/2026 (holerite pago em 05/10/2026), não nesta folha de agosto. "
               "Atestado de até 15 dias é abonado pela empresa: falta justificada, sem desconto de salário nem de DSR. "
               "A partir do 16º dia seria auxílio-doença pelo INSS. Anexar o atestado à pasta da funcionária.")],
  JUL_NOTA="OBSERVAÇÃO: em julho/2026 a comissão foi lançada por uma MÉDIA, e não pelo apurado do sistema. A partir de agosto/2026 a loja passa a pagar a comissão em dobro, e a empresa vai reduzir nas premiações a diferença gerada por esse aumento.",
- DEFINIDO=["Os prêmios, vales, INSS e IRRF vieram do holerite de agosto emitido pela Betel Contabilidade. A linha DIFERENÇA fecha em zero para os cinco.",
+ DEFINIDO=["Os prêmios, vales, INSS e IRRF vieram do holerite de agosto emitido pela Betel Contabilidade. A linha DIFERENÇA fecha em zero para todos, exceto INIURLE, cujas horas extras foram corrigidas depois (16 h a 50% + 24 h a 100%).",
            "TRANCOSO PAGA O DOBRO DA COMISSÃO APURADA: a linha COMISSÃO PRODUTOS já multiplica por 2 o valor do InovaFarma (multiplicador na aba PARÂMETROS).",
            "Os incentivos são simples: entram pelo valor apurado, sem dobrar.",
            "Em julho/2026 a comissão foi lançada por média. Com a comissão dobrada a partir de agosto, a empresa vai reduzir nas premiações a diferença.",
@@ -186,6 +187,7 @@ def build(cfg):
          ("Salário do gerente", 5648.41, "Conforme jul/2026."),
          ("Horas mensais (base do salário-hora)", 220, "Salário-hora = salário base ÷ 220."),
          ("Adicional de hora extra", 0.5, "50% sobre a hora normal (hora extra = salário-hora × 1,5)."),
+         ("Adicional de hora extra 100%", 1.0, "100% sobre a hora normal (hora extra = salário-hora × 2)."),
          ("Adicional noturno", 0.2, "20% sobre a hora normal, nas horas entre 22h e 5h."),
          ("Dias do mês para o salário-dia", 30, "Salário-dia = salário base ÷ 30. Usado no feriado trabalhado."),
          ("Multiplicador da comissão", cfg["mult"],
@@ -714,6 +716,7 @@ def build(cfg):
 
     # ---------------------------------------------------------- PONTO
     TIPOS = {"HE50": ("Horas extras 50%", "horas", "HORAS EXTRAS"),
+             "HE100": ("Horas extras 100%", "horas", "HORAS EXTRAS"),
              "NOT": ("Adicional noturno", "horas", "ADICIONAL NOTURNO"),
              "FER": ("Feriado trabalhado (dobra)", "dias", "HORAS EXTRAS"),
              "FER_COMP": ("Feriado com folga compensatória", "dias", "—"),
@@ -751,6 +754,8 @@ def build(cfg):
         linha_sal(pr)
         if tipo == "HE50":
             fu = f"=ROUND(E{pr}/{P_HORAS}*(1+{P_HE}),4)"
+        elif tipo == "HE100":
+            fu = f"=ROUND(E{pr}/{P_HORAS}*(1+PARÂMETROS!$B${PROW['Adicional de hora extra 100%']}),4)"
         elif tipo == "NOT":
             fu = f"=ROUND(E{pr}/{P_HORAS}*{P_NOT},4)"
         elif tipo == "FER":
