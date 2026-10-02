@@ -79,14 +79,21 @@ CENTRO = dict(
  VT6={"ELIANA": -84.29, "GENECIR": -84.29, "THAYANE": -84.29},
  SEM_COMISSAO=["ARIANE", "PEDRO"],
  FERIAS_OBS="RENALDO: férias de 01 a 30/09/2026 — informar o valor do recibo.",
+ VALES={"GENECIR": -500.0},
+ VALES_OBS="GENECIR: adiantamento de R$ 500,00 em 09/09/2026.",
+ VT_COMPRA={"GENECIR": 270.0},
+ VT_COMPRA_OBS="GENECIR: R$ 270,00 de vale-transporte.",
  PONTO=[("GENECIR", "INFO", 0, "Voltou das férias (01 a 30/08/2026) — salário integral em setembro."),
+        ("GENECIR", "FER", 2, "Feriados de 07/09 e 08/09/2026 trabalhados, sem folga compensatória — 1 salário-dia a mais por feriado."),
         ("RENALDO", "INFO", 30, "Férias de 01 a 30/09/2026 — mês inteiro. Salário zerado no holerite; férias e 1/3 vão em recibo próprio.")],
  DEFINIDO=["ARIANE e PEDRO: não recebem comissão sobre vendas.",
-           "GENECIR: voltou das férias, salário integral em setembro.",
+           "GENECIR: voltou das férias, salário integral em setembro. Trabalhou os feriados de 07/09 e 08/09 (R$ 108,06), recebeu adiantamento de R$ 500,00 em 09/09 e R$ 270,00 de vale-transporte.",
            "RENALDO: férias de 01 a 30/09/2026 (mês inteiro) — salário zerado e sem desconto de vale-transporte; férias e 1/3 em recibo próprio.",
            "SERGIO e ANA CELIA seguem como folguistas (diária de R$ 150,00 e R$ 100,00), na aba FOLGUISTAS."],
  PENDENCIAS=["Extrair o relatório de comissões de setembro no InovaFarma e preencher a aba BASE INOVAFARMA SET.26.",
-             "Preencher a quantidade de diárias de SERGIO e ANA CELIA."],
+             "Preencher a quantidade de diárias de SERGIO e ANA CELIA.",
+             "08/09 foi tratado como feriado (GENECIR). Se for feriado municipal, somar 1 em 'Domingos + feriados' na aba PARÂMETROS das 3 lojas: o fator do DSR passa de 0,20 (5/25) para 0,25 (6/24).",
+             "Feriado trabalhado está a 1 salário-dia (R$ 54,03). Em agosto a Betel lançou o feriado como 4h53 de hora extra a 50% (R$ 53,97) — alinhar o critério."],
 )
 
 TRANCOSO = dict(
@@ -389,7 +396,8 @@ def build(cfg):
               kind="calc", bold=True, fill=FILL_TOT)
     r = sec(ws, r, "DESCONTOS  (lançar com sinal negativo)")
     rows["VALES"] = r
-    r = linha(ws, r, "ADIANTAMENTO SALARIAL / VALES", {}, "PREENCHER com os vales adiantados durante setembro.", kind="in")
+    r = linha(ws, r, "ADIANTAMENTO SALARIAL / VALES", cfg.get("VALES", {}),
+              "PREENCHER com os vales adiantados durante setembro. " + cfg.get("VALES_OBS", ""), kind="in")
     rows["VALES INC"] = r
     r = linha(ws, r, "ADIANT. VALES INCENT. E APLIC.",
               {n: (f"=-({get_column_letter(C0+i)}{rows['INC APLIC']}+{get_column_letter(C0+i)}{rows['INC VIT']}"
@@ -421,7 +429,8 @@ def build(cfg):
               kind="calc", bold=True, fill=FILL_LIQ)
     r = sec(ws, r, "INFORMATIVO — PAGO PELA EMPRESA, NÃO ENTRA NO HOLERITE")
     rows["VT"] = r
-    r = linha(ws, r, "VALE TRANSPORTE (compra out/26)", {}, "PREENCHER com as passagens compradas para outubro/2026.", kind="in")
+    r = linha(ws, r, "VALE TRANSPORTE (compra out/26)", cfg.get("VT_COMPRA", {}),
+              "PREENCHER com as passagens compradas. " + cfg.get("VT_COMPRA_OBS", ""), kind="in")
     rows["VA"] = r
     r = linha(ws, r, "VALE ALIMENTAÇÃO FERIADOS E DOMINGOS", {}, "PREENCHER conforme escala de domingos e feriados.", kind="in")
     rows["FERIAS PARTE"] = r
