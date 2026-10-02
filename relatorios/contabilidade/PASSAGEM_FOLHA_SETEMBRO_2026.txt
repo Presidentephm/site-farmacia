@@ -1,0 +1,193 @@
+﻿# Passagem de trabalho — folha de setembro/2026 das 3 farmácias
+
+Cole esta mensagem inteira numa conversa nova do Claude Code, no PC que tem a
+Radmin VPN e o arquivo `db.config` do InovaFarma.
+
+---
+
+## 1. Contexto
+
+Sou dono de três farmácias (Farmácia Tropical). A folha é fechada todo mês,
+com pagamento no dia 5 do mês seguinte. A contabilidade é a **Betel
+Contabilidade**, que emite os holerites a partir de uma planilha que eu mando.
+
+| Loja | Código no banco | Empresa no holerite |
+|---|---|---|
+| CENTRO (matriz) | 1 — FARMACIA TROPICAL | Farmácia Tropical Ltda |
+| ARRAIAL | 2 — FARMACIA TROPICAL MULTI ECONOMICA | Farmácia Tropical Multi Econômica |
+| TRANCOSO | 3 — FARMACIA TROPICAL TRANCOSO | Drogaria Trancoso |
+
+Numa conversa anterior (sessão na nuvem) foi montada toda a folha de
+**agosto/2026**. Agora falta a de **setembro/2026, com pagamento em
+05/10/2026**. A outra sessão não alcançava o banco; esta deve alcançar.
+
+## 2. Onde está o trabalho
+
+Repositório GitHub `presidentephm/site-farmacia`, branch
+`claude/relatorio-contabil-holerite-w665ki`, pasta `relatorios/contabilidade/`.
+Clone ou baixe essa pasta antes de começar.
+
+Arquivos de agosto (prontos, conferidos contra os holerites da Betel):
+
+- `RELATORIO_HOLERITE_AGOSTO_2026_pgto_05-09-2026.xlsx` — Arraial
+- `RELATORIO_HOLERITE_AGOSTO_2026_CENTRO_pgto_05-09-2026.xlsx`
+- `RELATORIO_HOLERITE_AGOSTO_2026_TRANCOSO_pgto_05-09-2026.xlsx`
+- `RESUMO_3_LOJAS_AGOSTO_2026_pgto_05-09-2026.xlsx` — consolidado que vai para a Betel
+- `MEDIA_COMISSOES_12_MESES_FERIAS.xlsx` — média de 12 meses de VALDICK, RENALDO e MANOEL
+- `ANA_CELIA_` e `SERGIO_DIAS_TRABALHADOS_AGOSTO_2026.xlsx` — dias dos folguistas
+
+Arquivos de setembro (esqueleto pronto, **comissões zeradas**):
+
+- `RELATORIO_HOLERITE_SETEMBRO_2026_{ARRAIAL,CENTRO,TRANCOSO}_pgto_05-10-2026.xlsx`
+
+Scripts Python (openpyxl) que geram tudo:
+
+- `gerar_relatorio_agosto_2026.py` — Arraial agosto
+- `gerar_relatorio_centro_trancoso.py` — Centro e Trancoso agosto (o mais atualizado)
+- `gerar_relatorio_setembro_2026.py` — as 3 lojas em setembro
+- `gerar_resumo_3_lojas.py`, `gerar_media_12_meses.py`, `gerar_relatorio_folguistas.py`
+- `README.md` — documentação de critérios e convenções
+
+**Atenção:** os scripts têm caminhos fixos de Linux (`/home/user/site-farmacia/...`
+e `/root/.claude/uploads/...`). No Windows, ajuste os caminhos antes de rodar.
+
+## 3. Acesso ao banco
+
+Leia primeiro o guia: https://claude.ai/artifact/YHMJPHEyHewM1jSay9kQLy
+
+Resumo: Radmin VPN conectada → servidor `26.145.41.136,1433` → banco
+`INOVAFARMA_TROPICAL_FILIAL1`, login somente leitura `claude_leitura`, senha no
+`db.config` ao lado do script `consulta.ps1`. **Somente leitura, base de
+produção.** Não peça a senha. Filtros de venda: `Eliminado = 0 AND Status = 2`.
+
+## 4. O que precisa ser feito
+
+### 4.1 Descobrir onde ficam as comissões no banco
+
+O guia mapeia `Venda` e `Venda_Produto`, mas **não** a comissão. Falta achar:
+
+- a tabela/coluna do **vendedor** de cada venda (o código: 81, 151, 162…)
+- o **% de comissão por grupo de produto** e o **incentivo** por produto
+- a tabela de **grupos** (ETICO, GENERICO NORMAL, INJETAVEIS, PERFUMARIA 1%…)
+
+Vendas da **Farmácia Popular não geram comissão** e não entram no relatório.
+
+### 4.2 Validar contra agosto antes de confiar
+
+Rode a consulta para **01/08/2026 a 31/08/2026** e compare com o relatório oficial
+do InovaFarma. Tem que bater:
+
+| Loja | Vendedor (cód.) | Comissão | Incentivo |
+|---|---|---:|---:|
+| Arraial | DEAN (242) | 975,65 | 199 |
+| Arraial | AGNOR (53) | 909,51 | 189 |
+| Arraial | EDEY (272) | 873,76 | 73 |
+| Arraial | JOEL (181) | 103,31 | 22 |
+| Arraial | VALÉRIA (292) | 1.141,03 | 192 |
+| Arraial | SARA (43) | 368,78 | 10 |
+| Arraial | CAMILA (312) | 241,50 | 0 |
+| Arraial | NATI (212) | 243,14 | 0 |
+| Centro | ELIANA (81) | 1.511,36 | 225 |
+| Centro | RENALDO (151) | 847,94 | 96 |
+| Centro | ARIANE (211) | 257,46 | 125 |
+| Centro | THAY (61) | 57,33 | 10 |
+| Centro | PEDRO (41) | 12,18 | 0 |
+| Centro | GENECIR (241) | 0,62 | 0 |
+| Centro | SERGIO (51) | 128,80 | 40 |
+| Centro | ANA CELIA (131) | 83,56 | 0 |
+| Trancoso | VALDIC (162) | 886,30 | 260 |
+| Trancoso | MANOEL (92) | 825,38 | 49 |
+| Trancoso | UILLIAN (13) | 589,92 | 25 |
+| Trancoso | INIURLE (83) | 235,42 | 0 |
+| Trancoso | TAMILES (103) | 125,58 | 0 |
+
+Totais gerais de agosto: Arraial comissão 4.856,69 / incentivo 685 · Centro
+2.934,17 / 527 · Trancoso 2.662,60 / 334.
+
+Também vale para validar: SARA tem R$ 2,65 de comissão no Centro (código 43).
+O incentivo se divide em **aplicações** (grupo INJETAVEIS), **vitaminas**
+(grupo APLICAÇAO E VITAMINAS INCETIVO) e **outros** (populares, oficinais,
+similar normal).
+
+Se não bater, **não siga**: me mostre a diferença.
+
+### 4.3 Extrair setembro e preencher as planilhas
+
+Com a consulta validada, rode **01/09/2026 a 30/09/2026** e:
+
+1. Preencha o `INOVA` de cada loja em `gerar_relatorio_setembro_2026.py`:
+   `nome: (cód, venda bruta, descontos, venda líquida, comissão, incentivo aplicações, incentivo vitaminas, outros incentivos)`
+2. Gere de novo os 3 arquivos de setembro
+3. Some o saldo da SARA no Centro à folha dela no Arraial (linha COMPLEMENTO / COMISSÃO PDV)
+4. Levante os **dias trabalhados** dos folguistas SERGIO e ANA CELIA (dias com venda no código) e preencha a aba FOLGUISTAS do Centro
+5. Verifique se alguém vendeu pelos códigos de **RENALDO (151) e VALDIC (162)** — os dois estão de férias o mês inteiro
+6. Gere o resumo consolidado das 3 lojas de setembro
+
+**Importante:** o `gerar_relatorio_setembro_2026.py` foi feito antes de algumas
+melhorias. Traga para ele o que já existe em `gerar_relatorio_centro_trancoso.py`:
+linhas DSR SOBRE HORAS EXTRAS, SALÁRIO FAMÍLIA, INSUFICIÊNCIA DE SALDO,
+PRÊMIO COTA GERAL / BONIFICAÇÃO, FÉRIAS PAGAS À PARTE e a conferência
+LÍQUIDO DO HOLERITE (BETEL) + DIFERENÇA.
+
+## 5. Regras da casa
+
+- **Salário** base R$ 1.621,00. Gerentes (DEAN, ARIANE, UILLIAN) R$ 5.648,41.
+- **Não recebem comissão:** DEAN, ARIANE, UILLIAN e PEDRO. GILSON, FABIANA e o
+  UILLIAN no Centro também não. Os incentivos do DEAN são pagos normalmente.
+- **AGNOR**: comissão fixa de R$ 2.000,00 — o complemento sobre o apurado entra
+  na linha COMPLEMENTO / COMISSÃO PDV.
+- **TRANCOSO paga a comissão em DOBRO** desde agosto/2026 (multiplicador 2 na aba
+  PARÂMETROS). Incentivos são simples, sem dobrar. A diferença é compensada
+  reduzindo as premiações.
+- **Incentivos** são pagos em dinheiro durante o mês. Na planilha entram como
+  provento e como desconto (ADIANT. VALES INCENT. E APLIC.), sem mexer no líquido.
+  Não aparecem no holerite da Betel.
+- **Auxílio gerência** R$ 810,50: AGNOR e SARA. **Quebra de caixa** R$ 307,99:
+  VALÉRIA e NATI.
+- **DSR** = (comissão + horas extras) × (domingos + feriados) ÷ dias úteis.
+- **Ponto**: salário-hora = salário ÷ 220. Hora extra = salário-hora × 1,5.
+  Adicional noturno = salário-hora × 20%. Os totais da aba PONTO entram sozinhos
+  nas linhas HORAS EXTRAS e ADICIONAL NOTURNO via SUMIFS.
+- **Folguistas** (Centro, fora do holerite, contas a pagar): SERGIO diária
+  R$ 150,00 e ANA CELIA diária R$ 100,00.
+- Quem passa o mês inteiro de férias: salário zerado e sem desconto de
+  vale-transporte; férias e 1/3 vão em recibo próprio (linha FÉRIAS PAGAS À PARTE).
+
+## 6. Setembro/2026 — o que já se sabe
+
+- **Calendário**: 30 dias, 4 domingos + feriado de 07/09 (segunda) = 5; dias úteis
+  25; **fator DSR 0,200000**. Conferir feriado municipal.
+- **JOEL** (Arraial): férias até 03/09 (já pagas no recibo de agosto), voltou em
+  04/09 → salário proporcional a 27 dias, R$ 1.458,90.
+- **RENALDO** (Centro) e **VALDICK** (Trancoso): férias de 01 a 30/09 — salário
+  zerado, sem desconto de VT. Média de 12 meses para as férias:
+  VALDICK R$ 1.075,20 · RENALDO R$ 949,18 (ver `MEDIA_COMISSOES_12_MESES_FERIAS.xlsx`).
+- **TAMILES** (Trancoso): atestado de 02 a 08/09, abonado — salário integral, sem desconto.
+- **GENECIR** (Centro): voltou das férias, salário integral.
+- **EDEY**: adicional noturno fixo de R$ 350,00 — confirmar com o ponto.
+- Ainda vou passar: ponto de setembro (horas extras, noturno, quem trabalhou
+  dia 07/09), vales, convênio, faltas e prêmios.
+
+## 7. Pendências de agosto ainda abertas
+
+- **DSR sobre hora extra em duplicidade** nos holerites da Betel: a rubrica 420
+  já usa comissão + horas extras e ainda saiu a 057 (DSR/hora extra). R$ 213,68
+  no total — EDEY 51,01, NATI 46,51, VALÉRIA/SARA/CAMILA 10,38 cada, INIURLE
+  85,02. Precisa alinhar com a Betel qual critério fica.
+- **JOEL**: comissão de R$ 103,31 de agosto não entrou no holerite.
+- **PEDRO**: não apareceu no holerite de agosto do Centro.
+
+## 8. Armadilhas técnicas
+
+- Texto de célula começando com `=` vira `#ERROR!` no Google Planilhas.
+- Fórmulas escritas pelo openpyxl não têm valor em cache — o Excel calcula ao abrir.
+- Em CSV gerado no Windows, cuidado com vírgula decimal (ver `InvariantCulture`
+  no guia do banco).
+- Use sempre o código do vendedor, não o nome: há nomes repetidos entre lojas.
+- Cadastro de clientes tem CPF e endereço: não traga dado pessoal sem necessidade.
+
+## 9. Como quero o resultado
+
+Os 3 arquivos de setembro + o resumo das 3 lojas, prontos para mandar à Betel, e
+um resumo curto em português do que mudou e do que ficou pendente. Pergunte
+antes de supor qualquer regra que não esteja aqui.
