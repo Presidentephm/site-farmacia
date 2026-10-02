@@ -155,8 +155,8 @@ LÍQUIDO DO HOLERITE (BETEL) + DIFERENÇA.
 
 ## 6. Setembro/2026 — o que já se sabe
 
-- **Calendário**: 30 dias, 4 domingos + feriado de 07/09 (segunda) = 5; dias úteis
-  25; **fator DSR 0,200000**. Conferir feriado municipal.
+- **Calendário**: 30 dias, 4 domingos + feriados de 07/09 e 08/09 (municipal) = 6; dias úteis
+  24; **fator DSR 0,250000**.
 - **JOEL** (Arraial): férias até 03/09 (já pagas no recibo de agosto), voltou em
   04/09 → salário proporcional a 27 dias, R$ 1.458,90.
 - **RENALDO** (Centro) e **VALDICK** (Trancoso): férias de 01 a 30/09 — salário

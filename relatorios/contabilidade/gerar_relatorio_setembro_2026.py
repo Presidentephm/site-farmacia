@@ -92,7 +92,6 @@ CENTRO = dict(
            "SERGIO e ANA CELIA seguem como folguistas (diária de R$ 150,00 e R$ 100,00), na aba FOLGUISTAS."],
  PENDENCIAS=["Extrair o relatório de comissões de setembro no InovaFarma e preencher a aba BASE INOVAFARMA SET.26.",
              "Preencher a quantidade de diárias de SERGIO e ANA CELIA.",
-             "08/09 foi tratado como feriado (GENECIR). Se for feriado municipal, somar 1 em 'Domingos + feriados' na aba PARÂMETROS das 3 lojas: o fator do DSR passa de 0,20 (5/25) para 0,25 (6/24).",
              "Feriado trabalhado está a 1 salário-dia (R$ 54,03). Em agosto a Betel lançou o feriado como 4h53 de hora extra a 50% (R$ 53,97) — alinhar o critério."],
 )
 
@@ -153,7 +152,7 @@ def build(cfg):
          ("Data de extração do InovaFarma", "a extrair", f"Extrair o relatório da loja {cfg['loja']} no início de outubro/2026 e lançar na aba BASE INOVAFARMA SET.26."),
          ("SEÇÃO", "CALENDÁRIO DO MÊS (base do DSR)", ""),
          ("Dias do mês", 30, "Setembro/2026."),
-         ("Domingos + feriados", 5, "Domingos: 06, 13, 20 e 27/09/2026, mais o feriado de 07/09 (segunda-feira). CONFERIR feriados municipais."),
+         ("Domingos + feriados", 6, "Domingos: 06, 13, 20 e 27/09/2026, mais os feriados de 07/09 (Independência, segunda) e 08/09 (municipal, terça)."),
          ("Dias úteis (inclui sábados)", None, "Dias do mês menos domingos e feriados."),
          ("Fator DSR (domingos ÷ dias úteis)", None, "Domingos ÷ dias úteis. Usado na rubrica REPOUSO REMUNERADO / DSR."),
          ("SEÇÃO", "VALORES FIXOS / RECORRENTES", ""),
@@ -360,7 +359,7 @@ def build(cfg):
     r = linha(ws, r, "REPOUSO REMUNERADO / DSR",
               {n: (f"=ROUND(({get_column_letter(C0+i)}{rows['COMISSÃO TOTAL']}"
                    f"+{get_column_letter(C0+i)}{rows['HORAS EXTRAS']})*{FATOR},2)") for i, n in enumerate(EMP)},
-              "Cálculo: (comissão total + horas extras) × (4 domingos + feriado 07/09) ÷ 25 dias úteis de setembro/2026.", kind="calc")
+              "Cálculo: (comissão total + horas extras) × (4 domingos + feriados de 07/09 e 08/09) ÷ 24 dias úteis de setembro/2026.", kind="calc")
     rows["AUXÍLIO GERÊNCIA"] = r
     r = linha(ws, r, "AUXÍLIO GERÊNCIA", cfg["AUXGER"], "Conforme acordo da loja.", kind="in")
     rows["META CAIXA"] = r
@@ -779,7 +778,7 @@ def build(cfg):
               ("SEC", "APURAÇÃO DO MÊS"),
               ("T", f"Venda bruta geral da loja: R$ {g['bruta']:,.2f} · descontos concedidos: R$ {g['desc']:,.2f} · venda líquida: R$ {g['liq']:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")),
               ("T", f"Comissão apurada no InovaFarma: R$ {g['com']:,.2f} · incentivos: R$ {g['inc']:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")),
-              ("T", "DSR de setembro/2026: 4 domingos + o feriado de 07/09 ÷ 25 dias úteis = fator 0,200000"),
+              ("T", "DSR de setembro/2026: 4 domingos + os feriados de 07/09 e 08/09 (municipal) = 6 ÷ 24 dias úteis = fator 0,250000"),
               ("SEC", "DEFINIÇÕES DA LOJA")]
     for t in cfg["DEFINIDO"]:
         blocos.append(("T", t))

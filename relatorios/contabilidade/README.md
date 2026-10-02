@@ -109,8 +109,8 @@ parâmetros do mês e as ocorrências conhecidas. Comissões e incentivos
 ficam zerados até o relatório do InovaFarma de setembro ser extraído no
 início de outubro e lançado na aba BASE INOVAFARMA SET.26.
 
-Calendário do DSR em setembro: 4 domingos mais o feriado de 07/09
-(segunda-feira) ÷ 25 dias úteis = fator 0,200000.
+Calendário do DSR em setembro: 4 domingos mais os feriados de 07/09
+(Independência) e 08/09 (municipal) ÷ 24 dias úteis = fator 0,250000.
 
 Ocorrências já registradas:
 
