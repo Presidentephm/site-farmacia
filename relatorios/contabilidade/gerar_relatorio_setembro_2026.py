@@ -368,7 +368,7 @@ def build(cfg):
     c = wm.cell(9, 3, '=IF(OR(AND(C7<>"",C7>=C6),UPPER(C8)="SIM"),"SIM","NÃO")')
     c.font = font(10, True); c.fill = FILL_TOT; c.border = BOX; c.alignment = Alignment(horizontal="center")
     hdr = ["FUNCIONÁRIO", "FAIXA", "META CHEIA", "DIAS TRAB.", "META AJUSTADA", "VENDA REALIZADA", "% DA META",
-           "PRÊMIO 80%", "PRÊMIO 100%", "PRÊMIO 120%", "META 1 VOLUME", "META 2 PROD. FOCO",
+           "PRÊMIO 80%", "PRÊMIO 100%", "PRÊMIO 120%", "META 1 VOLUME", "META 2 (INCENTIVO INOVAFARMA)",
            "PRÉ-VENC. VENDIDO", "META PRÉ-V. FARMAC.", "META 3 PRÉ-VENC.", "META 4?",
            "COMISSÃO PERFUMARIA", "META 4 PERFUM.", "TOTAL PRÊMIOS", "OBSERVAÇÃO"]
     HR = 11
@@ -388,6 +388,8 @@ def build(cfg):
                 8: p80, 9: p100, 10: p120,
                 11: (0 if regra == "referencia" else
                      f"=IF(G{r}>=1.2,J{r},IF(G{r}>=1,I{r},IF(G{r}>=0.8,H{r},0)))"),
+                12: (f"=IFERROR(INDEX({BASE}!$J${first}:$J${last},"
+                     f"MATCH(A{r},{BASE}!$B${first}:$B${last},0)),0)"),
                 14: meta_farm,
                 15: (f"=IF(AND(M{r}<>\"\",M{r}>=N{r}),150,0)" if meta_farm else
                      f"=IF(M{r}>=3000,300,IF(M{r}>=2000,200,IF(M{r}>=1000,100,0)))"),
@@ -401,8 +403,10 @@ def build(cfg):
                 c.number_format = MONEY
             if col == 7:
                 c.number_format = "0.0%"
-            if col in (4, 6, 12, 13, 17):
+            if col in (4, 6, 13, 17):
                 c.font = font(10, False, BLUE); c.fill = FILL_IN
+            if col == 12:
+                c.font = font(10, False, GREEN)
             if col in (11, 15, 18):
                 c.fill = FILL_TOT
             if col == 19:
@@ -425,7 +429,7 @@ def build(cfg):
     regras = ["COMO PREENCHER (células amarelas):",
               "VENDA REALIZADA: total vendido no mês pelo código do vendedor (InovaFarma, venda líquida). DIAS TRAB.: dias efetivamente trabalhados — a meta cai na mesma proporção.",
               "META 1 — VOLUME: meta = média dos 3 últimos meses + 8%. 80% da meta paga o prêmio de 80%, 100% paga o de 100% e 120% paga o de 120%, conforme a faixa (A 150/250/500 · B 100/150/300 · C e D 50/80/150).",
-              "META 2 — PRODUTOS FOCO: lançar o valor apurado na semana (vitaminas da campanha, packs, injetáveis, coquetel, brinco, kit ressaca). ATENÇÃO: se o incentivo já vier no relatório do InovaFarma (linhas INCENTIVO do holerite), não lançar de novo aqui.",
+              "META 2 — PRODUTOS FOCO: é paga pelo campo de incentivo do InovaFarma (R$ 10 por item cadastrado no estoque). A coluna puxa o total de incentivos da aba BASE só para mostrar o ganho completo — no holerite ela entra pelas linhas INCENTIVO, e não numa linha de prêmio, para não pagar duas vezes.",
               "META 3 — PRÉ-VENCIDOS: escada mensal por vendedor (acima de R$ 1.000 = 100 · R$ 2.000 = 200 · R$ 3.000 = 300). Farmacêuticos têm regra própria: bateu a meta da coluna META PRÉ-V. FARMAC., recebe R$ 150.",
               "META 4 — PERFUMARIA 130%: meta da LOJA (bloco no topo). Se a loja bater 130% da média ou zerar o estoque, cada vendedora marcada recebe a comissão de perfumaria do mês mais R$ 50 fixos.",
               "Os prêmios entram sozinhos nas linhas PRÊMIO META 1 a 4 do holerite. Fonte: planilha Metas_Equipe_Set2026_v2.xlsx."]
@@ -499,9 +503,6 @@ def build(cfg):
               "Da aba METAS SET.26: venda do mês contra a meta individual (80% / 100% / 120%)."
               + (" Aplicar a redução combinada pela comissão dobrada, se ainda valer." if cfg["mult"] != 1 else ""),
               kind="link")
-    rows["M2"] = r
-    r = linha(ws, r, "PRÊMIO META 2 — PRODUTOS FOCO", premio(12),
-              "Da aba METAS SET.26: vitaminas, packs, injetáveis, coquetel, brinco e kit ressaca.", kind="link")
     rows["PRÊMIO PRÉ-VENCIDOS"] = r
     r = linha(ws, r, "PRÊMIO META 3 — PRÉ-VENCIDOS", premio(15),
               "Da aba METAS SET.26: escada de pré-vencidos (farmacêuticos com regra própria).", kind="link")
@@ -513,7 +514,7 @@ def build(cfg):
     rows["1/3 FÉRIAS"] = r
     r = linha(ws, r, "1/3 CONSTITUCIONAL DE FÉRIAS", {}, "Calculado pela contabilidade sobre o valor das férias.", kind="in")
     rows["INC APLIC"] = r
-    inc_obs = "Incentivo de injetáveis apurado no InovaFarma."
+    inc_obs = "Incentivo de injetáveis apurado no InovaFarma. As linhas de incentivo incluem a META 2 (produtos foco) do programa de metas."
     if cfg["mult"] != 1:
         inc_obs += " Incentivo é simples: NÃO entra em dobro."
     r = linha(ws, r, "INCENTIVO APLICAÇÕES", {n: f"={BASE}!G{BROW[n]}" for n in EMP}, inc_obs, kind="link")
@@ -604,7 +605,6 @@ def build(cfg):
              ("AUXÍLIO GERÊNCIA", "AUXÍLIO GERÊNCIA", "Provento"),
              ("META CAIXA", "ADICIONAL PRÊMIO META CAIXA", "Provento"),
              ("PRÊMIO COTA GERAL", "PRÊMIO META 1 — VOLUME", "Provento"),
-             ("M2", "PRÊMIO META 2 — PRODUTOS FOCO", "Provento"),
              ("PRÊMIO PRÉ-VENCIDOS", "PRÊMIO META 3 — PRÉ-VENCIDOS", "Provento"),
              ("M4", "PRÊMIO META 4 — PERFUMARIA 130%", "Provento"),
              ("FÉRIAS", "FÉRIAS", "Provento"),
@@ -668,7 +668,6 @@ def build(cfg):
               ("L", "Auxílio gerência", rows["AUXÍLIO GERÊNCIA"]),
               ("L", "Adicional prêmio meta caixa", rows["META CAIXA"]),
               ("L", "Prêmio meta 1 — volume", rows["PRÊMIO COTA GERAL"]),
-              ("L", "Prêmio meta 2 — produtos foco", rows["M2"]),
               ("L", "Prêmio meta 3 — pré-vencidos", rows["PRÊMIO PRÉ-VENCIDOS"]),
               ("L", "Prêmio meta 4 — perfumaria", rows["M4"]),
               ("L", "Férias", rows["FÉRIAS"]),
