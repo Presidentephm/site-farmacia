@@ -136,7 +136,7 @@ TRANCOSO = dict(
         ("UILLIAN", "A", 29000, 30, "normal", 940, False, "Farmacêutico: na Meta 3 vale a regra própria (equipe + 30%)."),
         ("MANOEL", "A", 24000, 30, "normal", None, False, ""),
         ("INIURLE", "B", 16000, 30, "normal", None, True, ""),
-        ("TAMILES", "B", 12000, 23, "normal", None, True, "Atestado de 02 a 08/09: 23 dias trabalhados. Ajustar se o atestado contar como dia trabalhado.")],
+        ("TAMILES", "B", 12000, 30, "normal", None, True, "Atestado de 02 a 08/09 abonado: conta como dia trabalhado, meta cheia.")],
  PERF_LOJA=(10923.65, 14200),
  DEFINIDO=["TRANCOSO PAGA O DOBRO DA COMISSÃO APURADA: a linha COMISSÃO PRODUTOS já multiplica por 2 o valor do InovaFarma.",
            "Os incentivos são simples: entram pelo valor apurado, sem dobrar.",
