@@ -60,7 +60,7 @@ OBS_SET = {
  "ARIANE": "Não recebe comissão.",
  "GENECIR": "Feriados de 07/09 e 08/09 trabalhados (R$ 108,06). Adiantamento de R$ 500,00 em 09/09. VT de R$ 270,00.",
  "RENALDO": "Férias de 01 a 30/09 — salário zerado; férias e 1/3 em recibo próprio.",
- "PEDRO": "Registrado na matriz. Salário corrigido para R$ 4.000,00. Não recebe comissão. O holerite de agosto dele não veio da Betel — pedir junto.",
+ "PEDRO": "Registrado na matriz. Nesta folha segue com R$ 1.621,00; o salário de R$ 4.000,00 começa na competência de outubro (pagamento 05/11). Não recebe comissão. O holerite de agosto dele não veio da Betel — pedir junto.",
  "UILLIAN": "Não recebe comissão.",
  "VALDICK": "Férias de 01 a 30/09 — salário zerado; férias e 1/3 em recibo próprio.",
  "TAMILES": "Atestado de 02 a 08/09, abonado — sem desconto.",
@@ -191,7 +191,8 @@ r += 2
 avisos = [
  "ESTE RESUMO AINDA É PARCIAL — falta, antes de mandar à Betel:",
  "• Comissões e incentivos de setembro: extrair o relatório do InovaFarma (01/09 a 30/09) das 3 lojas. Só o AGNOR já aparece com comissão, porque o fixo de R$ 2.000,00 não depende do apurado.",
- "• Prêmios (cota geral e pré-vencidos), vales adiantados, convênio e faltas — por enquanto só o adiantamento do GENECIR está lançado.",
+ "• Prêmios do programa de metas de setembro (Metas 1 a 4): as metas de cada um já estão na aba METAS SET.26 de cada loja; os prêmios saem sozinhos quando a venda realizada, o pré-vencido vendido, a Meta 2 e a perfumaria da loja forem lançados.",
+ "• Vales adiantados, convênio e faltas — por enquanto só o adiantamento do GENECIR está lançado.",
  "• Ponto de setembro: horas extras e quem mais trabalhou nos feriados de 07/09 e 08/09.",
  "• INSS e IRRF são calculados pela Betel.",
  "• Diárias dos folguistas SERGIO e ANA CELIA (contas a pagar, fora do holerite).",

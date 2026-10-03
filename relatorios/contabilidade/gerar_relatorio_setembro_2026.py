@@ -30,6 +30,11 @@ BLUE, GREEN = "0000FF", "008000"
 # com o relatório do InovaFarma extraído no início de outubro/2026.
 ZERO = (0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
+# Programa de metas de setembro/2026 (planilha Metas_Equipe_Set2026_v2.xlsx).
+# (nome, faixa, meta cheia, dias trabalhados, regra Meta 1, meta pré-venc. farmacêutico, participa Meta 4, obs)
+FAIXAS = {"A": (150, 250, 500), "B": (100, 150, 300), "C": (50, 80, 150), "D": (50, 80, 150)}
+FAIXA_NOME = {"A": "A - Vendedor pleno", "B": "B - Meia jornada", "C": "C - Apoio / balcão", "D": "D - Folguista"}
+
 ARRAIAL = dict(
  loja="ARRAIAL", arquivo="RELATORIO_HOLERITE_SETEMBRO_2026_ARRAIAL_pgto_05-10-2026.xlsx",
  mult=1.0,
@@ -49,6 +54,15 @@ ARRAIAL = dict(
  COM_FIXA={"AGNOR": 2000.00},
  PONTO=[("EDEY", "VALOR", 350.0, "Adicional noturno lançado como valor fixo desde jul/26 — CONFERIR com o apontamento do ponto."),
         ("JOEL", "INFO", 3, "Férias de 01 a 03/09/2026 (fim do período iniciado em 04/08), já pagas no recibo de agosto — nada a pagar aqui. Ele voltou ao trabalho em 04/09.")],
+ METAS=[("JOEL", "A", 40000, 27, "normal", None, False, "Férias até 03/09: 27 dias trabalhados."),
+        ("VALÉRIA", "A", 38000, 30, "normal", None, False, ""),
+        ("EDEY", "A", 32000, 30, "normal", None, False, ""),
+        ("AGNOR", "A", 31000, 30, "referencia", 1590, False, "Premiação diferenciada (acordo à parte): Meta 1 só como referência."),
+        ("DEAN", "A", 27000, 30, "referencia", 1590, False, "Premiação diferenciada (acordo à parte): Meta 1 só como referência."),
+        ("SARA", "A", 27000, 30, "normal", None, True, ""),
+        ("NATI", "A", 26000, 30, "normal", None, True, ""),
+        ("CAMILA", "B", 15000, 30, "normal", None, True, "")],
+ PERF_LOJA=(31083.80, 40400),
  DEFINIDO=["DEAN: não recebe comissão sobre vendas — a rubrica fica zerada.",
            "AGNOR: comissão fixa de R$ 2.000,00 — o complemento sobre o apurado é calculado sozinho.",
            "JOEL: salário proporcional a 27 dias (R$ 1.458,90), porque as férias foram até 03/09 e ele voltou em 04/09.",
@@ -74,7 +88,7 @@ CENTRO = dict(
              ("ANA CELIA", "131", 100.00, 0.0, 0.0, 0.0)],
  GERAL=dict(bruta=0.0, desc=0.0, liq=0.0, com=0.0, inc=0.0),
  SALARIO={"ARIANE": 5648.41, "ELIANA": 1621.0, "GENECIR": 1621.0,
-          "RENALDO": 0.0, "THAYANE": 1621.0, "PEDRO": 4000.0},
+          "RENALDO": 0.0, "THAYANE": 1621.0, "PEDRO": 1621.0},
  NOTURNO={}, AUXGER={}, METACX={},
  VT6={"ELIANA": -84.29, "GENECIR": -84.29, "THAYANE": -84.29},
  SEM_COMISSAO=["ARIANE", "PEDRO"],
@@ -86,8 +100,15 @@ CENTRO = dict(
  PONTO=[("GENECIR", "INFO", 0, "Voltou das férias (01 a 30/08/2026) — salário integral em setembro."),
         ("GENECIR", "FER", 2, "Feriados de 07/09 e 08/09/2026 trabalhados, sem folga compensatória — 1 salário-dia a mais por feriado."),
         ("RENALDO", "INFO", 30, "Férias de 01 a 30/09/2026 — mês inteiro. Salário zerado no holerite; férias e 1/3 vão em recibo próprio.")],
+ METAS=[("ELIANA", "A", 43000, 30, "normal", None, False, ""),
+        ("RENALDO", "A", 31000, 0, "normal", None, False, "Férias de 01 a 30/09: sem dias trabalhados, fica fora da apuração."),
+        ("ARIANE", "B", 12000, 30, "normal", 1040, False, "Farmacêutica: na Meta 3 vale a regra própria (equipe + 30%)."),
+        ("GENECIR", "B", 9000, 30, "normal", None, True, ""),
+        ("THAYANE", "C", 7000, 30, "normal", None, True, ""),
+        ("SERGIO", "D", 3500, None, "normal", None, False, "Folguista: meta proporcional aos dias trabalhados — preencher os dias. Prêmio vai para o contas a pagar, fora do holerite.")],
+ PERF_LOJA=(9455.09, 12300),
  DEFINIDO=["ARIANE e PEDRO: não recebem comissão sobre vendas.",
-           "PEDRO: registrado na empresa matriz; salário de R$ 4.000,00 a partir de setembro/2026.",
+           "PEDRO: registrado na empresa matriz. Nesta folha (pagamento 05/10) segue com R$ 1.621,00; o salário de R$ 4.000,00 começa na competência de outubro (pagamento 05/11/2026).",
            "GENECIR: voltou das férias, salário integral em setembro. Trabalhou os feriados de 07/09 e 08/09 (R$ 108,06), recebeu adiantamento de R$ 500,00 em 09/09 e R$ 270,00 de vale-transporte.",
            "RENALDO: férias de 01 a 30/09/2026 (mês inteiro) — salário zerado e sem desconto de vale-transporte; férias e 1/3 em recibo próprio.",
            "SERGIO e ANA CELIA seguem como folguistas (diária de R$ 150,00 e R$ 100,00), na aba FOLGUISTAS."],
@@ -111,6 +132,12 @@ TRANCOSO = dict(
  FERIAS_OBS="VALDICK: férias de 01 a 30/09/2026 — informar o valor do recibo.",
  PONTO=[("VALDICK", "INFO", 30, "Férias de 01 a 30/09/2026 — mês inteiro. Salário zerado no holerite; férias e 1/3 vão em recibo próprio."),
         ("TAMILES", "ATESTADO", 7, "Atestado médico de 02 a 08/09/2026, entregue em 02/09. Até 15 dias é abonado pela empresa: falta justificada, SEM desconto de salário nem de DSR. Anexar o atestado à pasta da funcionária.")],
+ METAS=[("VALDICK", "A", 31000, 0, "normal", None, False, "Férias de 01 a 30/09: sem dias trabalhados, fica fora da apuração."),
+        ("UILLIAN", "A", 29000, 30, "normal", 940, False, "Farmacêutico: na Meta 3 vale a regra própria (equipe + 30%)."),
+        ("MANOEL", "A", 24000, 30, "normal", None, False, ""),
+        ("INIURLE", "B", 16000, 30, "normal", None, True, ""),
+        ("TAMILES", "B", 12000, 23, "normal", None, True, "Atestado de 02 a 08/09: 23 dias trabalhados. Ajustar se o atestado contar como dia trabalhado.")],
+ PERF_LOJA=(10923.65, 14200),
  DEFINIDO=["TRANCOSO PAGA O DOBRO DA COMISSÃO APURADA: a linha COMISSÃO PRODUTOS já multiplica por 2 o valor do InovaFarma.",
            "Os incentivos são simples: entram pelo valor apurado, sem dobrar.",
            "A diferença gerada pela comissão dobrada é reduzida nas premiações.",
@@ -315,6 +342,108 @@ def build(cfg):
         return r + 1
 
     # ---------------------------------------------------------- HOLERITE AGO
+    # ---------------------------------------------------------- METAS
+    wm = wb.create_sheet("METAS SET.26")
+    wm.sheet_view.showGridLines = False
+    larg = [13, 18, 12, 9, 12, 13, 8, 9, 9, 9, 11, 12, 13, 12, 11, 8, 13, 11, 12, 52]
+    for i, w in enumerate(larg, 1):
+        wm.column_dimensions[get_column_letter(i)].width = w
+    title_block(wm, "PROGRAMA DE METAS E PREMIAÇÃO — SETEMBRO/2026",
+                f"Loja {cfg['loja']} · as 4 metas somam · pagamento junto com o holerite de 05/10/2026", 20)
+    media_perf, meta_perf = cfg["PERF_LOJA"]
+    wm.cell(4, 1, "META 4 — PERFUMARIA DA LOJA").font = font(10, True, "1F3864")
+    for i, (rot, val, inp) in enumerate([("Média mensal (mar-ago/26)", media_perf, False),
+                                         ("Meta = 130% da média", meta_perf, False),
+                                         ("Perfumaria vendida no mês", None, True),
+                                         ("Zerou o estoque? (SIM/NÃO)", "NÃO", True)]):
+        wm.cell(5 + i, 1, rot).font = font(9)
+        wm.merge_cells(start_row=5 + i, start_column=1, end_row=5 + i, end_column=2)
+        c = wm.cell(5 + i, 3, val); c.border = BOX
+        if isinstance(val, float) or isinstance(val, int) or inp and i == 2:
+            c.number_format = MONEY
+        if inp:
+            c.font = font(10, False, BLUE); c.fill = FILL_IN
+    wm.cell(9, 1, "A LOJA BATEU A META 4?").font = font(10, True)
+    wm.merge_cells(start_row=9, start_column=1, end_row=9, end_column=2)
+    c = wm.cell(9, 3, '=IF(OR(AND(C7<>"",C7>=C6),UPPER(C8)="SIM"),"SIM","NÃO")')
+    c.font = font(10, True); c.fill = FILL_TOT; c.border = BOX; c.alignment = Alignment(horizontal="center")
+    hdr = ["FUNCIONÁRIO", "FAIXA", "META CHEIA", "DIAS TRAB.", "META AJUSTADA", "VENDA REALIZADA", "% DA META",
+           "PRÊMIO 80%", "PRÊMIO 100%", "PRÊMIO 120%", "META 1 VOLUME", "META 2 PROD. FOCO",
+           "PRÉ-VENC. VENDIDO", "META PRÉ-V. FARMAC.", "META 3 PRÉ-VENC.", "META 4?",
+           "COMISSÃO PERFUMARIA", "META 4 PERFUM.", "TOTAL PRÊMIOS", "OBSERVAÇÃO"]
+    HR = 11
+    for i, h in enumerate(hdr, 1):
+        c = wm.cell(HR, i, h); c.font = font(8, True, "FFFFFF"); c.fill = FILL_HDR
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True); c.border = BOX
+    wm.row_dimensions[HR].height = 32
+    wm.freeze_panes = f"B{HR+1}"
+    r = HR + 1
+    MROW = {}
+    for nome, fx, meta, dias, regra, meta_farm, m4, obs in cfg["METAS"]:
+        p80, p100, p120 = FAIXAS[fx]
+        MROW[nome] = r
+        vals = {1: nome, 2: FAIXA_NOME[fx], 3: meta, 4: dias,
+                5: f"=ROUND(C{r}*IF(D{r}=\"\",0,D{r})/30,2)",
+                7: f"=IF(E{r}>0,IF(F{r}=\"\",0,F{r})/E{r},0)",
+                8: p80, 9: p100, 10: p120,
+                11: (0 if regra == "referencia" else
+                     f"=IF(G{r}>=1.2,J{r},IF(G{r}>=1,I{r},IF(G{r}>=0.8,H{r},0)))"),
+                14: meta_farm,
+                15: (f"=IF(AND(M{r}<>\"\",M{r}>=N{r}),150,0)" if meta_farm else
+                     f"=IF(M{r}>=3000,300,IF(M{r}>=2000,200,IF(M{r}>=1000,100,0)))"),
+                16: "SIM" if m4 else "—",
+                18: (f"=IF(AND(P{r}=\"SIM\",$C$9=\"SIM\"),IF(Q{r}=\"\",0,Q{r})+50,0)"),
+                19: f"=ROUND(K{r}+IF(L{r}=\"\",0,L{r})+O{r}+R{r},2)",
+                20: obs}
+        for col in range(1, 21):
+            c = wm.cell(r, col, vals.get(col)); c.border = BOX
+            if col in (3, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19):
+                c.number_format = MONEY
+            if col == 7:
+                c.number_format = "0.0%"
+            if col in (4, 6, 12, 13, 17):
+                c.font = font(10, False, BLUE); c.fill = FILL_IN
+            if col in (11, 15, 18):
+                c.fill = FILL_TOT
+            if col == 19:
+                c.font = font(10, True); c.fill = FILL_LIQ
+            if col == 20:
+                c.font = font(8, it=True); c.alignment = Alignment(wrap_text=True, vertical="center")
+            if col in (2, 16):
+                c.font = font(9); c.alignment = Alignment(horizontal="center")
+        wm.cell(r, 1).font = font(10, True)
+        r += 1
+    M_INI, M_FIM = HR + 1, r - 1
+    wm.cell(r, 1, "TOTAL").font = font(10, True)
+    for col in (11, 12, 15, 18, 19):
+        L = get_column_letter(col)
+        c = wm.cell(r, col, f"=SUM({L}{M_INI}:{L}{M_FIM})"); c.number_format = MONEY; c.font = font(10, True)
+    for col in range(1, 21):
+        wm.cell(r, col).fill = FILL_TOT; wm.cell(r, col).border = BOX
+    wm.auto_filter.ref = f"A{HR}:T{M_FIM}"
+    r += 2
+    regras = ["COMO PREENCHER (células amarelas):",
+              "VENDA REALIZADA: total vendido no mês pelo código do vendedor (InovaFarma, venda líquida). DIAS TRAB.: dias efetivamente trabalhados — a meta cai na mesma proporção.",
+              "META 1 — VOLUME: meta = média dos 3 últimos meses + 8%. 80% da meta paga o prêmio de 80%, 100% paga o de 100% e 120% paga o de 120%, conforme a faixa (A 150/250/500 · B 100/150/300 · C e D 50/80/150).",
+              "META 2 — PRODUTOS FOCO: lançar o valor apurado na semana (vitaminas da campanha, packs, injetáveis, coquetel, brinco, kit ressaca). ATENÇÃO: se o incentivo já vier no relatório do InovaFarma (linhas INCENTIVO do holerite), não lançar de novo aqui.",
+              "META 3 — PRÉ-VENCIDOS: escada mensal por vendedor (acima de R$ 1.000 = 100 · R$ 2.000 = 200 · R$ 3.000 = 300). Farmacêuticos têm regra própria: bateu a meta da coluna META PRÉ-V. FARMAC., recebe R$ 150.",
+              "META 4 — PERFUMARIA 130%: meta da LOJA (bloco no topo). Se a loja bater 130% da média ou zerar o estoque, cada vendedora marcada recebe a comissão de perfumaria do mês mais R$ 50 fixos.",
+              "Os prêmios entram sozinhos nas linhas PRÊMIO META 1 a 4 do holerite. Fonte: planilha Metas_Equipe_Set2026_v2.xlsx."]
+    if cfg["mult"] != 1:
+        regras.append("TRANCOSO: se ainda valer a redução combinada para compensar a comissão dobrada, ajustar o prêmio manualmente no holerite.")
+    for t in regras:
+        wm.merge_cells(start_row=r, start_column=1, end_row=r, end_column=20)
+        c = wm.cell(r, 1, t); c.font = font(9, t.endswith(":"), "1F3864" if t.endswith(":") else "000000")
+        c.alignment = Alignment(wrap_text=True, vertical="center")
+        wm.row_dimensions[r].height = 22
+        r += 1
+
+    def premio(col):
+        L = get_column_letter(col)
+        return {n: (f"=IFERROR(INDEX('METAS SET.26'!${L}${M_INI}:${L}${M_FIM},"
+                    f"MATCH({get_column_letter(C0+i)}$4,'METAS SET.26'!$A${M_INI}:$A${M_FIM},0)),0)")
+                for i, n in enumerate(EMP)}
+
     ws = wb.create_sheet("HOLERITE SET.26")
     r = cabecalho(ws, "RELATÓRIO PARA A CONTABILIDADE — LANÇAMENTO EM HOLERITE",
                   f"Loja {cfg['loja']} · competência SETEMBRO/2026 (01/08 a 31/08/2026) · pagamento em 05/09/2026")
@@ -366,12 +495,19 @@ def build(cfg):
     rows["META CAIXA"] = r
     r = linha(ws, r, "ADICIONAL PRÊMIO META CAIXA", cfg["METACX"], "Conforme apuração do caixa.", kind="in")
     rows["PRÊMIO COTA GERAL"] = r
-    obs_cota = "PREENCHER conforme a tabela de metas da loja (aba METAS da planilha original)."
-    if cfg["mult"] != 1:
-        obs_cota += " Lançar já com a redução combinada para compensar o aumento da comissão dobrada."
-    r = linha(ws, r, "PRÊMIO COTA GERAL", {}, obs_cota, kind="in", fill=FILL_CONF if cfg["mult"] != 1 else None)
+    r = linha(ws, r, "PRÊMIO META 1 — VOLUME", premio(11),
+              "Da aba METAS SET.26: venda do mês contra a meta individual (80% / 100% / 120%)."
+              + (" Aplicar a redução combinada pela comissão dobrada, se ainda valer." if cfg["mult"] != 1 else ""),
+              kind="link")
+    rows["M2"] = r
+    r = linha(ws, r, "PRÊMIO META 2 — PRODUTOS FOCO", premio(12),
+              "Da aba METAS SET.26: vitaminas, packs, injetáveis, coquetel, brinco e kit ressaca.", kind="link")
     rows["PRÊMIO PRÉ-VENCIDOS"] = r
-    r = linha(ws, r, "PRÊMIO PRÉ-VENCIDOS", {}, "PREENCHER conforme a apuração de pré-vencidos de setembro.", kind="in")
+    r = linha(ws, r, "PRÊMIO META 3 — PRÉ-VENCIDOS", premio(15),
+              "Da aba METAS SET.26: escada de pré-vencidos (farmacêuticos com regra própria).", kind="link")
+    rows["M4"] = r
+    r = linha(ws, r, "PRÊMIO META 4 — PERFUMARIA 130%", premio(18),
+              "Da aba METAS SET.26: se a loja bateu, comissão de perfumaria em dobro + R$ 50 fixos.", kind="link")
     rows["FÉRIAS"] = r
     r = linha(ws, r, "FÉRIAS (DIAS GOZADOS)", {}, "PREENCHER se houve férias no mês; informar o período.", kind="in")
     rows["1/3 FÉRIAS"] = r
@@ -467,8 +603,10 @@ def build(cfg):
              ("DSR", "REPOUSO REMUNERADO / DSR", "Provento"),
              ("AUXÍLIO GERÊNCIA", "AUXÍLIO GERÊNCIA", "Provento"),
              ("META CAIXA", "ADICIONAL PRÊMIO META CAIXA", "Provento"),
-             ("PRÊMIO COTA GERAL", "PRÊMIO COTA GERAL", "Provento"),
-             ("PRÊMIO PRÉ-VENCIDOS", "PRÊMIO PRÉ-VENCIDOS", "Provento"),
+             ("PRÊMIO COTA GERAL", "PRÊMIO META 1 — VOLUME", "Provento"),
+             ("M2", "PRÊMIO META 2 — PRODUTOS FOCO", "Provento"),
+             ("PRÊMIO PRÉ-VENCIDOS", "PRÊMIO META 3 — PRÉ-VENCIDOS", "Provento"),
+             ("M4", "PRÊMIO META 4 — PERFUMARIA 130%", "Provento"),
              ("FÉRIAS", "FÉRIAS", "Provento"),
              ("1/3 FÉRIAS", "1/3 CONSTITUCIONAL DE FÉRIAS", "Provento"),
              ("INC APLIC", "INCENTIVO APLICAÇÕES", "Provento"),
@@ -529,8 +667,10 @@ def build(cfg):
               ("L", "Repouso remunerado / DSR", rows["DSR"]),
               ("L", "Auxílio gerência", rows["AUXÍLIO GERÊNCIA"]),
               ("L", "Adicional prêmio meta caixa", rows["META CAIXA"]),
-              ("L", "Prêmio cota geral", rows["PRÊMIO COTA GERAL"]),
-              ("L", "Prêmio pré-vencidos", rows["PRÊMIO PRÉ-VENCIDOS"]),
+              ("L", "Prêmio meta 1 — volume", rows["PRÊMIO COTA GERAL"]),
+              ("L", "Prêmio meta 2 — produtos foco", rows["M2"]),
+              ("L", "Prêmio meta 3 — pré-vencidos", rows["PRÊMIO PRÉ-VENCIDOS"]),
+              ("L", "Prêmio meta 4 — perfumaria", rows["M4"]),
               ("L", "Férias", rows["FÉRIAS"]),
               ("L", "1/3 constitucional de férias", rows["1/3 FÉRIAS"]),
               ("L", "Incentivo aplicações", rows["INC APLIC"]),
@@ -785,7 +925,7 @@ def build(cfg):
         blocos.append(("T", t))
     blocos.append(("SEC", "PENDÊNCIAS — CONFIRMAR ANTES DE ENVIAR"))
     for t in ["Horas extras, adicional noturno e feriados trabalhados de setembro — lançar na aba PONTO SET.26.",
-              "Prêmio cota geral e prêmio pré-vencidos, conforme a tabela de metas da loja.",
+              "Prêmios do programa de metas: lançar na aba METAS SET.26 a venda realizada, os dias trabalhados, o pré-vencido vendido, a Meta 2 e a perfumaria da loja.",
               "Vales adiantados, convênio e faltas de agosto.",
               "Férias, afastamentos e admissões que mudem o salário do mês."] + cfg["PENDENCIAS"]:
         blocos.append(("P", t))
@@ -797,6 +937,7 @@ def build(cfg):
                ("T", "LISTA CONTABILIDADE — os mesmos lançamentos em formato de lista."),
                ("T", "BASE INOVAFARMA SET.26 — apuração de comissões e incentivos por vendedor."),
                ("T", "PARÂMETROS — calendário do mês, fator do DSR e valores fixos."),
+               ("T", "METAS SET.26 — programa de metas de setembro (4 metas), com o prêmio de cada um calculado e ligado ao holerite."),
                ("T", "PONTO SET.26 — horas extras, adicional noturno e feriado trabalhado; alimenta o holerite.")]
     if cfg.get("FOLGUISTAS"):
         blocos.append(("T", "FOLGUISTAS — diárias de SERGIO e ANA CELIA para o contas a pagar (fora do holerite)."))
