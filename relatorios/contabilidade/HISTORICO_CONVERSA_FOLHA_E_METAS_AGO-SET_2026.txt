@@ -1,0 +1,219 @@
+﻿HISTÓRICO DA CONVERSA — FOLHA DE PAGAMENTO E PROGRAMA DE METAS
+Farmácia Tropical · lojas Centro (matriz), Arraial e Trancoso
+Período da conversa: 03/09/2026 a 04/10/2026
+
+Observação: este é um registro organizado do que foi pedido, decidido e
+produzido ao longo da conversa — não é a transcrição palavra por palavra.
+Os valores citados são os que constam nas planilhas geradas.
+
+======================================================================
+1. LOJAS E EMPRESAS
+======================================================================
+
+  Loja              Código no banco   Empresa no holerite (Betel)
+  ----------------  ---------------   ---------------------------------
+  Centro (matriz)   1                 Farmácia Tropical Ltda
+  Arraial           2                 Farmácia Tropical Multi Econômica
+  Trancoso          3                 Drogaria Trancoso
+
+Contabilidade: Betel Contabilidade. Sistema: InovaFarma.
+Pagamento da folha: dia 5 do mês seguinte à competência.
+
+======================================================================
+2. LINHA DO TEMPO DO QUE FOI FEITO
+======================================================================
+
+03/09 — Folha de AGOSTO (pagamento 05/09)
+  - Recebida a planilha de comissões do Arraial e o relatório de
+    comissões do InovaFarma de agosto. A planilha de julho foi
+    reorganizada e a de agosto refeita.
+  - Encontrados erros na planilha de julho: DSR calculado com o
+    calendário de agosto (5/26 em vez de 4/27) e somas do saldo final
+    pulando linhas.
+  - Definições do Arraial: AGNOR com comissão fixa de R$ 2.000,00; JOEL
+    de férias (acordo interno de 04/08 a 04/09; recibo saiu de 01 a
+    31/08); CAMILA recém-contratada; DEAN não recebe comissão, mas
+    recebe os incentivos.
+  - Criada a aba GANHOS DO COLABORADOR (demonstrativo individual com
+    lista suspensa) e filtros em todas as abas.
+  - Feitas as lojas Centro e Trancoso no mesmo modelo.
+  - Trancoso paga a comissão em DOBRO; incentivos simples. Julho tinha
+    sido lançado por média; a diferença da comissão dobrada seria
+    reduzida nas premiações.
+  - Centro: GENECIR de férias de 01 a 30/08; SERGIO (diária R$ 150) e
+    ANA CELIA (diária R$ 100) são folguistas, pagos pelo contas a
+    pagar; PEDRO, FABIANA, UILLIAN e GILSON não recebem comissão; o
+    saldo da SARA no Centro foi somado à folha dela no Arraial.
+  - Apontamento de ponto de agosto: EDEY 24 h extras; NATI 17 h extras
+    noturnas e feriado 15/08; CAMILA, SARA e VALÉRIA feriado 15/08;
+    VALÉRIA 2 e AGNOR 3 madrugadas (8 h cada, com folga, só adicional
+    noturno); DEAN feriado com folga compensatória; INIURLE (Trancoso)
+    40 h extras — depois corrigido para 16 h a 50% + 24 h a 100%.
+  - Atestado da TAMILES (02 a 08/09) registrado para setembro.
+  - Média de 12 meses de comissão para férias: VALDICK R$ 1.075,20 e
+    RENALDO R$ 949,18 (férias de 01 a 30/09); MANOEL R$ 639,50 (férias
+    de maio).
+  - Holerites da Betel lidos e lançados: o líquido da planilha bateu em
+    17 dos 19 funcionários. Total líquido de agosto: R$ 39.723,92.
+  - Levantados os dias trabalhados dos folguistas em agosto: ANA CELIA
+    12 dias (R$ 1.200,00); SERGIO 7 dias com venda, 5 com movimento
+    efetivo.
+
+01 a 04/10 — Folha de SETEMBRO (pagamento 05/10)
+  - Montada a folha de setembro das 3 lojas e uma passagem de trabalho
+    para continuar no PC com acesso ao banco do InovaFarma.
+  - 08/09 confirmado como feriado municipal: DSR de setembro passa a
+    6 ÷ 24 = 0,25.
+  - GENECIR: feriados de 07 e 08/09 trabalhados, adiantamento de
+    R$ 500,00 em 09/09 e R$ 270,00 de vale-transporte.
+  - PEDRO: registrado na matriz. Fica com R$ 1.621,00 nesta folha; o
+    salário de R$ 4.000,00 começa na competência de outubro
+    (pagamento 05/11).
+  - Recebida a planilha Metas_Equipe_Set2026_v2.xlsx e lançado o
+    PROGRAMA DE METAS de setembro (ver seção 4).
+
+======================================================================
+3. REGRAS DA CASA
+======================================================================
+
+  - Salário base R$ 1.621,00. Gerentes (DEAN, ARIANE, UILLIAN)
+    R$ 5.648,41.
+  - Não recebem comissão: DEAN, ARIANE, UILLIAN e PEDRO (e GILSON,
+    FABIANA e UILLIAN pelo Centro). Os incentivos do DEAN são pagos.
+  - AGNOR: comissão fixa de R$ 2.000,00.
+  - Trancoso: comissão em dobro desde agosto/2026; incentivos simples.
+  - Incentivos: pagos em dinheiro no mês; na planilha entram como
+    provento e como desconto, sem mexer no líquido.
+  - Auxílio gerência R$ 810,50 (AGNOR e SARA). Quebra de caixa
+    R$ 307,99 (VALÉRIA e NATI).
+  - DSR = (comissão + horas extras) × (domingos + feriados) ÷ dias úteis.
+  - Salário-hora = salário ÷ 220. Hora extra 50% = hora × 1,5; 100% =
+    hora × 2. Adicional noturno = hora × 20%. Feriado trabalhado sem
+    folga = 1 salário-dia a mais.
+  - Mês inteiro de férias: salário zerado, sem desconto de
+    vale-transporte; férias e 1/3 em recibo à parte.
+  - Atestado de até 15 dias é abonado, sem desconto.
+
+======================================================================
+4. PROGRAMA DE METAS — SETEMBRO/2026
+======================================================================
+
+Fonte: planilha Metas_Equipe_Set2026_v2.xlsx. As 4 metas somam e são
+pagas junto com o holerite do mês seguinte, discriminadas por meta.
+Em cada relatório de setembro há uma aba METAS SET.26, ligada ao
+holerite.
+
+META 1 — VOLUME (mensal)
+  Meta = média dos 3 últimos meses + 8%, ajustada pelos dias
+  trabalhados. Prêmio por faixa ao atingir 80% / 100% / 120%:
+    Faixa A (meta >= R$ 20 mil) ......... 150 / 250 / 500
+    Faixa B (R$ 8 a 20 mil) ............. 100 / 150 / 300
+    Faixa C (abaixo de R$ 8 mil) ........  50 /  80 / 150
+    Faixa D (folguista) .................  50 /  80 / 150
+  DEAN e AGNOR: premiação diferenciada (acordo à parte) — Meta 1 só
+  como referência.
+
+META 2 — PRODUTOS FOCO (semanal, acumula no mês)
+  Vitaminas da campanha, packs, injetáveis, coquetel, brinco e kit
+  ressaca. DECISÃO: paga pelo campo de incentivo do InovaFarma — entra
+  pelas linhas INCENTIVO do holerite, sem linha de prêmio própria, para
+  não pagar duas vezes.
+
+META 3 — PRÉ-VENCIDOS (mensal)
+  Escada por vendedor: acima de R$ 1.000 = R$ 100; R$ 2.000 = R$ 200;
+  R$ 3.000 = R$ 300.
+  Farmacêuticos (regra própria, R$ 150 se baterem a meta):
+    ARIANE R$ 1.040 · UILLIAN R$ 940 · DEAN R$ 1.590 · AGNOR R$ 1.590
+
+META 4 — PERFUMARIA 130% (meta da loja)
+  Se a loja vender 130% da média de perfumaria (ou zerar o estoque),
+  as vendedoras participantes recebem a comissão de perfumaria em dobro
+  + R$ 50 fixos.
+    Centro ..... média R$ 9.455,09  · meta R$ 12.300 · THAYANE, GENECIR
+    Arraial .... média R$ 31.083,80 · meta R$ 40.400 · SARA, NATI, CAMILA
+    Trancoso ... média R$ 10.923,65 · meta R$ 14.200 · INIURLE, TAMILES
+
+METAS INDIVIDUAIS DE SETEMBRO (Meta 1)
+
+  Loja      Funcionário  Faixa  Meta cheia  Dias  Observação
+  --------  -----------  -----  ----------  ----  --------------------------
+  Centro    ELIANA       A      43.000      30
+  Centro    RENALDO      A      31.000       0    férias — fora da apuração
+  Centro    ARIANE       B      12.000      30    farmacêutica na Meta 3
+  Centro    GENECIR      B       9.000      30
+  Centro    THAYANE      C       7.000      30
+  Centro    SERGIO       D       3.500      —     folguista; dias a preencher;
+                                                  prêmio no contas a pagar
+  Arraial   JOEL         A      40.000      27    férias até 03/09
+  Arraial   VALÉRIA      A      38.000      30
+  Arraial   EDEY         A      32.000      30
+  Arraial   AGNOR        A      31.000      30    Meta 1 só referência
+  Arraial   DEAN         A      27.000      30    Meta 1 só referência
+  Arraial   SARA         A      27.000      30
+  Arraial   NATI         A      26.000      30
+  Arraial   CAMILA       B      15.000      30
+  Trancoso  VALDICK      A      31.000       0    férias — fora da apuração
+  Trancoso  UILLIAN      A      29.000      30    farmacêutico na Meta 3
+  Trancoso  MANOEL       A      24.000      30
+  Trancoso  INIURLE      B      16.000      30
+  Trancoso  TAMILES      B      12.000      30    atestado abonado conta como
+                                                  dia trabalhado
+
+DECISÕES SOBRE METAS NESTA CONVERSA
+  - TAMILES: atestado abonado conta como dia trabalhado — 30 dias, meta
+    cheia.
+  - Meta 2: entra pelo incentivo do InovaFarma.
+  - Em aberto: se a redução nas premiações do Trancoso (para compensar
+    a comissão dobrada) continua valendo com o programa novo.
+
+O QUE FALTA PARA CALCULAR OS PRÊMIOS
+  Lançar na aba METAS SET.26 de cada loja, com base no relatório de
+  setembro do InovaFarma: venda realizada de cada um, pré-vencido
+  vendido, perfumaria vendida pela loja e a comissão de perfumaria das
+  participantes da Meta 4. As planilhas preenchidas no PC ainda não
+  chegaram ao GitHub (faltou o push) — enviar os arquivos para lançar
+  sem sobrescrever as correções feitas depois.
+
+======================================================================
+5. PENDÊNCIAS EM ABERTO
+======================================================================
+
+  Agosto
+  - DSR sobre hora extra pago em duplicidade pela Betel (rubricas 420
+    e 057): R$ 213,68 no total.
+  - JOEL: comissão de R$ 103,31 não entrou no holerite.
+  - PEDRO: holerite de agosto não veio no arquivo da Betel — pedir.
+  - INIURLE: holerite precisa ser refeito com 16 h a 50% + 24 h a 100%
+    (diferença de R$ 105,43 antes do INSS).
+
+  Setembro
+  - Comissões e incentivos de setembro (relatório do InovaFarma).
+  - Lançamentos da aba METAS SET.26 (seção 4).
+  - Ponto de setembro (horas extras e quem trabalhou nos feriados).
+  - Vales, convênio e faltas dos demais funcionários.
+  - Diárias dos folguistas SERGIO e ANA CELIA.
+  - Critério do feriado trabalhado: 1 salário-dia (planilha) × 4h53 de
+    hora extra (como a Betel lançou em agosto).
+
+======================================================================
+6. ARQUIVOS
+======================================================================
+
+GitHub: repositório presidentephm/site-farmacia, branch
+claude/relatorio-contabil-holerite-w665ki, pasta relatorios/contabilidade/
+
+  Agosto
+    RELATORIO_HOLERITE_AGOSTO_2026_pgto_05-09-2026.xlsx (Arraial)
+    RELATORIO_HOLERITE_AGOSTO_2026_CENTRO_pgto_05-09-2026.xlsx
+    RELATORIO_HOLERITE_AGOSTO_2026_TRANCOSO_pgto_05-09-2026.xlsx
+    RESUMO_3_LOJAS_AGOSTO_2026_pgto_05-09-2026.xlsx
+    MEDIA_COMISSOES_12_MESES_FERIAS.xlsx
+    ANA_CELIA_ e SERGIO_DIAS_TRABALHADOS_AGOSTO_2026.xlsx
+
+  Setembro
+    RELATORIO_HOLERITE_SETEMBRO_2026_{ARRAIAL,CENTRO,TRANCOSO}_pgto_05-10-2026.xlsx
+    RESUMO_3_LOJAS_SETEMBRO_2026_pgto_05-10-2026.xlsx
+    PASSAGEM_FOLHA_SETEMBRO_2026.txt (para continuar no PC)
+
+  Os scripts gerar_*.py recriam todas as planilhas; o README.md
+  documenta critérios e convenções.
