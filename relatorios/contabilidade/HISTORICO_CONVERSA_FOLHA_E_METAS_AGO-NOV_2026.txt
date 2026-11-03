@@ -1,6 +1,6 @@
 ﻿HISTÓRICO DA CONVERSA — FOLHA DE PAGAMENTO E PROGRAMA DE METAS
 Farmácia Tropical · lojas Centro (matriz), Arraial e Trancoso
-Período da conversa: 03/09/2026 a 04/10/2026
+Período da conversa: 03/09/2026 a 03/11/2026
 
 Observação: este é um registro organizado do que foi pedido, decidido e
 produzido ao longo da conversa — não é a transcrição palavra por palavra.
@@ -71,6 +71,25 @@ Pagamento da folha: dia 5 do mês seguinte à competência.
     (pagamento 05/11).
   - Recebida a planilha Metas_Equipe_Set2026_v2.xlsx e lançado o
     PROGRAMA DE METAS de setembro (ver seção 4).
+  - 04/10: gerado este histórico. As planilhas de setembro preenchidas
+    no PC (venda realizada, pré-vencido, perfumaria) NÃO chegaram ao
+    GitHub — faltou o push.
+
+05/10 a 03/11 — Situação depois do fechamento de setembro
+  - 05/10: relatórios restaurados e reenviados. O resumo de setembro
+    (pagamento 05/10) ficou PARCIAL nesta conversa: R$ 43.609,16, sem
+    comissões, prêmios, INSS e IRRF de setembro.
+  - Os PDFs dos holerites da Betel de agosto não ficam guardados aqui
+    (anexos se perdem quando o ambiente reinicia); os valores deles estão
+    lançados nas planilhas de agosto.
+  - 03/11: confirmado que NÃO existe fechamento automático das
+    comissões nesta conversa nem rotina agendada na conta. Esta conversa
+    roda na nuvem e não acessa o banco do InovaFarma; os dados de
+    comissão sempre entraram por arquivo anexado. Se houve automação,
+    foi feita numa conversa do PC (provavelmente "Relatório de comissões
+    Inovafarma" ou "Metas de vendas por equipe").
+  - Próximo vencimento: folha de OUTUBRO, pagamento 05/11/2026 — a
+    primeira com o PEDRO a R$ 4.000,00.
 
 ======================================================================
 3. REGRAS DA CASA
@@ -186,7 +205,12 @@ O QUE FALTA PARA CALCULAR OS PRÊMIOS
   - INIURLE: holerite precisa ser refeito com 16 h a 50% + 24 h a 100%
     (diferença de R$ 105,43 antes do INSS).
 
-  Setembro
+  Outubro (pagamento 05/11)
+  - Montar a folha de outubro das 3 lojas. PEDRO passa a R$ 4.000,00.
+  - Metas de outubro: já estão na conversa "Metas de vendas por equipe"
+    do PC (Matriz 105.000, Multi Econômica 288.500, Trancoso 131.000).
+
+  Setembro (fechado fora desta conversa — conferir)
   - Comissões e incentivos de setembro (relatório do InovaFarma).
   - Lançamentos da aba METAS SET.26 (seção 4).
   - Ponto de setembro (horas extras e quem trabalhou nos feriados).
@@ -196,7 +220,18 @@ O QUE FALTA PARA CALCULAR OS PRÊMIOS
     hora extra (como a Betel lançou em agosto).
 
 ======================================================================
-6. ARQUIVOS
+6. ONDE FICA CADA COISA
+======================================================================
+
+  - Esta conversa: "Relatório contábil para holerite", roda na nuvem
+    (link: https://claude.ai/code/session_01N2n4hj3F39Ez9XRrPSJYG5).
+    Guarda planilhas e scripts no GitHub. Não enxerga o PC nem o banco.
+  - Conversas do PC (disco C:): enxergam as pastas do computador e o
+    banco do InovaFarma pela Radmin VPN. Trocam informação com esta por
+    arquivo (.txt / .xlsx).
+
+======================================================================
+7. ARQUIVOS
 ======================================================================
 
 GitHub: repositório presidentephm/site-farmacia, branch
